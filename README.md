@@ -18,24 +18,24 @@ Käyttöliittymä on suunniteltu ensisijaisesti käytettäväksi pöytätietokon
 ## Käyttäjäryhmät (roolit)
 
 ### Lipputoimiston myyjä
-..* Pystyy tarkastelemaan eri tapahtumien lippuja, niiden tyyppejä ja hintoja.
-..* Voi myydä asiakkaalle lipun ja tulostaa sen
-..* Voi tarkastella myymiensä lippujen myyntiraportteja
-..* Ei pysty muokkaamaan tapahtumiin kirjattuja lipputietoja tai hintoja
+- Pystyy tarkastelemaan eri tapahtumien lippuja, niiden tyyppejä ja hintoja.
+- Voi myydä asiakkaalle lipun ja tulostaa sen
+- Voi tarkastella myymiensä lippujen myyntiraportteja
+- Ei pysty muokkaamaan tapahtumiin kirjattuja lipputietoja tai hintoja
 
 ### Järjestelmän pääkäyttäjä
-..* Lipputoimiston henkilökuntaa
-..* Pystyy käyttämään kaikkia järjestelmän ominaisuuksia (lisäys, muokkaus, poisto)
-..* Voi tarkastella kaikkien tapahtumien myyntiraportteja
-..* Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään
+- Lipputoimiston henkilökuntaa
+- Pystyy käyttämään kaikkia järjestelmän ominaisuuksia (lisäys, muokkaus, poisto)
+- Voi tarkastella kaikkien tapahtumien myyntiraportteja
+- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään
 
 ### Tapahtumajärjestäjä
-..* Pystyy tarkastelemaan omien tapahtumiensa lipputietoja.
-..* Voi luoda ja tulostaa myyntiraportteja omista tapahtumista.
+- Pystyy tarkastelemaan omien tapahtumiensa lipputietoja.
+- Voi luoda ja tulostaa myyntiraportteja omista tapahtumista.
 
 ### Asiakas
-..* Voi ostaa lippuja Lipputoimiston myyntipisteestä
-..* Näkee ostamansa lipun tiedot (tapahtuma, lipputyyppi, hinta, tarkistuskoodi). Lipussa näkyy myös ostopäivämäärä ja aika.
+- Voi ostaa lippuja Lipputoimiston myyntipisteestä
+- Näkee ostamansa lipun tiedot (tapahtuma, lipputyyppi, hinta, tarkistuskoodi). Lipussa näkyy myös ostopäivämäärä ja aika.
 
 
 # Käyttöliittymä
