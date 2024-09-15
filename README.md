@@ -48,7 +48,7 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
   - **Tulos:** Myyjä saa näkyviin valitun tapahtuman tiedot ja voi tarkastella sen ominaisuuksia.
 
 - **Käyttötapaus 2: Lipun myynti**
-    - **Tavoite:**Myyjä haluaa myydä lipun asiakkaalle.
+    - **Tavoite:** Myyjä haluaa myydä lipun asiakkaalle.
     - **Toimet:** Myyjä valitsee tapahtuman, valitsee lipputyypin, syöttää asiakkaan tiedot, hyväksyy maksun ja tulostaa lipun.
     - **Tulos:** Asiakas saa lipun ja järjestelmä tallentaa myyntitapahtuman tiedot.
 
