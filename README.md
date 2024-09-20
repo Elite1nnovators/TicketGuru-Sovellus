@@ -174,79 +174,92 @@ Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät
 - **Kaavio:** [Käyttöliittymäkaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=643351026#gid=643351026)
 - **Miksi:** Käyttöliittymäkaavio näyttää, miten eri näkymät liittyvät toisiinsa ja miten käyttäjä navigoi niiden välillä.
 
-## Tietohakemisto
+## Tietokanta
 
-### Event
+### Tietohakemisto
+Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä roolin TicketGuru-sovelluksessa.
 
-| Kenttä            | Tyyppi           | Kuvaus  |
-| ------------------|:----------------:| -------:|
-| Even_id           | int(AN) PK       |         |
-| Event_name        | varchar(50)      |         |
-| Event_date        | date             |         |
-| Event_address     | varchar(50)      |         |
-| Event_city        | varchar(50)      |         |
-| Event_description | varchar(50)      |         |
+### Event (Tapahtuma)
 
-### Ticket
+Tapahtumataulu sisältää tiedot järjestettävistä tapahtumista, joihin myydään lippuja. Yksi tapahtuma voi sisältää useita lippuja
 
-| Kenttä            | Tyyppi           | Kuvaus  |
-| ------------------|:----------------:| -------:|
-| Ticket_id         | int(AN) PK       |         |
-| Ticket_Typeid     | int FK           |         |
-| Event_id          | int FK           |         |
-| TotalQuantity     | int              |         |
-| TicketsInStock    | int              |         |
-| TicketCode        | varchar(30)      |         |
-| TicketIsUsed      | boolean          |         |
+| Kenttä            | Tyyppi           | Kuvaus                                                  |
+| ------------------|:----------------:| -------------------------------------------------------:|
+| Even_id           | int(AN) PK       | Tapahtuman yksilöllinen tunniste.                       |
+| Event_name        | varchar(50)      | Tapahtuman nimi.                                        |
+| Event_date        | date             | Tapahtuman päivämäärä.                                  |
+| Event_address     | varchar(50)      | Tapahtuman osoite.                                      |
+| Event_city        | varchar(50)      | Kaupunki, jossa tapahtuma järjestetään.                 |
+| Event_description | varchar(50)      | Lyhyt kuvaus tapahtumasta.                              |
 
-### TicketType
-
-| Kenttä            | Tyyppi           | Kuvaus  |
-| ------------------|:----------------:| -------:|
-| TicketType_id     | int(AN) PK       |         |
-| Type_name         | varchar(30)      |         |
-| type_price        | double           |         |
+### Ticket (Lippu)
+Lipputaulu sisältää tiedot myydyistä lipuista tiettyihin tapahtumiin.  Yksi lippu kuuluu yhteen tapahtumaan ja yhteen lipputyyppiin . Yksi lippu voi kuulua useaan tilaukseen.
 
 
-### OrderDetails
+| Kenttä            | Tyyppi           | Kuvaus                                                  |
+| ------------------|:----------------:| -------------------------------------------------------:|
+| Ticket_id         | int(AN) PK       | Yksittäisen lipun tunniste.                             |
+| Ticket_Typeid     | int FK           | Viittaus lipun tyyppiin. (TicketType-taulu)             |
+| Event_id          | int FK           | Viittaus tapahtumaan, johon lippu kuuluu. (Event-taulu) |
+| TotalQuantity     | int              | Lippujen kokonaismäärä.                                 |
+| TicketsInStock    | int              | Jäljellä olevien lippujen määrä varastossa.             |
+| TicketCode        | varchar(30)      | Lipun tarkistuskoodi (QR- tai viivakoodi).              |
+| TicketIsUsed      | boolean          | Indikaatio siitä, onko lippu käytetty.                  |
 
-| Kenttä            | Tyyppi           | Kuvaus  |
-| ------------------|:----------------:| -------:|
-| OrderDetail_id    | int(AN)          |         |
-| Order_id          | int FK           |         |
-| Ticket_id         | int FK           |         |
-| UnitPrice         | double           |         |
+### TicketType (Lipputyyppi)
+Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Yksi lipputyyppi voi liittyä useisiin lippuihin.
+
+| Kenttä            | Tyyppi           | Kuvaus                                                  |
+| ------------------|:----------------:| -------------------------------------------------------:|
+| TicketType_id     | int(AN) PK       | Lipputyypin yksilöllinen tunniste.                      |
+| Type_name         | varchar(30)      | Lipputyypin nimi (esim. aikuinen, lapsi).               |
+| type_price        | double           | Lipputyypin hinta.                                      |
+
+
+### OrderDetails (Tilauksen tiedot)
+Tilausrivien taulu sisältää yksityiskohtaiset tiedot yksittäisistä lipuista, jotka kuuluvat tilauksiin. Yksi tilaus voi sisältää useita lippuja
+
+
+| Kenttä            | Tyyppi           | Kuvaus                                                  |
+| ------------------|:----------------:| -------------------------------------------------------:|
+| OrderDetail_id    | int(AN)          | Tilauksen yksityiskohtien tunniste.                     |
+| Order_id          | int FK           | Viittaus tilaukseen (Order-taulu).                      |
+| Ticket_id         | int FK           | Viittaus lippuun (Ticket-taulu).                        |
+| UnitPrice         | double           | Lipun yksikköhinta tilauksen hetkellä.                  |
 
 
 ### Customer
+Asiakastaulu sisältää tiedot asiakkaista, jotka ostavat lippuja. Yhdellä asiakkaalla voi olla useita tilauksia.
 
-| Kenttä            | Tyyppi           | Kuvaus  |
-| ------------------|:----------------:| -------:|
-| Customer-id       | int(AN) PK       |         |
-| Cust_lastName     | varchar(30)      |         |
-| Cust_firsttName   | varchar(30)      |         |
-| Cust_phone        | varchar(30)      |         |
-| Cust_email        | varchar(30)      |         |
-| Cust_address      | varchar(30)      |         |
-| Cust_City         | varchar(30)      |         |
+| Kenttä            | Tyyppi           | Kuvaus                                                  |
+| ------------------|:----------------:| -------------------------------------------------------:|
+| Customer-id       | int(AN) PK       | Asiakkaan yksilöllinen tunniste.                        |
+| Cust_lastName     | varchar(30)      | Asiakkaan sukunimi.                                     |
+| Cust_firsttName   | varchar(30)      | Asiakkaan etunimi.                                      |
+| Cust_phone        | varchar(30)      | Asiakkaan puhelinnumero.                                |
+| Cust_email        | varchar(30)      | Asiakkaan sähköpostiosoite.                             |
+| Cust_address      | varchar(30)      | Asiakkaan osoite.                                       |
+| Cust_City         | varchar(30)      | Asiakkaan asuinpaikkakunta.                             |
 
 ### Order
+Tilaustaulu sisältää tiedot asiakkaiden tekemistä lippuostoista. Yksi asiakas voi tehdä useita tilauksia. Yhdessä tilauksessa voi olla useita lippuja.
 
-| Kenttä            | Tyyppi           | Kuvaus  |
-| ------------------|:----------------:| -------:|
-| Order_id          | int (AN) PK      |         |
-| Customer_id       | int FK           |         |
-| SalesPerson_id    | int FK           |         |
-| OrderDate         | date             |         |
+| Kenttä            | Tyyppi           | Kuvaus                                                  |
+| ------------------|:----------------:| -------------------------------------------------------:|
+| Order_id          | int (AN) PK      | Tilauksen yksilöllinen tunniste.                        |
+| Customer_id       | int FK           | Viittaus tilaajaan (Customer-taulu).                    |
+| SalesPerson_id    | int FK           | Viittaus myyjään (SalesPerson-taulu).                   |
+| OrderDate         | date             | Tilauksen päivämäärä.                                   |
 
 ### SalesPerson
+Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston työntekijöistä. Yksi myyjä voi käsitellä useita tilauksia.
 
-| Kenttä            | Tyyppi           | Kuvaus  |
-| ------------------|:----------------:| -------:|
-| SalesPerson_id    | int (AN) PK      |         |
-| SalesP_lastName   | varchar(30)      |         |
-| SalesP_firstName  | varchar(30)     |         |
-| SalesP_phone      | varchar(30)      |         |
+| Kenttä            | Tyyppi           | Kuvaus                                                  |
+| ------------------|:----------------:| -------------------------------------------------------:|
+| SalesPerson_id    | int (AN) PK      | Myyjän yksilöllinen tunniste.                           |
+| SalesP_lastName   | varchar(30)      | Myyjän sukunimi.                                        |
+| SalesP_firstName  | varchar(30)      | Myyjän etunimi.                                         |
+| SalesP_phone      | varchar(30)      | Myyjän puhelinnumero.                                   |
 
 
 
