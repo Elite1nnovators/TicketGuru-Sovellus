@@ -173,3 +173,16 @@ Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät
 ### Käyttöliittymäkaavio
 - **Kaavio:** [Käyttöliittymäkaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=643351026#gid=643351026)
 - **Miksi:** Käyttöliittymäkaavio näyttää, miten eri näkymät liittyvät toisiinsa ja miten käyttäjä navigoi niiden välillä.
+
+## Tietohakemisto
+
+
+
+| Kenttä            | Tyyppi           | Kuvaus  |
+| ------------------|:----------------:| -------:|
+| Even_id           | int(AN)          |         |
+| Event_name        | varchar(50)      |         |
+| Event_date        | date             |         |
+| Event_address     | varchar(50)      |         |
+| Event_city        | varchar(50)      |         |
+| Event_description | varchar(50)      |         |
