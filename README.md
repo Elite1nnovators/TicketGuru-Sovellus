@@ -184,7 +184,7 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 Tapahtumataulu sisältää tiedot järjestettävistä tapahtumista, joihin myydään lippuja. Yksi tapahtuma voi sisältää useita lippuja
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|:----------------:| -------------------------------------------------------:|
+| ------------------|----------------  | ------------------------------------------------------- |
 | Even_id           | int(AN) PK       | Tapahtuman yksilöllinen tunniste.                       |
 | Event_name        | varchar(50)      | Tapahtuman nimi.                                        |
 | Event_date        | date             | Tapahtuman päivämäärä.                                  |
@@ -197,7 +197,7 @@ Lipputaulu sisältää tiedot myydyistä lipuista tiettyihin tapahtumiin.  Yksi 
 
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|:----------------:| -------------------------------------------------------:|
+| ------------------|------------------| ------------------------------------------------------- |
 | Ticket_id         | int(AN) PK       | Yksittäisen lipun tunniste.                             |
 | Ticket_Typeid     | int FK           | Viittaus lipun tyyppiin. (TicketType-taulu)             |
 | Event_id          | int FK           | Viittaus tapahtumaan, johon lippu kuuluu. (Event-taulu) |
@@ -210,7 +210,7 @@ Lipputaulu sisältää tiedot myydyistä lipuista tiettyihin tapahtumiin.  Yksi 
 Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Yksi lipputyyppi voi liittyä useisiin lippuihin.
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|:----------------:| -------------------------------------------------------:|
+| ------------------|------------------| ------------------------------------------------------- |
 | TicketType_id     | int(AN) PK       | Lipputyypin yksilöllinen tunniste.                      |
 | Type_name         | varchar(30)      | Lipputyypin nimi (esim. aikuinen, lapsi).               |
 | type_price        | double           | Lipputyypin hinta.                                      |
@@ -221,7 +221,7 @@ Tilausrivien taulu sisältää yksityiskohtaiset tiedot yksittäisistä lipuista
 
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|:----------------:| -------------------------------------------------------:|
+| ------------------|------------------| --------------------------------------------------------|
 | OrderDetail_id    | int(AN)          | Tilauksen yksityiskohtien tunniste.                     |
 | Order_id          | int FK           | Viittaus tilaukseen (Order-taulu).                      |
 | Ticket_id         | int FK           | Viittaus lippuun (Ticket-taulu).                        |
@@ -232,7 +232,7 @@ Tilausrivien taulu sisältää yksityiskohtaiset tiedot yksittäisistä lipuista
 Asiakastaulu sisältää tiedot asiakkaista, jotka ostavat lippuja. Yhdellä asiakkaalla voi olla useita tilauksia.
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|:----------------:| -------------------------------------------------------:|
+| ------------------|------------------| --------------------------------------------------------|
 | Customer-id       | int(AN) PK       | Asiakkaan yksilöllinen tunniste.                        |
 | Cust_lastName     | varchar(30)      | Asiakkaan sukunimi.                                     |
 | Cust_firsttName   | varchar(30)      | Asiakkaan etunimi.                                      |
@@ -245,7 +245,7 @@ Asiakastaulu sisältää tiedot asiakkaista, jotka ostavat lippuja. Yhdellä asi
 Tilaustaulu sisältää tiedot asiakkaiden tekemistä lippuostoista. Yksi asiakas voi tehdä useita tilauksia. Yhdessä tilauksessa voi olla useita lippuja.
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|:----------------:| -------------------------------------------------------:|
+| ------------------|------------------| --------------------------------------------------------|
 | Order_id          | int (AN) PK      | Tilauksen yksilöllinen tunniste.                        |
 | Customer_id       | int FK           | Viittaus tilaajaan (Customer-taulu).                    |
 | SalesPerson_id    | int FK           | Viittaus myyjään (SalesPerson-taulu).                   |
@@ -255,7 +255,7 @@ Tilaustaulu sisältää tiedot asiakkaiden tekemistä lippuostoista. Yksi asiaka
 Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston työntekijöistä. Yksi myyjä voi käsitellä useita tilauksia.
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|:----------------:| -------------------------------------------------------:|
+| ------------------|------------------| --------------------------------------------------------|
 | SalesPerson_id    | int (AN) PK      | Myyjän yksilöllinen tunniste.                           |
 | SalesP_lastName   | varchar(30)      | Myyjän sukunimi.                                        |
 | SalesP_firstName  | varchar(30)      | Myyjän etunimi.                                         |
