@@ -176,13 +176,79 @@ Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät
 
 ## Tietohakemisto
 
-
+### Event
 
 | Kenttä            | Tyyppi           | Kuvaus  |
 | ------------------|:----------------:| -------:|
-| Even_id           | int(AN)          |         |
+| Even_id           | int(AN) PK       |         |
 | Event_name        | varchar(50)      |         |
 | Event_date        | date             |         |
 | Event_address     | varchar(50)      |         |
 | Event_city        | varchar(50)      |         |
 | Event_description | varchar(50)      |         |
+
+### Ticket
+
+| Kenttä            | Tyyppi           | Kuvaus  |
+| ------------------|:----------------:| -------:|
+| Ticket_id         | int(AN) PK       |         |
+| Ticket_Typeid     | int FK           |         |
+| Event_id          | int FK           |         |
+| TotalQuantity     | int              |         |
+| TicketsInStock    | int              |         |
+| TicketCode        | varchar(30)      |         |
+| TicketIsUsed      | boolean          |         |
+
+### TicketType
+
+| Kenttä            | Tyyppi           | Kuvaus  |
+| ------------------|:----------------:| -------:|
+| TicketType_id     | int(AN) PK       |         |
+| Type_name         | varchar(30)      |         |
+| type_price        | double           |         |
+
+
+### OrderDetails
+
+| Kenttä            | Tyyppi           | Kuvaus  |
+| ------------------|:----------------:| -------:|
+| OrderDetail_id    | int(AN)          |         |
+| Order_id          | int FK           |         |
+| Ticket_id         | int FK           |         |
+| UnitPrice         | double           |         |
+
+
+### Customer
+
+| Kenttä            | Tyyppi           | Kuvaus  |
+| ------------------|:----------------:| -------:|
+| Customer-id       | int(AN) PK       |         |
+| Cust_lastName     | varchar(30)      |         |
+| Cust_firsttName   | varchar(30)      |         |
+| Cust_phone        | varchar(30)      |         |
+| Cust_email        | varchar(30)      |         |
+| Cust_address      | varchar(30)      |         |
+| Cust_City         | varchar(30)      |         |
+
+### Order
+
+| Kenttä            | Tyyppi           | Kuvaus  |
+| ------------------|:----------------:| -------:|
+| Order_id          | int (AN) PK      |         |
+| Customer_id       | int FK           |         |
+| SalesPerson_id    | int FK           |         |
+| OrderDate         | date             |         |
+
+### SalesPerson
+
+| Kenttä            | Tyyppi           | Kuvaus  |
+| ------------------|:----------------:| -------:|
+| SalesPerson_id    | int (AN) PK      |         |
+| SalesP_lastName   | varchar(30)      |         |
+| SalesP_firstName  | varchar(30)     |         |
+| SalesP_phone      | varchar(30)      |         |
+
+
+
+
+
