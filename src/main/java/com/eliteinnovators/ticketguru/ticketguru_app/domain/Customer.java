@@ -12,25 +12,25 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customer_id;
 
-    @Column(unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    //Lisää myös salasana
+    @Column(name = "password", nullable = false)
+    private String passwordHash;
 
     private String firstName, lastName, phone, email, address, city;
 
     /* Muista lisätä tälle myös getterit ja setterit ja generoi constructorit
-    
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
+    @JsonIgnore
+    private List<Order> orders;
 
     */
-
     public Customer() {
     }
 
-    public Customer(Long customer_id, String username, String firstName, String lastName, String phone, String email,
+    public Customer(Long customer_id, String username, String passwordHash, String firstName, String lastName, String phone, String email,
             String address, String city) {
         this.customer_id = customer_id;
         this.username = username;
@@ -57,6 +57,15 @@ public class Customer {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
 
     public String getFirstName() {
         return firstName;

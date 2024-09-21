@@ -13,10 +13,11 @@ public class Salesperson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long salesperson_id;
 
-    @Column(unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-//Tähän täytyy lisätä myös salasana
+    @Column(name = "password", nullable = false)
+    private String passwordHash;
 
     private boolean isAdmin;
 
@@ -24,15 +25,15 @@ public class Salesperson {
 
 /* Muista lisätä tälle myös getterit ja setterit ja generoi constructorit
     
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
+    @JsonIgnore
+    private List<Order> orders;
 
     */
 
     public Salesperson() {}
 
-    public Salesperson(Long salesperson_id, String username, boolean isAdmin, String firstName, String lastName,
+    public Salesperson(Long salesperson_id, String username, String passwordHash, boolean isAdmin, String firstName, String lastName,
             String phone) {
         this.salesperson_id = salesperson_id;
         this.username = username;
@@ -57,6 +58,15 @@ public class Salesperson {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
 
     public boolean isAdmin() {
         return isAdmin;
