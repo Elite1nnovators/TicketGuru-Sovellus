@@ -18,6 +18,8 @@ public class Customer {
     @Column(name = "password", nullable = false)
     private String passwordHash;
 
+    private Date dateOfBirth;
+
     private String firstName, lastName, phone, email, address, city;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
@@ -30,11 +32,12 @@ public class Customer {
     
 
 
-    public Customer(Long customer_id, String username, String passwordHash, String firstName, String lastName,
+    public Customer(Long customer_id, String username, String passwordHash, Date dateOfBirth, String firstName, String lastName,
             String phone, String email, String address, String city, List<Order> orders) {
         this.customer_id = customer_id;
         this.username = username;
         this.passwordHash = passwordHash;
+        this.dateOfBirth = dateOfBirth;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -125,6 +128,15 @@ public class Customer {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     @Override
