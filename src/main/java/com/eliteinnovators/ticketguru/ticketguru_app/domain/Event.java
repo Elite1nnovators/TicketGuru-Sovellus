@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.util.Date;
 
 @Entity
 public class Event {
@@ -14,7 +15,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long event_id;
     private String event_name;
-    private String event_date;
+    private Date event_date;
     private String event_address;
     private String event_city;
     private String event_description;
@@ -47,12 +48,12 @@ public class Event {
     }
 
 
-    public String getEvent_date() {
+    public Date getEvent_date() {
         return event_date;
     }
 
 
-    public void setEvent_date(String event_date) {
+    public void setEvent_date(Date event_date) {
         this.event_date = event_date;
     }
 
