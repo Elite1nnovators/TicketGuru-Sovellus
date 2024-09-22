@@ -20,27 +20,31 @@ public class Customer {
 
     private String firstName, lastName, phone, email, address, city;
 
-    /* Muista lisätä tälle myös getterit ja setterit ja generoi constructorit
-
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
     @JsonIgnore
     private List<Order> orders;
 
-    */
+
     public Customer() {
     }
+    
 
-    public Customer(Long customer_id, String username, String passwordHash, String firstName, String lastName, String phone, String email,
-            String address, String city) {
+
+    public Customer(Long customer_id, String username, String passwordHash, String firstName, String lastName,
+            String phone, String email, String address, String city, List<Order> orders) {
         this.customer_id = customer_id;
         this.username = username;
+        this.passwordHash = passwordHash;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.city = city;
+        this.orders = orders;
     }
+
+
 
     public Long getCustomer_id() {
         return customer_id;
@@ -113,6 +117,14 @@ public class Customer {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     @Override
