@@ -177,7 +177,7 @@ Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät
 ## Tietokanta
 
 ### Tietokantakaavio
-[Tietokantakaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?usp=sharing)
+[Tietokantakaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
 
 ### Tietohakemisto
 Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä roolin TicketGuru-sovelluksessa.
