@@ -7,6 +7,6 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    Order findByOrder_id(Long order_id);
+    Order findByOrderId(Long orderId);
 
 }

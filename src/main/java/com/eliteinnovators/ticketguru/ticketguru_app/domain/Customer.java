@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customer_id;
+    private Long customerId;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -39,9 +39,9 @@ public class Customer {
     
 
 
-    public Customer(Long customer_id, String username, String passwordHash, Date dateOfBirth, String firstName, String lastName,
+    public Customer(Long customerId, String username, String passwordHash, Date dateOfBirth, String firstName, String lastName,
             String phone, String email, String address, String city, List<Order> orders) {
-        this.customer_id = customer_id;
+        this.customerId = customerId;
         this.username = username;
         this.passwordHash = passwordHash;
         this.dateOfBirth = dateOfBirth;
@@ -56,12 +56,12 @@ public class Customer {
 
 
 
-    public Long getCustomer_id() {
-        return customer_id;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(Long customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getUsername() {
@@ -148,7 +148,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer [customer_id=" + customer_id + ", username=" + username + ", firstName=" + firstName
+        return "Customer [customerId=" + customerId + ", username=" + username + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email + ", address=" + address
                 + ", city=" + city + "]";
     }
