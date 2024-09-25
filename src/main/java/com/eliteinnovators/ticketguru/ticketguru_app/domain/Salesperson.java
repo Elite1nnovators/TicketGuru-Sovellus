@@ -29,7 +29,7 @@ public class Salesperson {
 
     private String firstName, lastName, phone;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "salesperson")
     @JsonIgnore
     private List<Order> orders;
 

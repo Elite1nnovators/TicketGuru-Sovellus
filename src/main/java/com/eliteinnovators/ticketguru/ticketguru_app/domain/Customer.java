@@ -29,7 +29,7 @@ public class Customer {
 
     private String firstName, lastName, phone, email, address, city;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonIgnore
     private List<Order> orders;
 
@@ -152,9 +152,4 @@ public class Customer {
                 + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email + ", address=" + address
                 + ", city=" + city + "]";
     }
-
-
-
-    
-
 }
