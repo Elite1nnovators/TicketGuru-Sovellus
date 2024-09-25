@@ -6,6 +6,6 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
 
 public interface SalespersonRepository extends CrudRepository<Salesperson,Long>{
 
-    Salesperson findBySalespersonUsername(String username);
+    Salesperson findByUsername(String username);
 
 }
