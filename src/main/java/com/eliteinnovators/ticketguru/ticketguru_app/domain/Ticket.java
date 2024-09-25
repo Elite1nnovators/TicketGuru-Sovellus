@@ -17,7 +17,7 @@ public class Ticket {
     private boolean isValid;
 
     @ManyToOne
-    @JoinColumn(name = "ticketType.id")
+    @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
     public Ticket() {
