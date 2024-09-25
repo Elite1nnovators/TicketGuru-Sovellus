@@ -14,7 +14,7 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Order {
 
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
@@ -23,7 +23,7 @@ public class Order {
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "salesPerson_id")
+    @JoinColumn(name = "salesperson_id")
     private Salesperson salesperson;
 
     private Date orderDate;
