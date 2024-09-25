@@ -37,11 +37,8 @@ public class Customer {
     public Customer() {
     }
     
-
-
-    public Customer(Long customerId, String username, String passwordHash, Date dateOfBirth, String firstName, String lastName,
+    public Customer(String username, String passwordHash, Date dateOfBirth, String firstName, String lastName,
             String phone, String email, String address, String city, List<Order> orders) {
-        this.customerId = customerId;
         this.username = username;
         this.passwordHash = passwordHash;
         this.dateOfBirth = dateOfBirth;

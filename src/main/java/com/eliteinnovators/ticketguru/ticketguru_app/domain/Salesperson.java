@@ -35,11 +35,8 @@ public class Salesperson {
 
     public Salesperson() {}
     
-
-
-    public Salesperson(Long salespersonId, String username, String passwordHash, boolean isAdmin, String firstName,
+    public Salesperson(String username, String passwordHash, boolean isAdmin, String firstName,
             String lastName, String phone, List<Order> orders) {
-        this.salespersonId = salespersonId;
         this.username = username;
         this.passwordHash = passwordHash;
         this.isAdmin = isAdmin;
@@ -122,9 +119,4 @@ public class Salesperson {
         return "Salesperson [salespersonId=" + salespersonId + ", username=" + username + ", isAdmin=" + isAdmin
                 + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + "]";
     }
-
-    
-
-    
-
 }
