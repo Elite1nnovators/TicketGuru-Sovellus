@@ -22,7 +22,6 @@ public class Event {
     private String eventCity;
     private String eventDescription;
 
-    //Tähän lisätään yhteys Ticket-tauluun:
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<Ticket> tickets;
 
