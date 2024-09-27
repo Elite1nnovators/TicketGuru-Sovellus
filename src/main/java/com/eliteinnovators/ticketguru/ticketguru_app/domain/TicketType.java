@@ -20,6 +20,9 @@ public class TicketType {
     @OneToMany(mappedBy = "ticketType")
     private List<Ticket> tickets;
 
+    @OneToMany(mappedBy = "ticketType")
+    private List<EventTicketType> eventTicketTypes;
+
     public TicketType(String name, double price) {
         this.name = name;
         this.price = price;

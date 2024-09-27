@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.Date;
 
+
+
 @Entity
 public class Event {
 
@@ -25,6 +27,8 @@ public class Event {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<Ticket> tickets;
 
+    @OneToMany(mappedBy = "event")
+    private List<EventTicketType> eventTicketTypes;
 
     public List<Ticket> getTickets() {
         return tickets;
