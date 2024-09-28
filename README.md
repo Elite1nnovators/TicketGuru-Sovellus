@@ -270,12 +270,14 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 
 ## REST API dokumentaatio
 
-**Base URL: testauksen aikana käytettävä base URL on http://localhost:8080/**
+**Base URL: kehityksen aikana käytettävä base URL on http://localhost:8080/**
 
-### Lisää tapahtuma
+### Lisää tapahtuma (POST)
 
 * Metodi: POST
 * Polku: /events
+
+Sisältö:
 
 ```
 {
@@ -298,12 +300,23 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 }
 ```
 
-### Muokkaa tapahtumaa
+* Virhekoodit:
+    * 400 Bad Request: Pyynnössä oli virheellisiä tietoja (esim. puuttuvat tai väärän tyyppiset kentät).
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia luoda tapahtumaa.
+
+Sisältö:
+```
+{}
+```
+
+### Muokkaa tapahtumaa (PUT)
 
 * Metodi: PUT
 * Polku: /events/{id}
 * Polkuparametri:
     * id: Muokattavan tapahtuman yksilöivä tunnus
+
+ Sisältö:   
 
 ```
 {
@@ -317,6 +330,7 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 * Paluukoodi: 200 OK
 
 ```
+Sisältö: 
 {
     "id": 123,
     "name": "Updated Event Name",
@@ -327,7 +341,17 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 
 ```
 
-### Hae tapahtuma
+* Virhekoodit:
+    * 400 Bad Request: Pyynnössä oli virheellisiä tietoja.
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia muokata tätä tapahtumaa.
+    * 404 Not Found: Tapahtumaa annetulla id:ia ei löytynyt.
+
+Sisältö:
+```
+{}
+```
+
+### Hae tapahtuma (GET)
 
 * Metodi: GET
 * Polku: /events/{id}
@@ -348,11 +372,42 @@ Vastaus:
 
 ```
 
-### Poista tapahtuma
+* Query-parametrit ovat valinnaisia. Niitä käytetään hakujen suodattamiseen:
+
+* **location:** Palauttaa vain ne tapahtumat, jotka järjestetään määritetyssä sijainnissa.
+    * Esimerkki: /events?location=Helsinki
+* **date**: Palauttaa vain ne tapahtumat, jotka järjestetään määritettynä päivämääränä.
+    * Esimerkki: /events?date=2024-09-28
+* **location** ja date voidaan yhdistää, jotta haetaan vain tietyn sijainnin tapahtumat tiettynä päivänä.
+    * Esimerkki: /events?location=Helsinki&date=2024-09-28
+
+
+* Virhekoodit:
+    * 404 Not Found: Tapahtumaa annetulla query -parametrilla ei löytynyt
+
+Sisältö:
+
+```
+{}
+```
+
+### Poista tapahtuma (DELETE)
 
 * Metodi: DELETE
 * Polku: /events/{id}
 *  Polkuparametri:
     * id: Poistettavan tapahtuman yksilöivä tunnus
 * Paluukoodi: 204 No Content
-* Vastaus: Ei sisältöä
+Sisältö:
+```
+{}
+```
+* Virhekoodit:
+    * 404 Not Found: Tapahtumaa annetulla query -parametrilla ei löytynyt
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia poistaa tätä tapahtumaa.
+
+Sisältö:
+
+```
+{}
+```
