@@ -282,24 +282,26 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 Sisältö:
 
 ```
-{
-    "name": "Event Name",
-    "date": "2024-09-28",
-    "location": "Location Name",
-    "description": "Event Description"
-}
+ {
+    "eventName": "Event name",
+    "eventDate": "2024-09-28T07:56:09.866+00:00",
+    "eventAddress": "Event Address",
+    "eventCity": "Event city",
+    "eventDescription": "Description"
+  },
 
 ```
 * Paluukoodi: 201 Created
 
 ```
-{
-    "id": 123,
-    "name": "Event Name",
-    "date": "2024-09-28",
-    "location": "Location Name",
-    "description": "Event Description"
-}
+ {
+    "eventId": 123,
+    "eventName": "Concert 1",
+    "eventDate": "2024-09-28T07:56:09.866+00:00",
+    "eventAddress": "Event Address 1",
+    "eventCity": "Helsinki",
+    "eventDescription": "A great concert event"
+  },
 ```
 
 * Virhekoodit:
@@ -323,25 +325,27 @@ Sisältö:
  Sisältö:   
 
 ```
-{
-    "name": "Updated Event Name",
-    "date": "2024-10-01",
-    "location": "Updated Location",
-    "description": "Updated Description"
-}
+ {
+    "eventName": "Concert 1",
+    "eventDate": "2024-09-28T07:56:09.866+00:00",
+    "eventAddress": "Event Address 1",
+    "eventCity": "Helsinki",
+    "eventDescription": "A great concert event"
+  },
 
 ```
 * Paluukoodi: 200 OK
 
 ```
 Sisältö: 
-{
-    "id": 123,
-    "name": "Updated Event Name",
-    "date": "2024-10-01",
-    "location": "Updated Location",
-    "description": "Updated Description"
-}
+ {
+    "eventId": 1,
+    "eventName": "Updated Name",
+    "eventDate": "2024-09-28T07:56:09.866+00:00",
+    "eventAddress": "Updated Address",
+    "eventCity": "Updated city",
+    "eventDescription": "Updated Description"
+  },
 
 ```
 
@@ -369,13 +373,14 @@ Sisältö:
 Vastaus:
 
 ```
-{
-    "id": 123,
-    "name": "Event Name",
-    "date": "2024-09-28",
-    "location": "Location Name",
-    "description": "Event Description"
-}
+ {
+    "eventId": 123,
+    "eventName": "Concert 1",
+    "eventDate": "2024-09-28T07:56:09.866+00:00",
+    "eventAddress": "Event Address 1",
+    "eventCity": "Helsinki",
+    "eventDescription": "A great concert event"
+  },
 
 ```
 
