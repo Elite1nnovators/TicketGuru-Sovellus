@@ -15,17 +15,15 @@ public class TicketType {
     private Long id;
 
     private String name;
-    private double price;
-
+    
     @OneToMany(mappedBy = "ticketType")
     private List<Ticket> tickets;
 
     @OneToMany(mappedBy = "ticketType")
     private List<EventTicketType> eventTicketTypes;
 
-    public TicketType(String name, double price) {
+    public TicketType(String name) {
         this.name = name;
-        this.price = price;
     }
 
     public TicketType() {
@@ -37,14 +35,6 @@ public class TicketType {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public List<Ticket> getTickets() {
