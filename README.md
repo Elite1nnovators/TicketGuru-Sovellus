@@ -318,7 +318,7 @@ Sisältö:
 <summary> Muokkaa tapahtumaa (PUT) </summary>
 
 * Metodi: PUT
-* Polku: /events/{id}
+* Polku: /event/{id}
 * Polkuparametri:
     * id: Muokattavan tapahtuman yksilöivä tunnus
 
@@ -365,7 +365,7 @@ Sisältö:
 <summary> Hae tapahtuma (GET) </summary>
 
 * Metodi: GET
-* Polku: /events/{id}
+* Polku: /event/{id}
 * Polkuparametri:
     * id: Haettavan tapahtuman yksilöivä tunnus
 * Paluukoodi: 200 OK
@@ -408,7 +408,7 @@ Sisältö:
 <summary> Poista tapahtuma (DELETE) </summary>
 
 * Metodi: DELETE
-* Polku: /events/{id}
+* Polku: /event/{id}
 *  Polkuparametri:
     * id: Poistettavan tapahtuman yksilöivä tunnus
 * Paluukoodi: 204 No Content
