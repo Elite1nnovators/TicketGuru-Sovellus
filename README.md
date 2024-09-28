@@ -268,3 +268,91 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 [Linkki tietokantakaavioon](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
 
 
+## REST API dokumentaatio
+
+**Base URL: testauksen aikana käytettävä base URL on http://localhost:8080/**
+
+### Lisää tapahtuma
+
+* Metodi: POST
+* Polku: /events
+
+```
+{
+    "name": "Event Name",
+    "date": "2024-09-28",
+    "location": "Location Name",
+    "description": "Event Description"
+}
+
+```
+* Paluukoodi: 201 Created
+
+```
+{
+    "id": 123,
+    "name": "Event Name",
+    "date": "2024-09-28",
+    "location": "Location Name",
+    "description": "Event Description"
+}
+```
+
+### Muokkaa tapahtumaa
+
+* Metodi: PUT
+* Polku: /events/{id}
+* Polkuparametri:
+    * id: Muokattavan tapahtuman yksilöivä tunnus
+
+```
+{
+    "name": "Updated Event Name",
+    "date": "2024-10-01",
+    "location": "Updated Location",
+    "description": "Updated Description"
+}
+
+```
+* Paluukoodi: 200 OK
+
+```
+{
+    "id": 123,
+    "name": "Updated Event Name",
+    "date": "2024-10-01",
+    "location": "Updated Location",
+    "description": "Updated Description"
+}
+
+```
+
+### Hae tapahtuma
+
+* Metodi: GET
+* Polku: /events/{id}
+* Polkuparametri:
+    * id: Haettavan tapahtuman yksilöivä tunnus
+* Paluukoodi: 200 OK
+
+Vastaus:
+
+```
+{
+    "id": 123,
+    "name": "Event Name",
+    "date": "2024-09-28",
+    "location": "Location Name",
+    "description": "Event Description"
+}
+
+```
+
+### Poista tapahtuma
+
+* Metodi: DELETE
+* Polku: /events/{id}
+*  Polkuparametri:
+    * id: Poistettavan tapahtuman yksilöivä tunnus
+* Paluukoodi: 204 No Content
+* Vastaus: Ei sisältöä
