@@ -272,7 +272,9 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 
 **Base URL: kehityksen aikana käytettävä base URL on http://localhost:8080/**
 
-### Lisää tapahtuma (POST)
+
+<details open >
+<summary>  Lisää tapahtuma (POST)</summary>
 
 * Metodi: POST
 * Polku: /events
@@ -308,8 +310,10 @@ Sisältö:
 ```
 {}
 ```
+</details>
 
-### Muokkaa tapahtumaa (PUT)
+<details open>
+<summary> Muokkaa tapahtumaa (PUT) </summary>
 
 * Metodi: PUT
 * Polku: /events/{id}
@@ -351,7 +355,10 @@ Sisältö:
 {}
 ```
 
-### Hae tapahtuma (GET)
+</details>
+
+<details open>
+<summary> Hae tapahtuma (GET) </summary>
 
 * Metodi: GET
 * Polku: /events/{id}
@@ -390,8 +397,10 @@ Sisältö:
 ```
 {}
 ```
+</details>
 
-### Poista tapahtuma (DELETE)
+<details open>
+<summary> Poista tapahtuma (DELETE) </summary>
 
 * Metodi: DELETE
 * Polku: /events/{id}
@@ -411,3 +420,4 @@ Sisältö:
 ```
 {}
 ```
+</details>
