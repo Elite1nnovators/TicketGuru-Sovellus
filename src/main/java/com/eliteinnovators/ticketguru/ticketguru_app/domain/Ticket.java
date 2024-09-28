@@ -17,16 +17,29 @@ public class Ticket {
     private boolean isValid;
 
     @ManyToOne
-    @JoinColumn(name = "ticketType.id")
+    @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 
     public Ticket() {
     }
 
-    public Ticket(String ticketCode, boolean isValid, TicketType ticketType) {
+    public Ticket(String ticketCode, boolean isValid, TicketType ticketType, Event event) {
         this.ticketCode = ticketCode;
         this.isValid = isValid;
         this.ticketType = ticketType;
+        this.event = event;
     }
 
     public Long getId() {

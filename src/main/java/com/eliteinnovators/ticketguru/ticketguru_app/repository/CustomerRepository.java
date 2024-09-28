@@ -6,6 +6,6 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.Customer;
 
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
-    Customer findByCUsername(String username);
+    Customer findByUsername(String username);
 
 }

@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 public class Salesperson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long salesperson_id;
+    private Long salespersonId;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -29,17 +29,14 @@ public class Salesperson {
 
     private String firstName, lastName, phone;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "salesperson")
     @JsonIgnore
     private List<Order> orders;
 
     public Salesperson() {}
     
-
-
-    public Salesperson(Long salesperson_id, String username, String passwordHash, boolean isAdmin, String firstName,
+    public Salesperson(String username, String passwordHash, boolean isAdmin, String firstName,
             String lastName, String phone, List<Order> orders) {
-        this.salesperson_id = salesperson_id;
         this.username = username;
         this.passwordHash = passwordHash;
         this.isAdmin = isAdmin;
@@ -51,12 +48,12 @@ public class Salesperson {
 
 
 
-    public Long getSalesperson_id() {
-        return salesperson_id;
+    public Long getSalespersonId() {
+        return salespersonId;
     }
 
-    public void setSalesperson_id(Long salesperson_id) {
-        this.salesperson_id = salesperson_id;
+    public void setSalespersonId(Long salespersonId) {
+        this.salespersonId = salespersonId;
     }
 
     public String getUsername() {
@@ -119,12 +116,7 @@ public class Salesperson {
 
     @Override
     public String toString() {
-        return "Salesperson [salesperson_id=" + salesperson_id + ", username=" + username + ", isAdmin=" + isAdmin
+        return "Salesperson [salespersonId=" + salespersonId + ", username=" + username + ", isAdmin=" + isAdmin
                 + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + "]";
     }
-
-    
-
-    
-
 }

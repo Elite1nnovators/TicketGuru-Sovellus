@@ -1,99 +1,103 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
-//import java.util.List;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-//import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToMany;
 import java.util.Date;
+
+
 
 @Entity
 public class Event {
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long event_id;
-    private String event_name;
-    private Date event_date;
-    private String event_address;
-    private String event_city;
-    private String event_description;
+    private Long eventId;
+    private String eventName;
+    private Date eventDate;
+    private String eventAddress;
+    private String eventCity;
+    private String eventDescription;
 
-    //Tähän lisätään yhteys Ticket-tauluun:
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "Event")
-    //private List<Ticket> tickets;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    @JsonIgnore
+    private List<Ticket> tickets;
 
+    @OneToMany(mappedBy = "event")
+    @JsonIgnore
+    private List<EventTicketType> eventTicketTypes;
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
 
     public Event() {
     }
 
-    public Long getEvent_id() {
-        return event_id;
+    public Event(String eventName, Date eventDate, String eventAddress, String eventCity, String eventDescription) {
+        this.eventName = eventName;
+        this.eventDate = eventDate;
+        this.eventAddress = eventAddress;
+        this.eventCity = eventCity;
+        this.eventDescription = eventDescription;
     }
 
-
-    public void setEvent_id(Long event_id) {
-        this.event_id = event_id;
+    public Long getEventId() {
+        return eventId;
     }
 
-
-    public String getEvent_name() {
-        return event_name;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
-
-    public void setEvent_name(String event_name) {
-        this.event_name = event_name;
+    public String getEventName() {
+        return eventName;
     }
 
-
-    public Date getEvent_date() {
-        return event_date;
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
-
-    public void setEvent_date(Date event_date) {
-        this.event_date = event_date;
+    public Date getEventDate() {
+        return eventDate;
     }
 
-
-    public String getEvent_address() {
-        return event_address;
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
     }
 
-
-    public void setEvent_address(String event_address) {
-        this.event_address = event_address;
+    public String getEventAddress() {
+        return eventAddress;
     }
 
-
-    public String getEvent_city() {
-        return event_city;
+    public void setEventAddress(String eventAddress) {
+        this.eventAddress = eventAddress;
     }
 
-
-    public void setEvent_city(String event_city) {
-        this.event_city = event_city;
+    public String getEventCity() {
+        return eventCity;
     }
 
-
-    public String getEvent_description() {
-        return event_description;
+    public void setEventCity(String eventCity) {
+        this.eventCity = eventCity;
     }
 
-
-    public void setEvent_description(String event_description) {
-        this.event_description = event_description;
+    public String getEventDescription() {
+        return eventDescription;
     }
 
-    @Override
-    public String toString() {
-        return "Event [event_id=" + event_id + ", event_name=" + event_name + ", event_date=" + event_date
-                + ", event_address=" + event_address + ", event_city=" + event_city + ", event_description="
-                + event_description + "]";
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
     }
-
-    
-    
 }
