@@ -31,14 +31,9 @@ public class TicketGuruController {
         return eRepo.findAll();
     }
 
-    @GetMapping("/event/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable("id") Long eventId) {
-        Optional<Event> event = eRepo.findById(eventId);
-        if(event.isPresent()) {
-            return ResponseEntity.ok(event.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/event/{eventId}")
+    Event getEventById(@PathVariable Long eventId) {
+        return eRepo.findById(eventId).orElse(null);
     }
 
     @PostMapping("/event")
