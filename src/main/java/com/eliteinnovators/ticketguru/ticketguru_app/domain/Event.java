@@ -3,6 +3,7 @@ package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -31,16 +32,8 @@ public class Event {
     private List<Ticket> tickets;
 
     @OneToMany(mappedBy = "event")
-    @JsonIgnore
+    @JsonManagedReference
     private List<EventTicketType> eventTicketTypes;
-
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
-    }
 
     public Event() {
     }
@@ -51,6 +44,22 @@ public class Event {
         this.eventAddress = eventAddress;
         this.eventCity = eventCity;
         this.eventDescription = eventDescription;
+    }
+
+    public List<EventTicketType> getEventTicketTypes() {
+        return eventTicketTypes;
+    }
+
+    public void setEventTicketTypes(List<EventTicketType> eventTicketTypes) {
+        this.eventTicketTypes = eventTicketTypes;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     public Long getEventId() {

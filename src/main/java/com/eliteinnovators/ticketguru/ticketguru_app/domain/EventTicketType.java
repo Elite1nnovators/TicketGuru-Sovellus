@@ -1,6 +1,8 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,10 +19,11 @@ public class EventTicketType {
 
     @ManyToOne
     @JoinColumn(name = "event_id")
+    @JsonBackReference
     private Event event;
 
     @ManyToOne
-    @JoinColumn(name = "ticketType_id")
+    @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
     private double price; 
