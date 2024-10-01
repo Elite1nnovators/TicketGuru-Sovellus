@@ -282,26 +282,38 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 Sisältö:
 
 ```
- {
-    "eventName": "Event name",
-    "eventDate": "2024-09-28T07:56:09.866+00:00",
-    "eventAddress": "Event Address",
-    "eventCity": "Event city",
-    "eventDescription": "Description"
-  },
+{
+    "eventName": "Concert 1",
+    "eventDate": "2024-10-01T05:08:30.651+00:00",
+    "eventAddress": "Event Address 1",
+    "eventCity": "Helsinki",
+    "eventDescription": "A great concert event",
+    "eventTicketTypes": [ {"ticketType":{ "id":1, "name": "aikuinen"}, "price": 10, "ticketsInStock": 40}]
+}
 
 ```
 * Paluukoodi: 201 Created
 
 ```
- {
-    "eventId": 123,
-    "eventName": "Concert 1",
-    "eventDate": "2024-09-28T07:56:09.866+00:00",
+{
+    "eventId": 5,
+    "eventName": "Concert 4",
+    "eventDate": "2024-10-01T05:08:30.651+00:00",
     "eventAddress": "Event Address 1",
     "eventCity": "Helsinki",
-    "eventDescription": "A great concert event"
-  },
+    "eventDescription": "A great concert event",
+    "eventTicketTypes": [
+        {
+            "id": 10,
+            "ticketType": {
+                "id": 1,
+                "name": "aikuinen"
+            },
+            "price": 10.0,
+            "ticketsInStock": 40
+        }
+    ]
+}
 ```
 
 * Virhekoodit:
@@ -325,27 +337,85 @@ Sisältö:
  Sisältö:   
 
 ```
- {
+   {
     "eventName": "Concert 1",
-    "eventDate": "2024-09-28T07:56:09.866+00:00",
+    "eventDate": "2024-10-01T09:43:35.689+00:00",
     "eventAddress": "Event Address 1",
     "eventCity": "Helsinki",
-    "eventDescription": "A great concert event"
-  },
+    "eventDescription": "A great concert event",
+    "eventTicketTypes": [
+        {
+            "id": 1,
+            "ticketType": {
+                "id": 1,
+                "name": "Aikuinen"
+            },
+            "price": 20.0,
+            "ticketsInStock": 50
+        },
+        {
+            "id": 2,
+            "ticketType": {
+                "id": 2,
+                "name": "Lapsi"
+            },
+            "price": 10.0,
+            "ticketsInStock": 60
+        },
+        {
+            "id": 3,
+            "ticketType": {
+                "id": 3,
+                "name": "VIP"
+            },
+            "price": 100.0,
+            "ticketsInStock": 15
+        }
+    ]
+}
 
 ```
 * Paluukoodi: 200 OK
 
 ```
 Sisältö: 
- {
+{
     "eventId": 1,
-    "eventName": "Updated Name",
-    "eventDate": "2024-09-28T07:56:09.866+00:00",
-    "eventAddress": "Updated Address",
-    "eventCity": "Updated city",
-    "eventDescription": "Updated Description"
-  },
+    "eventName": "Concert 1",
+    "eventDate": "2024-10-01T09:43:35.689+00:00",
+    "eventAddress": "Updated Event Address 1",
+    "eventCity": "Updated City",
+    "eventDescription": "Updated description",
+    "eventTicketTypes": [
+        {
+            "id": 1,
+            "ticketType": {
+                "id": 1,
+                "name": "Aikuinen"
+            },
+            "price": 20.0,
+            "ticketsInStock": 50
+        },
+        {
+            "id": 2,
+            "ticketType": {
+                "id": 2,
+                "name": "Lapsi"
+            },
+            "price": 10.0,
+            "ticketsInStock": 60
+        },
+        {
+            "id": 3,
+            "ticketType": {
+                "id": 3,
+                "name": "VIP"
+            },
+            "price": 100.0,
+            "ticketsInStock": 15
+        }
+    ]
+}
 
 ```
 
@@ -373,10 +443,10 @@ Sisältö:
 Vastaus:
 
 ```
- {
+{
     "eventId": 1,
     "eventName": "Concert 1",
-    "eventDate": "2024-10-01T05:08:30.651+00:00",
+    "eventDate": "2024-10-01T09:43:35.689+00:00",
     "eventAddress": "Event Address 1",
     "eventCity": "Helsinki",
     "eventDescription": "A great concert event",
