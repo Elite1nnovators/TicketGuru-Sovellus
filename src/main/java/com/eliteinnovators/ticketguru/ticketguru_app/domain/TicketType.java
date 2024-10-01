@@ -1,7 +1,11 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import java.util.List;
+import java.util.ArrayList;
 
+
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,14 +19,12 @@ public class TicketType {
     private Long id;
 
     private String name;
-    private double price;
+    
+    @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL)
+    private List<EventTicketType> eventTicketTypes = new ArrayList<>(); 
 
-    @OneToMany(mappedBy = "ticketType")
-    private List<Ticket> tickets;
-
-    public TicketType(String name, double price) {
+    public TicketType(String name) {
         this.name = name;
-        this.price = price;
     }
 
     public TicketType() {
@@ -36,21 +38,6 @@ public class TicketType {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
-    }
 
     public Long getId() {
         return id;

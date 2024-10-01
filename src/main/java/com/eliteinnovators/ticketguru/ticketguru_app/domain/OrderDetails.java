@@ -1,11 +1,13 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+@Entity
 public class OrderDetails {
 
     @Id
@@ -27,9 +29,8 @@ public class OrderDetails {
 
     }
 
-    public OrderDetails(Order order, Long orderDetailId, int quantity, Ticket ticket, double unitPrice) {
+    public OrderDetails(Order order, int quantity, Ticket ticket, double unitPrice) {
         this.order = order;
-        this.orderDetailId = orderDetailId;
         this.quantity = quantity;
         this.ticket = ticket;
         this.unitPrice = unitPrice;
@@ -80,7 +81,4 @@ public class OrderDetails {
         return "OrderDetails [orderDetailId=" + orderDetailId + ", order=" + order + ", ticket=" + ticket
                 + ", unitPrice=" + unitPrice + ", quantity=" + quantity + "]";
     }
-
-
-
 }

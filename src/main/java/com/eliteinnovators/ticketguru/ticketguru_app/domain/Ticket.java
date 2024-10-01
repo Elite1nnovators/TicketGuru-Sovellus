@@ -1,5 +1,7 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,16 +19,31 @@ public class Ticket {
     private boolean isValid;
 
     @ManyToOne
-    @JoinColumn(name = "ticketType.id")
+    @JoinColumn(name = "ticket_type_id")
+    @JsonBackReference
     private TicketType ticketType;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    @JsonBackReference
+    private Event event;
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 
     public Ticket() {
     }
 
-    public Ticket(String ticketCode, boolean isValid, TicketType ticketType) {
+    public Ticket(String ticketCode, boolean isValid, TicketType ticketType, Event event) {
         this.ticketCode = ticketCode;
         this.isValid = isValid;
         this.ticketType = ticketType;
+        this.event = event;
     }
 
     public Long getId() {

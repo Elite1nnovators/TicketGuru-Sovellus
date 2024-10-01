@@ -268,3 +268,260 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 [Linkki tietokantakaavioon](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
 
 
+## REST API dokumentaatio
+
+**Base URL: kehityksen aikana käytettävä base URL on http://localhost:8080/**
+
+
+<details>
+<summary>  Lisää tapahtuma (POST)</summary>
+
+* Metodi: POST
+* Polku: /event
+
+Sisältö:
+
+```
+{
+    "eventName": "Concert 1",
+    "eventDate": "2024-10-01T05:08:30.651+00:00",
+    "eventAddress": "Event Address 1",
+    "eventCity": "Helsinki",
+    "eventDescription": "A great concert event",
+    "eventTicketTypes": [ {"ticketType":{ "id":1, "name": "aikuinen"}, "price": 10, "ticketsInStock": 40}]
+}
+
+```
+* Paluukoodi: 201 Created
+
+```
+{
+    "eventId": 5,
+    "eventName": "Concert 4",
+    "eventDate": "2024-10-01T05:08:30.651+00:00",
+    "eventAddress": "Event Address 1",
+    "eventCity": "Helsinki",
+    "eventDescription": "A great concert event",
+    "eventTicketTypes": [
+        {
+            "id": 10,
+            "ticketType": {
+                "id": 1,
+                "name": "aikuinen"
+            },
+            "price": 10.0,
+            "ticketsInStock": 40
+        }
+    ]
+}
+```
+
+* Virhekoodit:
+    * 400 Bad Request: Pyynnössä oli virheellisiä tietoja (esim. puuttuvat tai väärän tyyppiset kentät).
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia luoda tapahtumaa.
+
+Sisältö:
+```
+{}
+```
+</details>
+
+<details>
+<summary> Muokkaa tapahtumaa (PUT) </summary>
+
+* Metodi: PUT
+* Polku: /event/{id}
+* Polkuparametri:
+    * id: Muokattavan tapahtuman yksilöivä tunnus
+
+ Sisältö:   
+
+```
+   {
+    "eventName": "Concert 1",
+    "eventDate": "2024-10-01T09:43:35.689+00:00",
+    "eventAddress": "Event Address 1",
+    "eventCity": "Helsinki",
+    "eventDescription": "A great concert event",
+    "eventTicketTypes": [
+        {
+            "id": 1,
+            "ticketType": {
+                "id": 1,
+                "name": "Aikuinen"
+            },
+            "price": 20.0,
+            "ticketsInStock": 50
+        },
+        {
+            "id": 2,
+            "ticketType": {
+                "id": 2,
+                "name": "Lapsi"
+            },
+            "price": 10.0,
+            "ticketsInStock": 60
+        },
+        {
+            "id": 3,
+            "ticketType": {
+                "id": 3,
+                "name": "VIP"
+            },
+            "price": 100.0,
+            "ticketsInStock": 15
+        }
+    ]
+}
+
+```
+* Paluukoodi: 200 OK
+
+```
+Sisältö: 
+{
+    "eventId": 1,
+    "eventName": "Concert 1",
+    "eventDate": "2024-10-01T09:43:35.689+00:00",
+    "eventAddress": "Updated Event Address 1",
+    "eventCity": "Updated City",
+    "eventDescription": "Updated description",
+    "eventTicketTypes": [
+        {
+            "id": 1,
+            "ticketType": {
+                "id": 1,
+                "name": "Aikuinen"
+            },
+            "price": 20.0,
+            "ticketsInStock": 50
+        },
+        {
+            "id": 2,
+            "ticketType": {
+                "id": 2,
+                "name": "Lapsi"
+            },
+            "price": 10.0,
+            "ticketsInStock": 60
+        },
+        {
+            "id": 3,
+            "ticketType": {
+                "id": 3,
+                "name": "VIP"
+            },
+            "price": 100.0,
+            "ticketsInStock": 15
+        }
+    ]
+}
+
+```
+
+* Virhekoodit:
+    * 400 Bad Request: Pyynnössä oli virheellisiä tietoja.
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia muokata tätä tapahtumaa.
+    * 404 Not Found: Tapahtumaa annetulla id:ia ei löytynyt.
+
+Sisältö:
+```
+{}
+```
+
+</details>
+
+<details>
+<summary> Hae tapahtuma (GET) </summary>
+
+* Metodi: GET
+* Polku: /event/{id}
+* Polkuparametri:
+    * id: Haettavan tapahtuman yksilöivä tunnus
+* Paluukoodi: 200 OK
+
+Vastaus:
+
+```
+{
+    "eventId": 1,
+    "eventName": "Concert 1",
+    "eventDate": "2024-10-01T09:43:35.689+00:00",
+    "eventAddress": "Event Address 1",
+    "eventCity": "Helsinki",
+    "eventDescription": "A great concert event",
+    "eventTicketTypes": [
+        {
+            "id": 1,
+            "ticketType": {
+                "id": 1,
+                "name": "Aikuinen"
+            },
+            "price": 20.0,
+            "ticketsInStock": 50
+        },
+        {
+            "id": 2,
+            "ticketType": {
+                "id": 2,
+                "name": "Lapsi"
+            },
+            "price": 10.0,
+            "ticketsInStock": 60
+        },
+        {
+            "id": 3,
+            "ticketType": {
+                "id": 3,
+                "name": "VIP"
+            },
+            "price": 100.0,
+            "ticketsInStock": 15
+        }
+    ]
+}
+
+```
+
+* Query-parametrit ovat valinnaisia. Niitä käytetään hakujen suodattamiseen:
+
+* **location:** Palauttaa vain ne tapahtumat, jotka järjestetään määritetyssä sijainnissa.
+    * Esimerkki: /events?location=Helsinki
+* **date**: Palauttaa vain ne tapahtumat, jotka järjestetään määritettynä päivämääränä.
+    * Esimerkki: /events?date=2024-09-28
+* **location** ja date voidaan yhdistää, jotta haetaan vain tietyn sijainnin tapahtumat tiettynä päivänä.
+    * Esimerkki: /events?location=Helsinki&date=2024-09-28
+
+
+* Virhekoodit:
+    * 404 Not Found: Tapahtumaa annetulla query -parametrilla ei löytynyt
+
+Sisältö:
+
+```
+{}
+```
+</details>
+
+<details>
+<summary> Poista tapahtuma (DELETE) </summary>
+
+* Metodi: DELETE
+* Polku: /event/{id}
+*  Polkuparametri:
+    * id: Poistettavan tapahtuman yksilöivä tunnus
+* Paluukoodi: 204 No Content
+Sisältö:
+```
+{}
+```
+* Virhekoodit:
+    * 404 Not Found: Tapahtumaa annetulla query -parametrilla ei löytynyt
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia poistaa tätä tapahtumaa.
+
+Sisältö:
+
+```
+{}
+```
+</details>

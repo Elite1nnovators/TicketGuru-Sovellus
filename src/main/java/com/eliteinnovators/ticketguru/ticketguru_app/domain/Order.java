@@ -10,20 +10,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "order_entity")
 public class Order {
 
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long order_id;
+    private Long orderId;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "salesPerson_id")
+    @JoinColumn(name = "salesperson_id")
     private Salesperson salesperson;
 
     private Date orderDate;
@@ -36,20 +38,19 @@ public class Order {
 
     }
 
-    public Order(Customer customer, Date orderDate, List<OrderDetails> orderDetails, Long order_id, Salesperson salesperson) {
+    public Order(Customer customer, Date orderDate, List<OrderDetails> orderDetails, Salesperson salesperson) {
         this.customer = customer;
         this.orderDate = orderDate;
         this.orderDetails = orderDetails;
-        this.order_id = order_id;
         this.salesperson = salesperson;
     }
 
-    public Long getOrder_id() {
-        return order_id;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(Long order_id) {
-        this.order_id = order_id;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public Customer getCustomer() {
@@ -86,7 +87,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order [order_id=" + order_id + ", customer=" + customer + ", salesperson=" + salesperson
+        return "Order [orderId=" + orderId + ", customer=" + customer + ", salesperson=" + salesperson
                 + ", orderDate=" + orderDate + ", orderDetails=" + orderDetails + "]";
     }
  
