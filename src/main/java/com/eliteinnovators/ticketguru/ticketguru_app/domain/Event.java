@@ -49,6 +49,9 @@ public class Event {
 
     public void setEventTicketTypes(List<EventTicketType> eventTicketTypes) {
         this.eventTicketTypes = eventTicketTypes;
+        for (EventTicketType eventTicketType : eventTicketTypes) {
+            eventTicketType.setEvent(this);
+        }
     }
 
 
