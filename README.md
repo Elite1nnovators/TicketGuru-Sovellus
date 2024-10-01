@@ -277,7 +277,7 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 <summary>  Lisää tapahtuma (POST)</summary>
 
 * Metodi: POST
-* Polku: /events
+* Polku: /event
 
 Sisältö:
 
@@ -374,13 +374,42 @@ Vastaus:
 
 ```
  {
-    "eventId": 123,
+    "eventId": 1,
     "eventName": "Concert 1",
-    "eventDate": "2024-09-28T07:56:09.866+00:00",
+    "eventDate": "2024-10-01T05:08:30.651+00:00",
     "eventAddress": "Event Address 1",
     "eventCity": "Helsinki",
-    "eventDescription": "A great concert event"
-  },
+    "eventDescription": "A great concert event",
+    "eventTicketTypes": [
+        {
+            "id": 1,
+            "ticketType": {
+                "id": 1,
+                "name": "Aikuinen"
+            },
+            "price": 20.0,
+            "ticketsInStock": 50
+        },
+        {
+            "id": 2,
+            "ticketType": {
+                "id": 2,
+                "name": "Lapsi"
+            },
+            "price": 10.0,
+            "ticketsInStock": 60
+        },
+        {
+            "id": 3,
+            "ticketType": {
+                "id": 3,
+                "name": "VIP"
+            },
+            "price": 100.0,
+            "ticketsInStock": 15
+        }
+    ]
+}
 
 ```
 
