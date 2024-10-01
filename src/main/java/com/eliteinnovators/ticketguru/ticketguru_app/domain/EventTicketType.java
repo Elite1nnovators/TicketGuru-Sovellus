@@ -19,7 +19,7 @@ public class EventTicketType {
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    @JsonBackReference
+    @JsonBackReference 
     private Event event;
 
     @ManyToOne

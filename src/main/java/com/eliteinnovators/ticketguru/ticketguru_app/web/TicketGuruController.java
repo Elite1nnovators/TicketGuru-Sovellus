@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
 
 @RestController
@@ -36,9 +37,12 @@ public class TicketGuruController {
         return eRepo.findById(eventId).orElse(null);
     }
 
-    @PostMapping("/event")
-    Event newEvent(@RequestBody Event newEvent) {
-        return eRepo.save(newEvent);
+      @PostMapping("/event")
+    public Event newEvent(@RequestBody Event newEvent) {
+        for (EventTicketType eventTicketType : newEvent.getEventTicketTypes()) {
+            eventTicketType.setEvent(newEvent); 
+        }
+        return eRepo.save(newEvent); 
     }
 
     @PutMapping("event/{eventId}")
