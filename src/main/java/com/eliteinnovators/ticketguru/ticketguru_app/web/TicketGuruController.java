@@ -30,23 +30,23 @@ public class TicketGuruController {
         return eRepo.findAll();
     }
 
-    @GetMapping("/event/{eventId}")
+    @GetMapping("/events/{eventId}")
     Event getEventById(@PathVariable Long eventId) {
         return eRepo.findById(eventId).orElse(null);
     }
 
-      @PostMapping("/event")
+      @PostMapping("/events")
     public Event newEvent(@RequestBody Event newEvent) {
         return eRepo.save(newEvent); 
     }
 
-    @PutMapping("event/{eventId}")
+    @PutMapping("events/{eventId}")
     Event editEvent(@RequestBody Event editedEvent, @PathVariable Long eventId) {
         editedEvent.setEventId(eventId);
         return eRepo.save(editedEvent);
     }
 
-    @DeleteMapping("event/{eventId}")
+    @DeleteMapping("events/{eventId}")
     public Iterable<Event> deleteEvent(@PathVariable("eventId") Long eventId) {
         eRepo.deleteById(eventId);
         return eRepo.findAll();
