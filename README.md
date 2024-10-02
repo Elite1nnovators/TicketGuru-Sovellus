@@ -1,6 +1,6 @@
 # TicketGuru-Sovellus
 
-[TicketGuru backlog sekä käyttöliittymäkaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=0#gid=0)
+[TicketGuru backlog -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=0#gid=0)
 
 # Johdanto
 
@@ -217,6 +217,19 @@ Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Y
 | TicketType_id     | int(AN) PK       | Lipputyypin yksilöllinen tunniste.                      |
 | Type_name         | varchar(30)      | Lipputyypin nimi (esim. aikuinen, lapsi).               |
 | type_price        | double           | Lipputyypin hinta.                                      |
+
+### EventTicketType (Tapahtuman lipputyyppi)
+
+Tapahtuman lipputyyppitaulu sisältää tiedot tapahtuman lipputyypeistä ja niiden määristä. Jokainen tapahtuma voi sisältää useita lipputyyppejä. Lipputyypit ovat määritetty TicketType-taulussa ja viitattu tähän tapahtuman lippukohtaisilla määrillä ja hinnoilla.
+
+| Kenttä            | Tyyppi           | Kuvaus                                                  |
+| ------------------|------------------| --------------------------------------------------------|
+| EventTicketType_id | int(AN) PK       | Tapahtuman lipputyypin yksilöllinen tunniste.            |
+| TicketType_id      | int FK           | Viittaus lipputyyppiin (TicketType-taulu).               |
+| Event_id           | int FK           | Viittaus tapahtumaan (Event-taulu).                      |
+| Price              | double           | Lipputyypin hinta tapahtumassa.                          |
+| TotalQuantity      | int              | Tapahtuman lipputyypin lippujen kokonaismäärä.           |
+| TicketsInStock     | int              | Tapahtuman lipputyypin jäljellä olevien lippujen määrä.  |
 
 
 ### OrderDetails (Tilauksen tiedot)
