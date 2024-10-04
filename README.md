@@ -19,6 +19,7 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 <details>
 <summary> Lipputoimiston myyjä</summary>
 
+
 ### Lipputoimiston myyjä
 - Pystyy tarkastelemaan eri tapahtumien lippuja, niiden tyyppejä ja hintoja.
 - Voi myydä asiakkaalle lipun ja tulostaa sen.
@@ -52,11 +53,17 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - Näkee ostamansa lipun tiedot (tapahtuma, lipputyyppi, hinta, tarkistuskoodi). Lipussa näkyy myös ostopäivämäärä ja aika.
 </details>
 
+
 ## Käyttötapaukset ja käyttäjätarinat
 <details>
 <summary> Lipputoimiston myyjä </summary>
 
 ### Lipputoimiston myyjä
+
+<details>
+<summary> Lipputoimiston myyjä- käyttötapaukset</summary>
+</br>
+
 - **Käyttötapaus 1: Tapahtumien tarkastelu**
   - **Tavoite:** Myyjä haluaa tarkastella tapahtumien lippuja, niiden tyyppejä ja hintoja.
   - **Toimet:** Myyjä navigoi järjestelmään, valitsee tarkasteltavan tapahtuman ja katsoo sen tiedot, kuten lipputyypit ja lippujen hinnat.
@@ -73,10 +80,14 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Tulos:** Myyjä saa näkyviin raportin myymistään lipuista.
 </details>
 
-<details>
-<summary> Järjestelmän pääkäyttäjä </summary>
+</details>
 
 ### Järjestelmän pääkäyttäjä
+
+<details>
+<summary> Järjestelmän pääkäyttäjä- käyttötapaukset </summary>
+</br>
+
 - **Käyttötapaus 1: Tapahtuman luominen**
     - **Tavoite:** Pääkäyttäjä haluaa lisätä uuden tapahtuman järjestelmään.
     - **Toimet:** Pääkäyttäjä syöttää tapahtuman tiedot (nimi, päivämäärä, lipputyypit, hinnat) ja tallentaa tiedot.
@@ -92,7 +103,14 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Toimet:** Pääkäyttäjä kirjautuu järjestelmään, valitsee tarkasteltavat tapahtumat ja aikajaksot, ja tarkastelee myyntiraportteja.
     - **Tulos:** Pääkäyttäjä saa näkyviin yhteenvedon myynnistä kaikkien tapahtumien osalta ja voi analysoida myyntitietoja.
 
+</details>
+
 ### Tapahtumajärjestäjä
+
+<details>
+<summary> Tapahtumajärjestäjä- käyttötapaukset </summary>
+</br>
+
 - **Käyttötapaus 1: Myyntiraportin luominen**
     - **Tavoite:** Tapahtumajärjestäjä haluaa tarkastella myyntiraporttia omasta tapahtumastaan.
     - **Toimet:** Tapahtumajärjestäjä valitsee tapahtuman ja aikajakson, luo raportin ja tulostaa sen.
@@ -104,10 +122,14 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Tulos:** Tapahtumajärjestäjä saa näkyviin raportin myymistään lipuista.
 </details>
 
-<details>
-<summary> Asiakas </summary>
+</details>
 
 ### Asiakas
+
+<details>
+<summary> Asiakas- käyttötapaukset</summary>
+</br>
+
 - **Käyttötapaus 1: Lipun ostaminen**
     - **Tavoite:** Asiakas haluaa ostaa lipun tapahtumaan.
     - **Toimet:** Asiakas valitsee tapahtuman, valitsee lipputyypin, maksaa lipun ja saa tulostetun lipun.
@@ -122,6 +144,10 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 ## Käyttäjätarinat
 <details> 
     <summary> Käyttäjätarinat </summary>
+
+<details>
+<summary>  Lista käyttäjätarinoista   </summary>
+</br>
 
 - **Käyttäjänä haluan ostaa liput tapahtumaan** niin, että voin valita tapahtuman, lipputyypin (aikuinen, lapsi, eläkeläinen jne.) ja ostaa haluamani määrän lippuja helposti. Tavoitteenani on sujuva ostokokemus ilman ongelmia.
 
@@ -152,8 +178,9 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - **Kehittäjänä haluan seurata ja raportoida sovelluksen virheitä ja bugeja**, jotta ne voidaan korjata nopeasti ja parantaa sovelluksen laatua.
 </details>
 
-<details>
-<summary> Yksityiskohtaiset vaatimukset </summary>
+</details>
+
+</br>
 
 ## Yksityiskohtaiset vaatimukset
 
@@ -179,35 +206,61 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - **Ei sisälly:** Verkkokauppatoiminnot (tulevaisuudessa mahdollisesti).
 </details>
 
+</br>
+
 # Käyttöliittymä
 
 <details>
 <summary>Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät voivat suorittaa tarvitsemansa toiminnot. Tässä kuvataan nämä päänäkymät ja miten niissä liikutaan.</summary>
 
-### Etusivu
+<details>
+<summary> Etusivu </summary>
+</br>
+
 - **Miksi:** Etusivu toimii pääsivuna, josta käyttäjä pääsee kaikkiin tärkeimpiin osiin sovelluksessa.
 - **Mitä:** Sivulla on linkit tapahtumien hallintaan, lipunmyyntiin ja raporttien tarkasteluun.
 - **Siirtymiset:** Etusivulta käyttäjä pääsee helposti muihin näkymiin ja takaisin.
 
-### Tapahtumien hallinta
+</details>
+
+<details>
+
+<summary> Tapahtumien hallinta </summary>
+</br>
+
 - **Miksi:** Täällä käyttäjä voi hallita tapahtumia, kuten lisätä, muokata ja poistaa niitä.
 - **Mitä:** Näkymässä on lista tapahtumista, lomake uusille tapahtumille ja työkalut tapahtumien muokkaamiseen.
 - **Siirtymiset:** Käyttäjä voi siirtyä etusivulta tapahtumien hallintaan ja takaisin etusivulle.
+</details>
 
-### Lipunmyyntinäkymä
+<details>
+<summary> Lipunmyyntinäkymä </summary>
+</br>
+
 - **Miksi:** Tämä on myyjien työskentelynäkymä, jossa he voivat myydä lippuja asiakkaille.
 - **Mitä:** Näkymässä valitaan tapahtuma, lipputyyppi, syötetään asiakastiedot ja maksetaan liput.
 - **Siirtymiset:** Etusivulta käyttäjä pääsee lipunmyyntiin ja takaisin. Lipunmyyntitapahtumasta voi siirtyä myös myyntiraporttiin.
+</details>
 
-### Myyntiraportit
+
+<details>
+<summary> Myyntiraportit </summary>
+</br>
+
 - **Miksi:** Täällä käyttäjä voi tarkastella myyntiraportteja ja saada kokonaiskuvan myynnistä.
 - **Mitä:** Näkymässä on raporttilistat, suodatusvaihtoehdot ja yksityiskohtaiset myyntitiedot.
 - **Siirtymiset:** Raporttien tarkastelusta voi palata etusivulle.
+</details>
 
-### Asiakasnäkymä
+<details>
+<summary> Asiakasnäkymä </summary>
+</br>
+
 - **Miksi:** Asiakkaat voivat tarkastella ostamiaan lippuja ja tapahtumatietoja.
 - **Mitä:** Näkymässä näkyvät ostetut liput, tapahtumatiedot ja tarkistuskoodi.
 - **Siirtymiset:** Asiakas voi siirtyä asiakasnäkymään etusivulta ja palata takaisin etusivulle.
+</details>
+
 
 ### Käyttöliittymäkaavio
 - **Kaavio:** [Käyttöliittymäkaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=643351026#gid=643351026)
@@ -224,8 +277,13 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 <details>
 <summary> Tietohakemisto </summary>
 
+
+
 ### Event (Tapahtuma)
-Tapahtumataulu sisältää tiedot järjestettävistä tapahtumista, joihin myydään lippuja. Yksi tapahtuma voi sisältää useita lippuja
+
+<details>
+<summary>Tapahtumataulu sisältää tiedot järjestettävistä tapahtumista, joihin myydään lippuja. Yksi tapahtuma voi sisältää useita lippuja</summary>
+</br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|----------------  | ------------------------------------------------------- |
@@ -236,9 +294,14 @@ Tapahtumataulu sisältää tiedot järjestettävistä tapahtumista, joihin myyd�
 | Event_city        | varchar(50)      | Kaupunki, jossa tapahtuma järjestetään.                 |
 | Event_description | varchar(50)      | Lyhyt kuvaus tapahtumasta.                              |
 
-### Ticket (Lippu)
-Lipputaulu sisältää tiedot myydyistä lipuista tiettyihin tapahtumiin.  Yksi lippu kuuluu yhteen tapahtumaan ja yhteen lipputyyppiin . Yksi lippu voi kuulua useaan tilaukseen.
+</details>
+</br>
 
+### Ticket (Lippu)
+
+<details>
+<summary>Lipputaulu sisältää tiedot myydyistä lipuista tiettyihin tapahtumiin.  Yksi lippu kuuluu yhteen tapahtumaan ja yhteen lipputyyppiin . Yksi lippu voi kuulua useaan tilaukseen.</summary>
+</br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| ------------------------------------------------------- |
@@ -250,8 +313,14 @@ Lipputaulu sisältää tiedot myydyistä lipuista tiettyihin tapahtumiin.  Yksi 
 | TicketCode        | varchar(30)      | Lipun tarkistuskoodi (QR- tai viivakoodi).              |
 | TicketIsUsed      | boolean          | Indikaatio siitä, onko lippu käytetty.                  |
 
+</details>
+</br>
+
 ### TicketType (Lipputyyppi)
-Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Yksi lipputyyppi voi liittyä useisiin lippuihin.
+
+<details>
+<summary> Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Yksi lipputyyppi voi liittyä useisiin lippuihin. </summary>
+</br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| ------------------------------------------------------- |
@@ -259,8 +328,15 @@ Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Y
 | Type_name         | varchar(30)      | Lipputyypin nimi (esim. aikuinen, lapsi).               |
 | type_price        | double           | Lipputyypin hinta.                                      |
 
+</details>
+</br>
+
 ### EventTicketType (Tapahtuman lipputyyppi)
-Tapahtuman lipputyyppitaulu sisältää tiedot tapahtuman lipputyypeistä ja niiden määristä. Jokainen tapahtuma voi sisältää useita lipputyyppejä. Lipputyypit ovat määritetty TicketType-taulussa ja viitattu tähän tapahtuman lippukohtaisilla määrillä ja hinnoilla.
+
+
+<details>
+<summary>Tapahtuman lipputyyppitaulu sisältää tiedot tapahtuman lipputyypeistä ja niiden määristä. Jokainen tapahtuma voi sisältää useita lipputyyppejä. Lipputyypit ovat määritetty TicketType-taulussa ja viitattu tähän tapahtuman lippukohtaisilla määrillä ja hinnoilla. </summary>
+</br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
@@ -271,10 +347,16 @@ Tapahtuman lipputyyppitaulu sisältää tiedot tapahtuman lipputyypeistä ja nii
 | TotalQuantity      | int              | Tapahtuman lipputyypin lippujen kokonaismäärä.           |
 | TicketsInStock     | int              | Tapahtuman lipputyypin jäljellä olevien lippujen määrä.  |
 
+</details>
+</br>
 
 ### OrderDetails (Tilauksen tiedot)
-Tilausrivien taulu sisältää yksityiskohtaiset tiedot yksittäisistä lipuista, jotka kuuluvat tilauksiin. Yksi tilaus voi sisältää useita lippuja
 
+<details>
+<summary>
+Tilausrivien taulu sisältää yksityiskohtaiset tiedot yksittäisistä lipuista, jotka kuuluvat tilauksiin. Yksi tilaus voi sisältää useita lippuja
+</summary>
+</br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
@@ -283,9 +365,17 @@ Tilausrivien taulu sisältää yksityiskohtaiset tiedot yksittäisistä lipuista
 | Ticket_id         | int FK           | Viittaus lippuun (Ticket-taulu).                        |
 | UnitPrice         | double           | Lipun yksikköhinta tilauksen hetkellä.                  |
 
+</details>
+</br>
 
 ### Customer
+
+<details>
+<summary>
 Asiakastaulu sisältää tiedot asiakkaista, jotka ostavat lippuja. Yhdellä asiakkaalla voi olla useita tilauksia.
+</summary>
+</br>
+
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
@@ -297,8 +387,17 @@ Asiakastaulu sisältää tiedot asiakkaista, jotka ostavat lippuja. Yhdellä asi
 | Cust_address      | varchar(30)      | Asiakkaan osoite.                                       |
 | Cust_City         | varchar(30)      | Asiakkaan asuinpaikkakunta.                             |
 
+</details>
+</br>
+
 ### Order
+
+<details>
+<summary>
 Tilaustaulu sisältää tiedot asiakkaiden tekemistä lippuostoista. Yksi asiakas voi tehdä useita tilauksia. Yhdessä tilauksessa voi olla useita lippuja.
+</summary>
+</br>
+
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
@@ -307,8 +406,15 @@ Tilaustaulu sisältää tiedot asiakkaiden tekemistä lippuostoista. Yksi asiaka
 | SalesPerson_id    | int FK           | Viittaus myyjään (SalesPerson-taulu).                   |
 | OrderDate         | date             | Tilauksen päivämäärä.                                   |
 
+</details>
+</br>
+
 ### SalesPerson
+
+<details>
+<summary>
 Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston työntekijöistä. Yksi myyjä voi käsitellä useita tilauksia.
+</summary>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
@@ -318,6 +424,7 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 | SalesP_phone      | varchar(30)      | Myyjän puhelinnumero.                                   |
 
 </details>
+</br>
 
 [Linkki tietokantakaavioon](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
 
