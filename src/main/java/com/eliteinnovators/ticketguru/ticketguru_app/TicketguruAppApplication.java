@@ -11,6 +11,7 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.Customer;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
@@ -87,6 +88,10 @@ public class TicketguruAppApplication {
             orderRepository.save(order);
             orderRepository.save(order2);
 
+            OrderDetails orderDetails = new OrderDetails(order, 3, ticket2, 30);
+            OrderDetails orderDetails2 = new OrderDetails(order, 4, ticket3, 10);
+            orderDetailsRepository.save(orderDetails);
+            orderDetailsRepository.save(orderDetails2);
         };
     }
 }
