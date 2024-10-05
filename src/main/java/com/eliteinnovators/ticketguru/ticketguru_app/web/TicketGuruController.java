@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderRepository;
 
 @RestController
 public class TicketGuruController {
 
     @Autowired
     EventRepository eRepo;
-    OrderRepository orderRepo;
 
     @GetMapping("/")
     public String index() {
@@ -53,34 +51,4 @@ public class TicketGuruController {
         return eRepo.findAll();
     }
 
-    // MYYNTITAPAHTUMIEN REST -ENDPOINTIT
-    /*@GetMapping("/orders")
-    public Iterable<Order> getAllOrders() {
-        return orderRepo.findAll();
-    }
-
-    @GetMapping("/orders/{orderId}")
-    Order getOrderById(@PathVariable Long orderId) {
-        return orderRepo.findById(orderId).orElse(null);
-    }
-
-     kesken
-    @PostMapping("/orders")
-    public Order newOrder(@RequestBody Order newOrder) {
-        return orderRepo.save(newOrder);
-    }
-
-    //kesken
-    @PutMapping("orders/{orderId}")
-    Order editOrder(@RequestBody Order editedOrder, @PathVariable Long OrderId) {
-        editedOrder.setOrderId(orderId);
-        return orderRepo.save(editedOrder);
-    }
-
-    //kesken
-    @DeleteMapping("orders/{orderId}")
-    public Iterable<Order> deleteOrder(@PathVariable("orderId") Long orderId) {
-        orderRepo.deleteById(orderId);
-        return orderRepo.findAll();
-    } */
 }
