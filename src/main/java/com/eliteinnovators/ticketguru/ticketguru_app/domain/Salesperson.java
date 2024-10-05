@@ -1,8 +1,10 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,8 +32,8 @@ public class Salesperson {
     private String firstName, lastName, phone;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "salesperson")
-    @JsonIgnore
-    private List<Order> orders;
+    @JsonManagedReference
+    private List<Order> orders = new ArrayList<>();
 
     public Salesperson() {}
     

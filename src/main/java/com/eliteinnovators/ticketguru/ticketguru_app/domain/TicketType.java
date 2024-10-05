@@ -1,6 +1,9 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.ArrayList;
 
 
@@ -21,6 +24,7 @@ public class TicketType {
     private String name;
     
     @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL)
+    @JsonManagedReference 
     private List<EventTicketType> eventTicketTypes = new ArrayList<>(); 
 
     public TicketType(String name) {

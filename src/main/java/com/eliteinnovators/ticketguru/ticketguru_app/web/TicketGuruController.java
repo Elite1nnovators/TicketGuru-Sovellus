@@ -1,5 +1,8 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class TicketGuruController {
@@ -50,5 +55,18 @@ public class TicketGuruController {
         eRepo.deleteById(eventId);
         return eRepo.findAll();
     }
+
+    @GetMapping("/events/")
+    public List<Event> searchEvents(@RequestParam(required = false) String name, @RequestParam(required = false) String city) {
+        if (name != null && !name.isEmpty() && city != null && !city.isEmpty()) {
+            return eRepo.findByEventNameAndCity(name, city);
+        } else if (name != null && !name.isEmpty()) {
+            return eRepo.findByEventName(name);
+        } else if (city != null && !city.isEmpty()) {
+            return eRepo.findByEventCity(city);
+        }
+        return eRepo.findAll();
+    }
+    
 
 }
