@@ -1,7 +1,6 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import java.util.Date;
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,18 +28,13 @@ public class Order {
 
     private Date orderDate;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderDetails> orderDetails;
-
-
-    public Order () {
+    public Order() {
 
     }
 
-    public Order(Customer customer, Date orderDate, List<OrderDetails> orderDetails, Salesperson salesperson) {
+    public Order(Customer customer, Date orderDate, Salesperson salesperson) {
         this.customer = customer;
         this.orderDate = orderDate;
-        this.orderDetails = orderDetails;
         this.salesperson = salesperson;
     }
 
@@ -77,19 +70,10 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public List<OrderDetails> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetails> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-
     @Override
     public String toString() {
         return "Order [orderId=" + orderId + ", customer=" + customer + ", salesperson=" + salesperson
-                + ", orderDate=" + orderDate + ", orderDetails=" + orderDetails + "]";
+                + ", orderDate=" + orderDate;
     }
- 
 
 }
