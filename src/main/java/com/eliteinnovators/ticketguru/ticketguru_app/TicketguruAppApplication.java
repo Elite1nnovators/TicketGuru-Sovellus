@@ -59,12 +59,12 @@ public class TicketguruAppApplication {
 			customerRepository.save(customer);
 			customerRepository.save(customer2);
 
-			Ticket ticket = new Ticket("hashedcode", true, ticketType, event);
-			Ticket ticket2 = new Ticket("hashedcode2", true, ticketType2, event);
-			Ticket ticket3 = new Ticket("hashedcode3", true, ticketType3, event);
-			Ticket ticket4 = new Ticket("hashedcode4", true, ticketType, event2);
-			Ticket ticket5 = new Ticket("hashedcode5", true, ticketType2, event2);
-			Ticket ticket6 = new Ticket("hashedcode6", true, ticketType3, event2);
+			Ticket ticket = new Ticket(eventTicketType, "hashedcode", true);
+			Ticket ticket2 = new Ticket(eventTicketType2, "hashedcode2", true);
+			Ticket ticket3 = new Ticket(eventTicketType3, "hashedcode3", true);
+			Ticket ticket4 = new Ticket(event2TicketType, "hashedcode4", true);
+			Ticket ticket5 = new Ticket(eventTicketType2, "hashedcode5", true);
+			Ticket ticket6 = new Ticket(eventTicketType3, "hashedcode6", true);
 			ticketRepository.save(ticket);
 			ticketRepository.save(ticket2);
 			ticketRepository.save(ticket3);
