@@ -17,6 +17,7 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.CustomerRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventTicketTypeRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderDetailsRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.SalespersonRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
@@ -30,7 +31,7 @@ public class TicketguruAppApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(CustomerRepository customerRepository, EventRepository eventRepository, TicketRepository ticketRepository, TicketTypeRepository ticketTypeRepository, EventTicketTypeRepository eventTicketTypeRepository, SalespersonRepository salespersonRepository, OrderRepository orderRepository) {
+    public CommandLineRunner demo(CustomerRepository customerRepository, EventRepository eventRepository, TicketRepository ticketRepository, TicketTypeRepository ticketTypeRepository, EventTicketTypeRepository eventTicketTypeRepository, SalespersonRepository salespersonRepository, OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository) {
         return (args) -> {
             TicketType ticketType = new TicketType("Aikuinen");
             TicketType ticketType2 = new TicketType("Lapsi");
