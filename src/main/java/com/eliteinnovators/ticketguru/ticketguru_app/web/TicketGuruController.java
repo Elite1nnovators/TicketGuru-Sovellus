@@ -1,8 +1,6 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +23,7 @@ public class TicketGuruController {
         return "index";
     }
 
+    // EVENTTIEN REST -ENDPOINTIT
     @GetMapping("/events")
     public Iterable<Event> getAllEvents() {
         return eRepo.findAll();
@@ -35,9 +34,9 @@ public class TicketGuruController {
         return eRepo.findById(eventId).orElse(null);
     }
 
-      @PostMapping("/events")
+    @PostMapping("/events")
     public Event newEvent(@RequestBody Event newEvent) {
-        return eRepo.save(newEvent); 
+        return eRepo.save(newEvent);
     }
 
     @PutMapping("events/{eventId}")
@@ -52,4 +51,5 @@ public class TicketGuruController {
         return eRepo.findAll();
     }
 
+    // MYYNTITAPAHTUMIEN REST -ENDPOINTIT
 }
