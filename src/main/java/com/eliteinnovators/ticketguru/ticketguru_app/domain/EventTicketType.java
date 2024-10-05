@@ -32,7 +32,7 @@ public class EventTicketType {
     private TicketType ticketType;
 
     @OneToMany(mappedBy = "eventTicketType", cascade = CascadeType.ALL)
-    @JsonManagedReference 
+    @JsonManagedReference
     private List<Ticket> tickets = new ArrayList<>();
 
     private double price; 
