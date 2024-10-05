@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderDetailsRepository;
 
 @RestController
 public class OrderController {
@@ -18,8 +20,10 @@ public class OrderController {
      @Autowired
     OrderRepository orderRepo;
 
+    @Autowired
+    OrderDetailsRepository orderDetailsRepo;
 
-    // MYYNTITAPAHTUMIEN REST -ENDPOINTIT
+    // ORDER REST -ENDPOINTIT
     @GetMapping("/orders")
     public Iterable<Order> getAllOrders() {
         return orderRepo.findAll();
@@ -36,17 +40,47 @@ public class OrderController {
         return orderRepo.save(newOrder);
     }
 
-    //kesken
+    
     @PutMapping("orders/{orderId}")
     Order editOrder(@RequestBody Order editedOrder, @PathVariable Long orderId) {
         editedOrder.setOrderId(orderId);
         return orderRepo.save(editedOrder);
     }
 
-    //kesken
+    
     @DeleteMapping("orders/{orderId}")
     public Iterable<Order> deleteOrder(@PathVariable("orderId") Long orderId) {
         orderRepo.deleteById(orderId);
         return orderRepo.findAll();
+    }
+
+    // ORDERDETAILS REST -ENDPOINTIT
+    @GetMapping("/orderdetails")
+    public Iterable<OrderDetails> getAllOrderDetails() {
+        return orderDetailsRepo.findAll();
+    }
+
+    @GetMapping("/orderdetails/{orderdetailsId}")
+    OrderDetails getOrderDetailsById(@PathVariable Long orderDetailsId) {
+        return orderDetailsRepo.findById(orderDetailsId).orElse(null);
+    }
+
+   // kesken
+   /*  @PostMapping("/orderdetails")
+    public Order newOrderDetails(@RequestBody Order newOrderDetails) {
+        return orderDetailsRepo.save(newOrderDetails);
+    }*/
+
+    
+    @PutMapping("orderdetails/{orderdetailsId}")
+    OrderDetails editOrderDetails(@RequestBody OrderDetails editedOrderDetails, @PathVariable Long orderDetailsId) {
+        editedOrderDetails.setOrderDetailId(orderDetailsId);
+        return orderDetailsRepo.save(editedOrderDetails);
+    }
+
+    @DeleteMapping("orderDetails/{orderDetailsId}")
+    public Iterable<OrderDetails> deleteOrderDetails(@PathVariable("orderDetailsId") Long orderDetailsId) {
+        orderDetailsRepo.deleteById(orderDetailsId);
+        return orderDetailsRepo.findAll();
     }
 }
