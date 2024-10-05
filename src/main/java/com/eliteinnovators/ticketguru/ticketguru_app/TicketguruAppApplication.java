@@ -7,19 +7,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.CustomerRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventTicketTypeRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketTypeRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Customer;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.CustomerRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventTicketTypeRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.SalespersonRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketTypeRepository;
 
 @SpringBootApplication
 public class TicketguruAppApplication {
@@ -29,7 +30,7 @@ public class TicketguruAppApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(CustomerRepository customerRepository, EventRepository eventRepository, TicketRepository ticketRepository, TicketTypeRepository ticketTypeRepository, EventTicketTypeRepository eventTicketTypeRepository, SalespersonRepository salespersonRepository) {
+    public CommandLineRunner demo(CustomerRepository customerRepository, EventRepository eventRepository, TicketRepository ticketRepository, TicketTypeRepository ticketTypeRepository, EventTicketTypeRepository eventTicketTypeRepository, SalespersonRepository salespersonRepository, OrderRepository orderRepository) {
         return (args) -> {
             TicketType ticketType = new TicketType("Aikuinen");
             TicketType ticketType2 = new TicketType("Lapsi");
@@ -62,10 +63,10 @@ public class TicketguruAppApplication {
             customerRepository.save(customer);
             customerRepository.save(customer2);
 
-            Salesperson salesPerson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "045123456", null);
-            Salesperson salesPerson2 = new Salesperson("anna_kokkonen", "password", false, "Anna", "Kokkonen", "045456321", null);
-            salespersonRepository.save(salesPerson);
-            salespersonRepository.save(salesPerson2);
+            Salesperson salesperson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "045123456", null);
+            Salesperson salesperson2 = new Salesperson("anna_kokkonen", "password", false, "Anna", "Kokkonen", "045456321", null);
+            salespersonRepository.save(salesperson);
+            salespersonRepository.save(salesperson2);
 
             Ticket ticket = new Ticket(eventTicketType, "hashedcode", true);
             Ticket ticket2 = new Ticket(eventTicketType2, "hashedcode2", true);
@@ -80,7 +81,9 @@ public class TicketguruAppApplication {
             ticketRepository.save(ticket5);
             ticketRepository.save(ticket6);
 
-            Order order = new Order(customer, salesPerson, new Date());
+            Order order = new Order(customer, new Date(), salesperson);
+            orderRepository.save(order);
+
         };
     }
 }
