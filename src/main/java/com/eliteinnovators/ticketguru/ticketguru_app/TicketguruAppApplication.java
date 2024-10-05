@@ -82,7 +82,9 @@ public class TicketguruAppApplication {
             ticketRepository.save(ticket6);
 
             Order order = new Order(customer, new Date(), salesperson);
+            Order order2 = new Order(customer2, new Date(), salesperson2);
             orderRepository.save(order);
+            orderRepository.save(order2);
 
         };
     }
