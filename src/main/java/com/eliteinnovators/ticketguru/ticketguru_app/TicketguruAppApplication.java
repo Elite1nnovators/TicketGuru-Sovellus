@@ -79,10 +79,13 @@ public class TicketguruAppApplication {
             customerRepository.save(customer);
             customerRepository.save(customer2);
 
+
+			Salesperson admin = new Salesperson("maijameikalainen", "password", true, "Maija", "Meikäläinen", "0501234567", null);
             Salesperson salesperson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "045123456", null);
             Salesperson salesperson2 = new Salesperson("anna_kokkonen", "password", false, "Anna", "Kokkonen", "045456321", null);
             salespersonRepository.save(salesperson);
             salespersonRepository.save(salesperson2);
+			salespersonRepository.save(admin);
 
             Ticket ticket = new Ticket(eventTicketType, "hashedcode", true);
             Ticket ticket2 = new Ticket(eventTicketType2, "hashedcode2", true);
