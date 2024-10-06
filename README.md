@@ -579,3 +579,298 @@ Sisältö:
 {}
 ```
 </details>
+<details>
+<summary>  Lisää myyntitapahtuma (POST) </summary>
+
+* Metodi: POST
+* Polku: /order
+
+Sisältö:
+
+```
+{
+    "customer": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com"
+    },
+    "salesPerson": {
+        "id": 1,
+        "firstName": "Sales",
+        "lastName": "Person"
+    },
+    "orderDate": "2024-10-01T10:00:00.000+00:00",
+    "orderDetails": [
+        {
+            "ticket": {
+                "id": 1,
+                "ticketType": {
+                    "id": 1,
+                    "name": "Aikuinen"
+                },
+                "eventTicketType": {
+                    "id": 1,
+                    "price": 10.0
+                }
+            },
+            "unitPrice": 10.0,
+            "quantity": 2
+        },
+        {
+            "ticket": {
+                "id": 2,
+                "ticketType": {
+                    "id": 2,
+                    "name": "Lapsi"
+                },
+                "eventTicketType": {
+                    "id": 2,
+                    "price": 5.0
+                }
+            },
+            "unitPrice": 5.0,
+            "quantity": 3
+        }
+    ]
+}
+```
+
+* Paluukoodi: 201 Created
+
+```
+{
+    "orderId": 1,
+    "customer": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com"
+    },
+    "salesPerson": {
+        "id": 1,
+        "firstName": "Sales",
+        "lastName": "Person"
+    },
+    "orderDate": "2024-10-01T10:00:00.000+00:00",
+    "orderDetails": [
+        {
+            "ticket": {
+                "id": 1,
+                "ticketType": {
+                    "id": 1,
+                    "name": "Aikuinen"
+                },
+                "eventTicketType": {
+                    "id": 1,
+                    "price": 10.0
+                }
+            },
+            "unitPrice": 10.0,
+            "quantity": 2
+        },
+        {
+            "ticket": {
+                "id": 2,
+                "ticketType": {
+                    "id": 2,
+                    "name": "Lapsi"
+                },
+                "eventTicketType": {
+                    "id": 2,
+                    "price": 5.0
+                }
+            },
+            "unitPrice": 5.0,
+            "quantity": 3
+        }
+    ]
+}
+```
+
+* Virhekoodit:
+    * 400 Bad Request: Pyynnössä oli virheellisiä tietoja (esim. puuttuvat tai väärän tyyppiset kentät).
+    * 404 Not Found: Pyydettyä resurssia (asiakas, myyjä, tapahtuma tai lippu) ei löytynyt.
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia luoda myyntitapahtumaa.
+    * 409 Conflict: Yritettiin tehdä tilaus lipuista, joita ei ole varastossa.
+
+Sisältö:
+```
+{}
+```
+</details>
+
+<details>
+<summary> Muokkaa myyntitapahtumaa (PUT) </summary>
+
+* Metodi: PUT
+* Polku: /order/{id}
+* Polkuparametri:
+    * id: Muokattavan tilauksen yksilöivä tunnus
+
+ Sisältö:   
+
+```
+{
+    "customer": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com"
+    },
+    "salesPerson": {
+        "id": 1,
+        "firstName": "Sales",
+        "lastName": "Person"
+    },
+    "orderDate": "2024-10-01T10:00:00.000+00:00",
+    "orderDetails": [
+        {
+            "ticket": {
+                "id": 1,
+                "ticketType": {
+                    "id": 1,
+                    "name": "Aikuinen"
+                },
+                "eventTicketType": {
+                    "id": 1,
+                    "price": 10.0
+                }
+            },
+            "unitPrice": 10.0,
+            "quantity": 2
+        }
+    ]
+}
+```
+
+* Paluukoodi: 200 OK
+
+```
+{
+    "orderId": 1,
+    "customer": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com"
+    },
+    "salesPerson": {
+        "id": 1,
+        "firstName": "Sales",
+        "lastName": "Person"
+    },
+    "orderDate": "2024-10-01T10:00:00.000+00:00",
+    "orderDetails": [
+        {
+            "ticket": {
+                "id": 1,
+                "ticketType": {
+                    "id": 1,
+                    "name": "Aikuinen"
+                },
+                "eventTicketType": {
+                    "id": 1,
+                    "price": 10.0
+                }
+            },
+            "unitPrice": 10.0,
+            "quantity": 2
+        }
+    ]
+}
+```
+
+* Virhekoodit:
+    * 400 Bad Request: Pyynnössä oli virheellisiä tietoja.
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia muokata tätä tilausta.
+    * 404 Not Found: Tilausta annetulla id:llä ei löytynyt.
+    * 409 Conflict: Yritettiin tehdä muokkaus, joka rikkoisi varastosaldon.
+
+Sisältö:
+```
+{}
+```
+
+</details>
+
+<details>
+<summary> Hae myyntitapahtuma (GET) </summary>
+
+* Metodi: GET
+* Polku: /order/{id}
+* Polkuparametri:
+    * id: Haettavan tilauksen yksilöivä tunnus
+* Paluukoodi: 200 OK
+
+Vastaus:
+
+```
+{
+    "orderId": 1,
+    "customer": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com"
+    },
+    "salesPerson": {
+        "id": 1,
+        "firstName": "Sales",
+        "lastName": "Person"
+    },
+    "orderDate": "2024-10-01T10:00:00.000+00:00",
+    "orderDetails": [
+        {
+            "ticket": {
+                "id": 1,
+                "ticketType": {
+                    "id": 1,
+                    "name": "Aikuinen"
+                },
+                "eventTicketType": {
+                    "id": 1,
+                    "price": 10.0
+                }
+            },
+            "unitPrice": 10.0,
+            "quantity": 2
+        }
+    ]
+}
+```
+
+* Virhekoodit:
+    * 404 Not Found: Tilausta annetulla id:llä ei löytynyt.
+
+Sisältö:
+```
+{}
+```
+</details>
+
+
+<details>
+<summary> Poista myyntitapahtuma (DELETE) </summary>
+
+* Metodi: DELETE
+* Polku: /order/{id}
+* Polkuparametri:
+    * id: Poistettavan tilauksen yksilöivä tunnus
+* Paluukoodi: 204 No Content
+
+Sisältö:
+```
+{}
+```
+
+* Virhekoodit:
+    * 404 Not Found: Tilausta annetulla id:llä ei löytynyt.
+    * 403 Forbidden: Käyttäjällä ei ole oikeuksia poistaa tätä tilausta.
+
+Sisältö:
+```
+{}
+```
+
+</details>
