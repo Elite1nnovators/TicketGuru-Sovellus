@@ -3,7 +3,6 @@
 [TicketGuru backlog -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=0#gid=0)
 
 # Johdanto
-
 Projektin tavoitteena on luoda lipunmyyntijärjestelmä (TicketGuru) lipputoimistolle, joka myy lippuja erilaisiin tapahtumiin omassa myyntipisteessään. Toistaiseksi myynti tapahtuu vain paikan päällä lipputoimistossa, mutta myöhemmin mahdollisesti myös verkkokaupan kautta. Järjestelmän tarkoituksena on, että lipputoimisto pystyy lipunmyynnin lisäksi hallinnoimaan ja tarkastelemaan myyntitapahtumia.
 
 Järjestelmä näyttää eri tapahtumiin tarjolla olevat lipputyypit ja niiden hinnat. Jokaisen myyntitapahtuman yhteydessä lippuihin tulostuu tarkastuskoodi. Sen avulla lippu voidaan merkitä käytetyksi ovella, kun asiakas tulee tapahtumaan. Lipputoimiston myyntipisteessä myydyt liput tulee voida tulostaa paperisena asiakkaille. Lipputoimiston asiakkaana on tapahtumajärjestäjiä, joille pystytään tapahtumakohtaisesti luomaan järjestelmästä myyntiraportteja. Raporteista nähdään kokonaismyynti myydyistä lipuista lipputyypeittäin sekä tarkempi erottelu jokaisesta erillisestä myyntitapahtumasta. 
@@ -12,34 +11,50 @@ Järjestelmä toteutetaan Spring Boot -menetelmän avulla Java-ohjelmointikielt�
 
 Käyttöliittymä on suunniteltu ensisijaisesti käytettäväksi pöytätietokoneilla ja läppäreillä, joita lipputoimistossa on käytössä. Kuitenkin lippujen tarkastuksen yhteydessä järjestelmää tulisi voida käyttää myös puhelimen avulla, jotta lippujen tarkastaminen on sujuvampaa.
 
-
 # Järjestelmän määrittely
 
 Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän näkökulmasta. Tämä osio keskittyy kuvaamaan, millaisia käyttäjäryhmiä (rooleja) sovelluksessa on ja millaisia toimintoja kullakin roolilla on käytettävissään. Lisäksi määrittelyssä käsitellään käyttäjätarinoita, jotka kuvaavat, miten käyttäjät vuorovaikuttavat sovelluksen kanssa ja mitkä ovat heidän tarpeensa ja odotuksensa. Tavoitteena on varmistaa, että sovellus täyttää käyttäjien ja organisaation vaatimukset, ja tarjoaa sujuvan, tehokkaan ja turvallisen käyttökokemuksen kaikille osapuolille.
 
 ## Käyttäjäryhmät (roolit)
+<details>
+<summary> Lipputoimiston myyjä</summary>
 
 ### Lipputoimiston myyjä
 - Pystyy tarkastelemaan eri tapahtumien lippuja, niiden tyyppejä ja hintoja.
 - Voi myydä asiakkaalle lipun ja tulostaa sen.
 - Voi tarkastella myymiensä lippujen myyntiraportteja.
 - Ei pysty muokkaamaan tapahtumiin kirjattuja lipputietoja tai hintoja.
+</details>
+
+<details>
+<summary> Järjestelmän pääkäyttäjä</summary>
 
 ### Järjestelmän pääkäyttäjä
 - Lipputoimiston henkilökuntaa.
 - Pystyy käyttämään kaikkia järjestelmän ominaisuuksia (lisäys, muokkaus, poisto).
 - Voi tarkastella kaikkien tapahtumien myyntiraportteja.
 - Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään.
+</details>
+
+<details>
+<summary> Tapahtumajärjestäjä</summary>
 
 ### Tapahtumajärjestäjä
 - Pystyy tarkastelemaan omien tapahtumiensa lipputietoja.
 - Voi luoda ja tulostaa myyntiraportteja omista tapahtumista.
+</details>
+
+<details>
+<summary> Asiakas</summary>
 
 ### Asiakas
 - Voi ostaa lippuja Lipputoimiston myyntipisteestä.
 - Näkee ostamansa lipun tiedot (tapahtuma, lipputyyppi, hinta, tarkistuskoodi). Lipussa näkyy myös ostopäivämäärä ja aika.
+</details>
 
 ## Käyttötapaukset ja käyttäjätarinat
+<details>
+<summary> Lipputoimiston myyjä </summary>
 
 ### Lipputoimiston myyjä
 - **Käyttötapaus 1: Tapahtumien tarkastelu**
@@ -56,6 +71,10 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Tavoite:** Myyjä haluaa tarkastella myymiään lippuja.
     - **Toimet:** Myyjä kirjautuu järjestelmään, valitsee ajanjakson ja tarkastelee raporttia omista myynneistään.
     - **Tulos:** Myyjä saa näkyviin raportin myymistään lipuista.
+</details>
+
+<details>
+<summary> Järjestelmän pääkäyttäjä </summary>
 
 ### Järjestelmän pääkäyttäjä
 - **Käyttötapaus 1: Tapahtuman luominen**
@@ -83,6 +102,10 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Tavoite:** Tapahtumajärjestäjä haluaa tarkastella myymiään lippuja.
     - **Toimet:** Tapahtumajärjestäjä kirjautuu järjestelmään, valitsee ajanjakson ja tarkastelee raporttia omista myynneistään.
     - **Tulos:** Tapahtumajärjestäjä saa näkyviin raportin myymistään lipuista.
+</details>
+
+<details>
+<summary> Asiakas </summary>
 
 ### Asiakas
 - **Käyttötapaus 1: Lipun ostaminen**
@@ -94,8 +117,11 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Tavoite:** Asiakas haluaa tarkastella ostamansa lipun tietoja.
     - **Toimet:** Asiakas kirjautuu järjestelmään, valitsee lipun ja tarkastelee sen tietoja, kuten tapahtuman, lipputyypin, hinnan ja tarkistuskoodin.
     - **Tulos:** Asiakas näkee lipun tiedot ja voi varmistaa lipun oikeellisuuden.
+</details>
 
 ## Käyttäjätarinat
+<details> 
+    <summary> Käyttäjätarinat </summary>
 
 - **Käyttäjänä haluan ostaa liput tapahtumaan** niin, että voin valita tapahtuman, lipputyypin (aikuinen, lapsi, eläkeläinen jne.) ja ostaa haluamani määrän lippuja helposti. Tavoitteenani on sujuva ostokokemus ilman ongelmia.
 
@@ -124,6 +150,7 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - **Kehittäjänä haluan laatia testitapaukset eri sovelluksen toiminnoille**, jotta voimme varmistaa, että kaikki osat toimivat oikein ennen julkaisua.
 
 - **Kehittäjänä haluan seurata ja raportoida sovelluksen virheitä ja bugeja**, jotta ne voidaan korjata nopeasti ja parantaa sovelluksen laatua.
+</details>
 
 ## Yksityiskohtaiset vaatimukset
 
@@ -181,9 +208,10 @@ Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät
 
 ### Tietohakemisto
 Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä roolin TicketGuru-sovelluksessa.
+<details>
+<summary> Tietohakemisto </summary>
 
 ### Event (Tapahtuma)
-
 Tapahtumataulu sisältää tiedot järjestettävistä tapahtumista, joihin myydään lippuja. Yksi tapahtuma voi sisältää useita lippuja
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
@@ -219,7 +247,6 @@ Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Y
 | type_price        | double           | Lipputyypin hinta.                                      |
 
 ### EventTicketType (Tapahtuman lipputyyppi)
-
 Tapahtuman lipputyyppitaulu sisältää tiedot tapahtuman lipputyypeistä ja niiden määristä. Jokainen tapahtuma voi sisältää useita lipputyyppejä. Lipputyypit ovat määritetty TicketType-taulussa ja viitattu tähän tapahtuman lippukohtaisilla määrillä ja hinnoilla.
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
@@ -277,6 +304,7 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 | SalesP_firstName  | varchar(30)      | Myyjän etunimi.                                         |
 | SalesP_phone      | varchar(30)      | Myyjän puhelinnumero.                                   |
 
+</details>
 
 [Linkki tietokantakaavioon](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
 
