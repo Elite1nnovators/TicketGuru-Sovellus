@@ -27,7 +27,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<OrderDetails> orderDetails;
+    private List<OrderDetails> orderDetails; //TODO: tarvitsee setterin ja getterin, setterissä asetetaan for-loopilla myös kaikkiin orderdetaileihin order
 
 
     @ManyToOne
