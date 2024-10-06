@@ -152,25 +152,37 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - **Kehittäjänä haluan seurata ja raportoida sovelluksen virheitä ja bugeja**, jotta ne voidaan korjata nopeasti ja parantaa sovelluksen laatua.
 </details>
 
+<details>
+<summary> Yksityiskohtaiset vaatimukset </summary>
+
 ## Yksityiskohtaiset vaatimukset
 
 - **Lippujen tulostaminen:** Liput tulostetaan standardikokoiselle paperille, ja lipussa on mukana QR-koodi tai viivakoodi tarkistamista varten.
 - **Tietoturva:** Käyttäjän tiedot salataan ja tallennetaan turvallisesti.
+</details>
+
+<details>
+<summary> Käyttöliittymävaatimukset </summary>
 
 ## Käyttöliittymävaatimukset
 
 - **Myyjän käyttöliittymä:** Yksinkertainen ja selkeä käyttöliittymä, jossa on helppo navigoida tapahtumien ja lippujen välillä.
 - **Raporttien tarkastelu:** Raportit esitetään visuaalisesti ymmärrettävällä tavalla, kuten taulukoina tai kaavioina.
+</details>
+
+<details>
+<summary> Yhteenveto ja rajaukset </summary>
 
 ## Yhteenveto ja rajaukset
 
 - **Sisältyvät toiminnot:** Lipun myynti, lippujen tulostaminen, myyntiraportit, käyttäjien hallinta.
 - **Ei sisälly:** Verkkokauppatoiminnot (tulevaisuudessa mahdollisesti).
-
+</details>
 
 # Käyttöliittymä
 
-Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät voivat suorittaa tarvitsemansa toiminnot. Tässä kuvataan nämä päänäkymät ja miten niissä liikutaan.
+<details>
+<summary>Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät voivat suorittaa tarvitsemansa toiminnot. Tässä kuvataan nämä päänäkymät ja miten niissä liikutaan.</summary>
 
 ### Etusivu
 - **Miksi:** Etusivu toimii pääsivuna, josta käyttäjä pääsee kaikkiin tärkeimpiin osiin sovelluksessa.
@@ -200,6 +212,7 @@ Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät
 ### Käyttöliittymäkaavio
 - **Kaavio:** [Käyttöliittymäkaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=643351026#gid=643351026)
 - **Miksi:** Käyttöliittymäkaavio näyttää, miten eri näkymät liittyvät toisiinsa ja miten käyttäjä navigoi niiden välillä.
+</details>
 
 ## Tietokanta
 
