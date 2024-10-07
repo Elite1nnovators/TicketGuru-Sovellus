@@ -2,8 +2,6 @@ package com.eliteinnovators.ticketguru.ticketguru_app;
 
 import java.util.Date;
 
-import javax.imageio.plugins.tiff.TIFFDirectory;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,9 +11,7 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.Customer;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.CustomerRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
@@ -39,18 +35,18 @@ public class TicketguruAppApplication {
             TicketType ticketType = new TicketType("Aikuinen");
             TicketType ticketType2 = new TicketType("Lapsi");
             TicketType ticketType3 = new TicketType("VIP");
-			TicketType ticketType4 = new TicketType("Eläkeläinen");
+            TicketType ticketType4 = new TicketType("Eläkeläinen");
             ticketTypeRepository.save(ticketType);
             ticketTypeRepository.save(ticketType2);
             ticketTypeRepository.save(ticketType3);
-			ticketTypeRepository.save(ticketType4);
+            ticketTypeRepository.save(ticketType4);
 
             Event event = new Event("Concert 1", new Date(), "Event Address 1", "Helsinki", "A great concert event");
             Event event2 = new Event("Concert 2", new Date(), "Event Address 2", "Helsinki", "Another event");
-			Event event3 = new Event("Opera", new Date(), "Event Address 3", "Espoo", "Fantastic Opera night!");
+            Event event3 = new Event("Opera", new Date(), "Event Address 3", "Espoo", "Fantastic Opera night!");
             eventRepository.save(event);
             eventRepository.save(event2);
-			eventRepository.save(event3);
+            eventRepository.save(event3);
 
             EventTicketType eventTicketType = new EventTicketType(event, ticketType, 20, 50);
             EventTicketType eventTicketType2 = new EventTicketType(event, ticketType2, 10, 60);
@@ -66,28 +62,26 @@ public class TicketguruAppApplication {
             eventTicketTypeRepository.save(event2TicketType2);
             eventTicketTypeRepository.save(event2TicketType3);
 
-			EventTicketType event3TicketType = new EventTicketType(event3, ticketType, 40, 50);
+            EventTicketType event3TicketType = new EventTicketType(event3, ticketType, 40, 50);
             EventTicketType event3TicketType2 = new EventTicketType(event3, ticketType2, 20, 20);
             EventTicketType event3TicketType3 = new EventTicketType(event3, ticketType4, 20, 20);
             eventTicketTypeRepository.save(event3TicketType);
             eventTicketTypeRepository.save(event3TicketType2);
             eventTicketTypeRepository.save(event3TicketType3);
 
-
             Customer customer = new Customer("john_doe", "password", new Date(), "John", "Doe", "123456789", "john@example.com", "Ensimmäinen kuja", "Helsinki", null);
             Customer customer2 = new Customer("jane_doe", "password2", new Date(), "Jane", "Doe", "987654321", "jane@example.com", "Toinen kuja", "Espoo", null);
             customerRepository.save(customer);
             customerRepository.save(customer2);
 
-
-			Salesperson admin = new Salesperson("maijameikalainen", "password", true, "Maija", "Meikäläinen", "0501234567", null);
+            Salesperson admin = new Salesperson("maijameikalainen", "password", true, "Maija", "Meikäläinen", "0501234567", null);
             Salesperson salesperson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "045123456", null);
             Salesperson salesperson2 = new Salesperson("anna_kokkonen", "password", false, "Anna", "Kokkonen", "045456321", null);
             salespersonRepository.save(salesperson);
             salespersonRepository.save(salesperson2);
-			salespersonRepository.save(admin);
+            salespersonRepository.save(admin);
 
-            Ticket ticket = new Ticket(eventTicketType, "hashedcode", true);
+            /* Ticket ticket = new Ticket(eventTicketType, "hashedcode", true);
             Ticket ticket2 = new Ticket(eventTicketType2, "hashedcode2", true);
             Ticket ticket3 = new Ticket(eventTicketType3, "hashedcode3", true);
             Ticket ticket4 = new Ticket(event2TicketType, "hashedcode4", true);
@@ -98,17 +92,16 @@ public class TicketguruAppApplication {
             ticketRepository.save(ticket3);
             ticketRepository.save(ticket4);
             ticketRepository.save(ticket5);
-            ticketRepository.save(ticket6);
-
+            ticketRepository.save(ticket6);*/
             Order order = new Order(customer, new Date(), salesperson);
             Order order2 = new Order(customer2, new Date(), salesperson2);
             orderRepository.save(order);
             orderRepository.save(order2);
 
-            OrderDetails orderDetails = new OrderDetails(order, 3, ticket2, 30);
+            /*  OrderDetails orderDetails = new OrderDetails(order, 3, ticket2, 30);
             OrderDetails orderDetails2 = new OrderDetails(order, 4, ticket3, 10);
             orderDetailsRepository.save(orderDetails);
-            orderDetailsRepository.save(orderDetails2);
+            orderDetailsRepository.save(orderDetails2);*/
         };
     }
 }
