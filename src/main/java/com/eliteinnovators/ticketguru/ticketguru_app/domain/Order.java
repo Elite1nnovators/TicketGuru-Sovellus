@@ -32,12 +32,12 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    @JsonManagedReference(value = "customer-order")
+    @JsonBackReference(value = "customer-order")
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "salesperson_id")
-    @JsonManagedReference(value = "salesperson-order")
+    @JsonBackReference(value = "salesperson-order")
     private Salesperson salesperson;
 
     private Date orderDate;
