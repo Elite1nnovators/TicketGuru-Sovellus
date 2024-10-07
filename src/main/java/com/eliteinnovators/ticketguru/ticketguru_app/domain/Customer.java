@@ -31,7 +31,7 @@ public class Customer {
     private String firstName, lastName, phone, email, address, city;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "customer")
-    //@JsonManagedReference
+    @JsonManagedReference
     private List<Order> orders = new ArrayList<>();
 
 

@@ -32,7 +32,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    //@JsonBackReference
+    @JsonBackReference
     private Customer customer;
 
     @ManyToOne
