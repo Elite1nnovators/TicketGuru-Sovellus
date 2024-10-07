@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class TicketGuruController {
@@ -37,14 +42,23 @@ public class TicketGuruController {
     }
 
     @PostMapping("/events")
-    public Event newEvent(@RequestBody Event newEvent) {
-        return eRepo.save(newEvent);
+    public ResponseEntity<?> newEvent(@Valid @RequestBody Event newEvent, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+        return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+    }
+        newEvent = eRepo.save(newEvent);
+        return ResponseEntity.ok(newEvent);
     }
 
     @PutMapping("events/{eventId}")
-    Event editEvent(@RequestBody Event editedEvent, @PathVariable Long eventId) {
+    public ResponseEntity<?> editEvent(@Valid @RequestBody Event editedEvent, BindingResult bindingResult, @PathVariable Long eventId) {
+        if(bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
         editedEvent.setEventId(eventId);
-        return eRepo.save(editedEvent);
+        eRepo.save(editedEvent);
+        return ResponseEntity.ok(editedEvent);
     }
 
     @DeleteMapping("events/{eventId}")
