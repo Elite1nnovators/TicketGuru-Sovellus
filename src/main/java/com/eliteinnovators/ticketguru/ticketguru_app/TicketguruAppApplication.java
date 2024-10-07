@@ -89,12 +89,8 @@ public class TicketguruAppApplication {
             ticketRepository.save(ticket);
             ticketRepository.save(ticket2);
             ticketRepository.save(ticket3);
-            ticketRepository.save(ticket4);
-            ticketRepository.save(ticket5);
-            ticketRepository.save(ticket6);
             Order order = new Order(customer, new Date(), salesperson);
             orderRepository.save(order);
-            orderRepository.save(order2);
 
             OrderDetails orderDetails = new OrderDetails(order, 3, ticket2, 30);
             OrderDetails orderDetails2 = new OrderDetails(order, 4, ticket3, 10);
