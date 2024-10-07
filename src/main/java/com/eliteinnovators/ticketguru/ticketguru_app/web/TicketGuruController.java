@@ -27,11 +27,6 @@ public class TicketGuruController {
     }
 
     // EVENTTIEN REST -ENDPOINTIT
-    @GetMapping("/events")
-    public Iterable<Event> getAllEvents() {
-        return eRepo.findAll();
-    }
-
     @GetMapping("/events/{eventId}")
     Event getEventById(@PathVariable Long eventId) {
         return eRepo.findById(eventId).orElse(null);
@@ -54,7 +49,7 @@ public class TicketGuruController {
         return eRepo.findAll();
     }
 
-    @GetMapping("/events/")
+    @GetMapping("/events")
     public List<Event> searchEvents(@RequestParam(required = false) String eventName, @RequestParam(required = false) String eventCity) {
         if (eventName != null && !eventName.isEmpty() && eventCity != null && !eventCity.isEmpty()) {
             return eRepo.findByEventNameAndEventCity(eventName, eventCity);
