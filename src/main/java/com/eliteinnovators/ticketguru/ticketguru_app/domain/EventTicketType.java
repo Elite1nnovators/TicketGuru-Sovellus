@@ -28,6 +28,7 @@ public class EventTicketType {
     private Event event;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
