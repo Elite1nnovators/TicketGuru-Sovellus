@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Customer;
+import com.eliteinnovators.ticketguru.ticketguru_app.service.OrderService;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
+import com.eliteinnovators.ticketguru.ticketguru_app.exception.CustomerNotFoundException;
+import com.eliteinnovators.ticketguru.ticketguru_app.exception.SalespersonNotFoundException;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderDetailsRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.CustomerRepository;
@@ -30,6 +33,9 @@ import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository
 
 @RestController
 public class OrderController {
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     OrderRepository orderRepo;
@@ -49,22 +55,40 @@ public class OrderController {
 
     // ORDER REST -ENDPOINTIT
     @GetMapping("/orders")
-    public Iterable<Order> getAllOrders() {
-        return orderRepo.findAll();
+    public List<OrderDTO> getAllOrders() {
+        List<Order> orders = orderRepo.findAll();
+        List<OrderDTO> orderDTOs = new ArrayList<>();
+        
+        for (Order order : orders) {
+            OrderDTO orderDTO = orderService.convertToOrderDTO(order);
+            orderDTOs.add(orderDTO);
+        }
+        
+        return orderDTOs;
     }
 
     @GetMapping("/orders/{orderId}")
-    public Order getOrderById(@PathVariable Long orderId) {
-        return orderRepo.findById(orderId).orElse(null);
+    public OrderDTO getOrderById(@PathVariable Long orderId) {
+        Order order = orderRepo.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+        
+        return orderService.convertToOrderDTO(order);
     }
-
     @PostMapping("/orders")
     public Order newOrder(@RequestBody OrderDTO newOrderDTO) {
+    if (newOrderDTO.getCustomerId() == null) {
+        throw new IllegalArgumentException("Customer ID must not be null");
+    }
+
+    if (newOrderDTO.getSalespersonId() == null) {
+        throw new IllegalArgumentException("Salesperson ID must not be null");
+    }
+
     Customer customer = customerRepo.findById(newOrderDTO.getCustomerId())
-        .orElseThrow(() -> new RuntimeException("Customer not found"));
+        .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + newOrderDTO.getCustomerId() + " not found"));
 
     Salesperson salesperson = salespersonRepo.findById(newOrderDTO.getSalespersonId())
-        .orElseThrow(() -> new RuntimeException("Salesperson not found"));
+        .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with ID " + newOrderDTO.getSalespersonId() + " not found"));
 
     Order newOrder = new Order();
     newOrder.setCustomer(customer);
@@ -73,8 +97,11 @@ public class OrderController {
 
     List<OrderDetails> orderDetailsList = new ArrayList<>();
     for (OrderDetailsDTO detailsDTO : newOrderDTO.getOrderDetails()) {
+        if (detailsDTO.getTicketId() == null) {
+            throw new IllegalArgumentException("Ticket ID must not be null in OrderDetails");
+        }
         Ticket ticket = ticketRepo.findById(detailsDTO.getTicketId())
-            .orElseThrow(() -> new RuntimeException("Ticket not found")); // Ensure ticket exists
+            .orElseThrow(() -> new RuntimeException("Ticket with ID " + detailsDTO.getTicketId() + " not found")); // Ensure ticket exists
         OrderDetails orderDetails = new OrderDetails();
         orderDetails.setOrder(newOrder);
         orderDetails.setTicket(ticket);
@@ -89,11 +116,39 @@ public class OrderController {
 }
 
 
-    @PutMapping("orders/{orderId}")
-    public Order editOrder(@RequestBody Order editedOrder, @PathVariable Long orderId) {
-        editedOrder.setOrderId(orderId);
-        return orderRepo.save(editedOrder);
+    @PutMapping("/orders/{orderId}")
+    public Order editOrder(@RequestBody OrderDTO editedOrderDTO, @PathVariable Long orderId) {
+        Order existingOrder = orderRepo.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        Customer customer = customerRepo.findById(editedOrderDTO.getCustomerId())
+            .orElseThrow(() -> new RuntimeException("Customer not found"));
+        Salesperson salesperson = salespersonRepo.findById(editedOrderDTO.getSalespersonId())
+            .orElseThrow(() -> new RuntimeException("Salesperson not found"));
+
+        existingOrder.setCustomer(customer);
+        existingOrder.setSalesperson(salesperson);
+        existingOrder.setOrderDate(editedOrderDTO.getOrderDate());
+
+        List<OrderDetails> updatedOrderDetailsList = new ArrayList<>();
+        for (OrderDetailsDTO detailsDTO : editedOrderDTO.getOrderDetails()) {
+            Ticket ticket = ticketRepo.findById(detailsDTO.getTicketId())
+                .orElseThrow(() -> new RuntimeException("Ticket with ID " + detailsDTO.getTicketId() + " not found"));
+
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.setOrder(existingOrder);
+            orderDetails.setTicket(ticket);
+            orderDetails.setQuantity(detailsDTO.getQuantity());
+            orderDetails.setUnitPrice(detailsDTO.getUnitPrice());
+
+            updatedOrderDetailsList.add(orderDetails);
+        }
+
+        existingOrder.setOrderDetails(updatedOrderDetailsList);
+
+        return orderRepo.save(existingOrder);
     }
+
 
     @DeleteMapping("orders/{orderId}")
     public Iterable<Order> deleteOrder(@PathVariable("orderId") Long orderId) {
