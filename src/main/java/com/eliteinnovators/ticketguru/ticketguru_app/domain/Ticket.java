@@ -26,12 +26,12 @@ public class Ticket {
     private boolean isValid;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    //@JsonManagedReference
     private List<OrderDetails> orderDetails = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "eventTicketType_id")
-    @JsonBackReference
+    //@JsonBackReference
     private EventTicketType eventTicketType;
 
     

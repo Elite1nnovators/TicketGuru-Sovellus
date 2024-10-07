@@ -24,7 +24,7 @@ public class TicketType {
     private String name;
     
     @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL)
-    @JsonManagedReference 
+    //@JsonManagedReference 
     private List<EventTicketType> eventTicketTypes = new ArrayList<>(); 
 
     public TicketType(String name) {

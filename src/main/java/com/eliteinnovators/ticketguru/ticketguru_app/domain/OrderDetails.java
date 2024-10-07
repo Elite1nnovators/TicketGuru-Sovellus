@@ -18,12 +18,12 @@ public class OrderDetails {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    @JsonBackReference
+    //@JsonBackReference
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "ticket_id")
-    @JsonBackReference
+    //@JsonBackReference
     private Ticket ticket;
 
     private double unitPrice;
