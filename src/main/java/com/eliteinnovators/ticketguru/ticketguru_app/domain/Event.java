@@ -29,7 +29,7 @@ public class Event {
     private String eventDescription;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    @JsonManagedReference 
+    @JsonManagedReference(value = "event-eventTicketType")
     private List<EventTicketType> eventTicketTypes = new ArrayList<>(); 
 
     public Event() {

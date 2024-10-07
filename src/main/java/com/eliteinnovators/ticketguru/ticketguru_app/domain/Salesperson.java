@@ -32,8 +32,7 @@ public class Salesperson {
     private String firstName, lastName, phone;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "salesperson")
-    //@JsonManagedReference
-    @JsonIgnore
+    @JsonManagedReference(value = "salesperson-order")
     private List<Order> orders = new ArrayList<>();
 
     public Salesperson() {}

@@ -24,16 +24,16 @@ public class EventTicketType {
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    @JsonBackReference 
+    @JsonBackReference(value = "event-eventTicketType")
     private Event event;
 
     @ManyToOne
     @JoinColumn(name = "ticket_type_id")
-    //@JsonBackReference
+    @JsonBackReference(value = "ticketType-eventTicketType")
     private TicketType ticketType;
 
     @OneToMany(mappedBy = "eventTicketType", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "eventTicketType-ticket")
     private List<Ticket> tickets = new ArrayList<>();
 
     private double price; 

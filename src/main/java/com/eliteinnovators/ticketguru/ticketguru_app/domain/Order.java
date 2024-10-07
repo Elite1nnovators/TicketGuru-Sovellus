@@ -27,16 +27,17 @@ public class Order {
     private Long orderId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "order-orderDetails")
     private List<OrderDetails> orderDetails = new ArrayList<>(); 
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    @JsonBackReference
+    @JsonBackReference(value = "customer-order")
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "salesperson_id")
+    @JsonBackReference(value = "salesperson-order")
     private Salesperson salesperson;
 
     private Date orderDate;
