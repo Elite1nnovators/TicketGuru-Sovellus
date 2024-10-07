@@ -1,7 +1,6 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,12 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 public class TicketGuruController {
@@ -57,16 +55,15 @@ public class TicketGuruController {
     }
 
     @GetMapping("/events/")
-    public List<Event> searchEvents(@RequestParam(required = false) String name, @RequestParam(required = false) String city) {
-        if (name != null && !name.isEmpty() && city != null && !city.isEmpty()) {
-            return eRepo.findByEventNameAndCity(name, city);
-        } else if (name != null && !name.isEmpty()) {
-            return eRepo.findByEventName(name);
-        } else if (city != null && !city.isEmpty()) {
-            return eRepo.findByEventCity(city);
+    public List<Event> searchEvents(@RequestParam(required = false) String eventName, @RequestParam(required = false) String eventCity) {
+        if (eventName != null && !eventName.isEmpty() && eventCity != null && !eventCity.isEmpty()) {
+            return eRepo.findByEventNameAndEventCity(eventName, eventCity);
+        } else if (eventName != null && !eventName.isEmpty()) {
+            return eRepo.findByEventName(eventName);
+        } else if (eventCity != null && !eventCity.isEmpty()) {
+            return eRepo.findByEventCity(eventCity);
         }
         return eRepo.findAll();
     }
-    
 
 }
