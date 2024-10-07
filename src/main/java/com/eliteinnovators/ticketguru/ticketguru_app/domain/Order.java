@@ -2,6 +2,7 @@ package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -27,8 +28,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<OrderDetails> orderDetails; //TODO: tarvitsee setterin ja getterin, setterissä asetetaan for-loopilla myös kaikkiin orderdetaileihin order
-
+    private List<OrderDetails> orderDetails = new ArrayList<>(); 
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -49,6 +49,17 @@ public class Order {
         this.customer = customer;
         this.orderDate = orderDate;
         this.salesperson = salesperson;
+    }
+
+    public List<OrderDetails> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
+        for (OrderDetails orderDetail : orderDetails) {
+            orderDetail.setOrder(this);
+        }
     }
 
     public Long getOrderId() {
