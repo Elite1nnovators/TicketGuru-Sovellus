@@ -27,7 +27,7 @@ public class Ticket {
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<OrderDetails> orderDetails = new ArrayList<>(); //TODO: tarvitsee setterin ja getterin, setterissä asetetaan for-loopilla myös kaikkiin orderdetaileihin ticket
+    private List<OrderDetails> orderDetails = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "eventTicketType_id")
@@ -51,6 +51,9 @@ public class Ticket {
 
     public void setOrderDetails(List<OrderDetails> orderDetails) {
         this.orderDetails = orderDetails;
+        for (OrderDetails orderDetail : orderDetails) {
+            orderDetail.setTicket(this);
+        }
     }
 
     public Long getId() {
