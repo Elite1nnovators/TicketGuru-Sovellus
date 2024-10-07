@@ -31,7 +31,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "eventTicketType_id")
-    //@JsonBackReference
+    @JsonBackReference
     private EventTicketType eventTicketType;
 
     

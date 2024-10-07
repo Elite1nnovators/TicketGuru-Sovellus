@@ -27,7 +27,7 @@ public class Order {
     private Long orderId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    //@JsonManagedReference
+    @JsonManagedReference
     private List<OrderDetails> orderDetails = new ArrayList<>(); 
 
     @ManyToOne

@@ -11,7 +11,9 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.Customer;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.CustomerRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
@@ -81,7 +83,7 @@ public class TicketguruAppApplication {
             salespersonRepository.save(salesperson2);
             salespersonRepository.save(admin);
 
-            /* Ticket ticket = new Ticket(eventTicketType, "hashedcode", true);
+            Ticket ticket = new Ticket(eventTicketType, "hashedcode", true);
             Ticket ticket2 = new Ticket(eventTicketType2, "hashedcode2", true);
             Ticket ticket3 = new Ticket(eventTicketType3, "hashedcode3", true);
             Ticket ticket4 = new Ticket(event2TicketType, "hashedcode4", true);
@@ -92,16 +94,16 @@ public class TicketguruAppApplication {
             ticketRepository.save(ticket3);
             ticketRepository.save(ticket4);
             ticketRepository.save(ticket5);
-            ticketRepository.save(ticket6);*/
+            ticketRepository.save(ticket6);
             Order order = new Order(customer, new Date(), salesperson);
             Order order2 = new Order(customer2, new Date(), salesperson2);
             orderRepository.save(order);
             orderRepository.save(order2);
 
-            /*  OrderDetails orderDetails = new OrderDetails(order, 3, ticket2, 30);
+            OrderDetails orderDetails = new OrderDetails(order, 3, ticket2, 30);
             OrderDetails orderDetails2 = new OrderDetails(order, 4, ticket3, 10);
             orderDetailsRepository.save(orderDetails);
-            orderDetailsRepository.save(orderDetails2);*/
+            orderDetailsRepository.save(orderDetails2);
         };
     }
 }
