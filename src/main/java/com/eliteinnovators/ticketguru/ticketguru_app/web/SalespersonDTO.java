@@ -5,8 +5,11 @@ public class SalespersonDTO {
     private String firstName;
     private String lastName;
     private boolean isAdmin;
+
+
     public SalespersonDTO() {
     }
+    
     public SalespersonDTO(Long salespersonId, String firstName, String lastName, boolean isAdmin) {
         this.salespersonId = salespersonId;
         this.firstName = firstName;

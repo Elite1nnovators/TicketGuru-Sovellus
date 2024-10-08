@@ -8,6 +8,10 @@ public class CustomerDTO {
     private String email;
     private String phone;
     private String city;
+
+    public CustomerDTO() {
+    }
+
     public CustomerDTO(Long customerId, String firstName, String lastName, String email, String phone, String city) {
         this.customerId = customerId;
         this.firstName = firstName;
@@ -52,6 +56,5 @@ public class CustomerDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-    public CustomerDTO() {
-    }
+    
 }
