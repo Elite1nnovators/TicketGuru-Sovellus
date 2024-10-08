@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -147,6 +149,74 @@ public class OrderController {
         return orderRepo.save(existingOrder);
     }
 
+    @PatchMapping("/orders/{orderId}")
+    public OrderDTO patchOrder(@RequestBody OrderDTO patchOrderDTO, @PathVariable Long orderId) {
+
+        Order existingOrder = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (patchOrderDTO.getCustomerId() != null) {
+            Customer customer = customerRepo.findById(patchOrderDTO.getCustomerId())
+                    .orElseThrow(() -> new RuntimeException("Customer not found"));
+            if (patchOrderDTO.getCustomerFirstName() != null) {
+                customer.setFirstName(patchOrderDTO.getCustomerFirstName());
+            }
+            if (patchOrderDTO.getCustomerLastName() != null) {
+                customer.setLastName(patchOrderDTO.getCustomerLastName());
+            }
+
+            existingOrder.setCustomer(customer);
+        }
+
+        if (patchOrderDTO.getSalespersonId() != null) {
+            Salesperson salesperson = salespersonRepo.findById(patchOrderDTO.getSalespersonId())
+                    .orElseThrow(() -> new RuntimeException("Salesperson not found"));
+
+            if (patchOrderDTO.getSalespersonFirstName() != null) {
+                salesperson.setFirstName(patchOrderDTO.getSalespersonFirstName());
+            }
+            if (patchOrderDTO.getSalespersonLastName() != null) {
+                salesperson.setLastName(patchOrderDTO.getSalespersonLastName());
+            }
+
+            existingOrder.setSalesperson(salesperson);
+        }
+
+        if (patchOrderDTO.getOrderDetails() != null) {
+            List<OrderDetails> existingOrderDetails = existingOrder.getOrderDetails();
+
+            for (OrderDetailsDTO detailsDTO : patchOrderDTO.getOrderDetails()) {
+                boolean updated = false;
+
+                for (OrderDetails existingDetails : existingOrderDetails) {
+                    if (existingDetails.getTicket().getId().equals(detailsDTO.getTicketId())) {
+
+                        existingDetails.setQuantity(detailsDTO.getQuantity());
+                        existingDetails.setUnitPrice(detailsDTO.getUnitPrice());
+                        updated = true;
+                        break;
+                    }
+                }
+
+                if (!updated) {
+                    Ticket ticket = ticketRepo.findById(detailsDTO.getTicketId())
+                            .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+                    OrderDetails newOrderDetails = new OrderDetails();
+                    newOrderDetails.setTicket(ticket);
+                    newOrderDetails.setQuantity(detailsDTO.getQuantity());
+                    newOrderDetails.setUnitPrice(detailsDTO.getUnitPrice());
+                    newOrderDetails.setOrder(existingOrder);
+
+                    existingOrderDetails.add(newOrderDetails);
+                }
+            }
+        }
+
+        Order updatedOrder = orderRepo.save(existingOrder);
+
+        return orderService.convertToOrderDTO(updatedOrder);
+    }
 
     @DeleteMapping("orders/{orderId}")
     public Iterable<Order> deleteOrder(@PathVariable("orderId") Long orderId) {
