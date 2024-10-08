@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,44 +74,44 @@ public class OrderController {
     }
     @PostMapping("/orders")
     public Order newOrder(@RequestBody OrderDTO newOrderDTO) {
-    if (newOrderDTO.getCustomerId() == null) {
-        throw new IllegalArgumentException("Customer ID must not be null");
-    }
-
-    if (newOrderDTO.getSalespersonId() == null) {
-        throw new IllegalArgumentException("Salesperson ID must not be null");
-    }
-
-    Customer customer = customerRepo.findById(newOrderDTO.getCustomerId())
-        .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + newOrderDTO.getCustomerId() + " not found"));
-
-    Salesperson salesperson = salespersonRepo.findById(newOrderDTO.getSalespersonId())
-        .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with ID " + newOrderDTO.getSalespersonId() + " not found"));
-
-    Order newOrder = new Order();
-    newOrder.setCustomer(customer);
-    newOrder.setSalesperson(salesperson);
-    newOrder.setOrderDate(new Date());
-
-    List<OrderDetails> orderDetailsList = new ArrayList<>();
-    for (OrderDetailsDTO detailsDTO : newOrderDTO.getOrderDetails()) {
-        if (detailsDTO.getTicketId() == null) {
-            throw new IllegalArgumentException("Ticket ID must not be null in OrderDetails");
+        if (newOrderDTO.getCustomerId() == null) {
+            throw new IllegalArgumentException("Customer ID must not be null");
         }
-        Ticket ticket = ticketRepo.findById(detailsDTO.getTicketId())
-            .orElseThrow(() -> new RuntimeException("Ticket with ID " + detailsDTO.getTicketId() + " not found")); // Ensure ticket exists
-        OrderDetails orderDetails = new OrderDetails();
-        orderDetails.setOrder(newOrder);
-        orderDetails.setTicket(ticket);
-        orderDetails.setQuantity(detailsDTO.getQuantity());
-        orderDetails.setUnitPrice(detailsDTO.getUnitPrice());
-        orderDetailsList.add(orderDetails);
-    }
 
-    newOrder.setOrderDetails(orderDetailsList);
-    
-    return orderRepo.save(newOrder);
-}
+        if (newOrderDTO.getSalespersonId() == null) {
+            throw new IllegalArgumentException("Salesperson ID must not be null");
+        }
+
+        Customer customer = customerRepo.findById(newOrderDTO.getCustomerId())
+            .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + newOrderDTO.getCustomerId() + " not found"));
+
+        Salesperson salesperson = salespersonRepo.findById(newOrderDTO.getSalespersonId())
+            .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with ID " + newOrderDTO.getSalespersonId() + " not found"));
+
+        Order newOrder = new Order();
+        newOrder.setCustomer(customer);
+        newOrder.setSalesperson(salesperson);
+        newOrder.setOrderDate(new Date());
+
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
+        for (OrderDetailsDTO detailsDTO : newOrderDTO.getOrderDetails()) {
+            if (detailsDTO.getTicketId() == null) {
+                throw new IllegalArgumentException("Ticket ID must not be null in OrderDetails");
+            }
+            Ticket ticket = ticketRepo.findById(detailsDTO.getTicketId())
+                .orElseThrow(() -> new RuntimeException("Ticket with ID " + detailsDTO.getTicketId() + " not found"));
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.setOrder(newOrder);
+            orderDetails.setTicket(ticket);
+            orderDetails.setQuantity(detailsDTO.getQuantity());
+            orderDetails.setUnitPrice(detailsDTO.getUnitPrice());
+            orderDetailsList.add(orderDetails);
+        }
+
+        newOrder.setOrderDetails(orderDetailsList);
+
+        return orderRepo.save(newOrder);
+    }
 
 
     @PutMapping("/orders/{orderId}")
@@ -162,23 +160,18 @@ public class OrderController {
         return orderDetailsRepo.findAll();
     }
 
-    @GetMapping("/orderdetails/{orderdetailsId}")
+    @GetMapping("/orderdetails/{orderDetailsId}")
     OrderDetails getOrderDetailsById(@PathVariable Long orderDetailsId) {
         return orderDetailsRepo.findById(orderDetailsId).orElse(null);
     }
 
-    // kesken
-    /*  @PostMapping("/orderdetails")
-    public Order newOrderDetails(@RequestBody Order newOrderDetails) {
-        return orderDetailsRepo.save(newOrderDetails);
-    }*/
-    @PutMapping("orderdetails/{orderdetailsId}")
+    @PutMapping("orderdetails/{orderDetailsId}")
     OrderDetails editOrderDetails(@RequestBody OrderDetails editedOrderDetails, @PathVariable Long orderDetailsId) {
         editedOrderDetails.setOrderDetailId(orderDetailsId);
         return orderDetailsRepo.save(editedOrderDetails);
     }
 
-    @DeleteMapping("orderDetails/{orderDetailsId}")
+    @DeleteMapping("orderdetails/{orderDetailsId}")
     public Iterable<OrderDetails> deleteOrderDetails(@PathVariable("orderDetailsId") Long orderDetailsId) {
         orderDetailsRepo.deleteById(orderDetailsId);
         return orderDetailsRepo.findAll();

@@ -13,6 +13,9 @@ public class OrderDTO {
     private Date orderDate;
     private CustomerDTO customer;
     private SalespersonDTO salesperson;
+
+    public OrderDTO() {}
+
     public OrderDTO(List<OrderDetailsDTO> orderDetails, Long orderId, Long customerId, Long salespersonId,
             Date orderDate, CustomerDTO customer, SalespersonDTO salesperson) {
         this.orderDetails = orderDetails;
@@ -35,8 +38,7 @@ public class OrderDTO {
     public void setSalespersonId(Long salespersonId) {
         this.salespersonId = salespersonId;
     }
-    public OrderDTO() {
-    }
+
     public List<OrderDetailsDTO> getOrderDetails() {
         return orderDetails;
     }
