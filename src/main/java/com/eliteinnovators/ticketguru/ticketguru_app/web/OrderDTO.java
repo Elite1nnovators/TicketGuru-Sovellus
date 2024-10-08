@@ -13,14 +13,14 @@ public class OrderDTO {
     private String salespersonFirstName;
     private String salespersonLastName;
     private Date orderDate;
-    private CustomerDTO customer;
-    private SalespersonDTO salesperson;
-
+    private List<OrderDetailsDTO> orderDetails;
+    
     public OrderDTO() {}
 
-    public OrderDTO(List<OrderDetailsDTO> orderDetails, Long orderId, Long customerId, Long salespersonId,
-            Date orderDate, CustomerDTO customer, SalespersonDTO salesperson) {
-        this.orderDetails = orderDetails;
+    public OrderDTO (Long orderId, Long customerId, String customerFirstName, String customerLastName,
+            Long salespersonId, String salespersonFirstName, String salespersonLastName, Date orderDate,
+            List<OrderDetailsDTO> orderDetails) {
+                
         this.orderId = orderId;
         this.customerId = customerId;
         this.customerFirstName = customerFirstName;

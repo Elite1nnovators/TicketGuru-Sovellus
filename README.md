@@ -981,3 +981,42 @@ Sisältö:
 ```
 
 </details>
+<br/>
+
+# Autentikaatio
+
+<details>
+<summary> Autentikointiprosessi </summary>
+<br/>
+
+TicketGuru-sovelluksessa käytetään perinteistä käyttäjätunnus-salasana -autentikaatiota. Sovelluksen käyttäjät jaetaan kahteen pääasialliseen rooliin: **asiakkaat** ja **myyjät** (Salesperson), joilla on eri oikeudet ja pääsyoikeudet sovelluksen eri toimintoihin.
+
+## Käyttäjätiedot
+
+Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `Customer` tai `Salesperson` -entiteetteinä. Käyttäjätunnukset ja salasanat tallennetaan tietokantaan seuraavasti:
+
+### Customer (Asiakas)
+- **customerId**: Asiakkaan yksilöllinen ID
+- **username**: Asiakkaan käyttäjätunnus
+- **passwordHash**: Salasanan hajautusarvo (hash), joka takaa tietoturvan.
+- **firstName**: Asiakkaan etunimi.
+- **lastName**: Asiakkaan sukunimi.
+- **phone**: Puhelinnumero.
+- **email**: Sähköpostiosoite.
+
+### Salesperson (Myyjä)
+- **salespersonId**: Myyjän yksilöllinen ID.
+- **username**: Myyjän käyttäjätunnus.
+- **passwordHash**: Salasanan hajautusarvo.
+- **isAdmin**: Boolean-arvo, joka määrittää onko myyjä järjestelmän pääkäyttäjä (admin).
+
+### Salasanan tallennus
+
+Salasana tallennetaan tietokantaan hajautettuna, eli se ei ole selkokielinen. Tämä toteutetaan hyödyntäen Java Spring Security -komponentteja, jotka varmistavat salasanan turvallisen tallennuksen ja tarkastamisen.
+
+```java
+BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+String hashedPassword = encoder.encode("salasana123");
+```
+
+</details>
