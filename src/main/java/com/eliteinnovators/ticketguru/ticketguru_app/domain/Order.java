@@ -2,7 +2,13 @@ package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,29 +26,41 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "order-orderDetails")
+    private List<OrderDetails> orderDetails = new ArrayList<>(); 
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonBackReference(value = "customer-order")
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "salesperson_id")
+    @JsonBackReference(value = "salesperson-order")
     private Salesperson salesperson;
 
     private Date orderDate;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderDetails> orderDetails;
-
-
-    public Order () {
+    public Order() {
 
     }
 
-    public Order(Customer customer, Date orderDate, List<OrderDetails> orderDetails, Salesperson salesperson) {
+    public Order(Customer customer, Date orderDate, Salesperson salesperson) {
         this.customer = customer;
         this.orderDate = orderDate;
-        this.orderDetails = orderDetails;
         this.salesperson = salesperson;
+    }
+
+    public List<OrderDetails> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
+        for (OrderDetails orderDetail : orderDetails) {
+            orderDetail.setOrder(this);
+        }
     }
 
     public Long getOrderId() {
@@ -77,19 +95,10 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public List<OrderDetails> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetails> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-
     @Override
     public String toString() {
         return "Order [orderId=" + orderId + ", customer=" + customer + ", salesperson=" + salesperson
-                + ", orderDate=" + orderDate + ", orderDetails=" + orderDetails + "]";
+                + ", orderDate=" + orderDate;
     }
- 
 
 }

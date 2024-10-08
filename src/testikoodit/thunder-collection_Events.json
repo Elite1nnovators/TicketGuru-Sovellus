@@ -1,0 +1,81 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "Events",
+    "collectionId": "6698e90f-effc-44f9-a4f8-97d71f844058",
+    "dateExported": "2024-10-07T11:14:37.303Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "98c24d13-4034-4d36-9625-bb2b12ae3304",
+            "colId": "6698e90f-effc-44f9-a4f8-97d71f844058",
+            "containerId": "",
+            "name": "http://localhost:8080/events/{eventid}",
+            "url": "http://localhost:8080/events/4",
+            "method": "DELETE",
+            "sortNum": 90000,
+            "created": "2024-10-07T08:52:58.071Z",
+            "modified": "2024-10-07T11:13:59.498Z",
+            "headers": []
+        },
+        {
+            "_id": "3e25465c-fa58-4ad6-87a3-dd8132f11522",
+            "colId": "6698e90f-effc-44f9-a4f8-97d71f844058",
+            "containerId": "",
+            "name": "http://localhost:8080/events/{eventid}",
+            "url": "http://localhost:8080/events/4",
+            "method": "GET",
+            "sortNum": 120000,
+            "created": "2024-10-07T08:59:21.494Z",
+            "modified": "2024-10-07T11:13:54.704Z",
+            "headers": []
+        },
+        {
+            "_id": "8642d5a2-fb4e-4444-b99b-14ad0cd9532c",
+            "colId": "6698e90f-effc-44f9-a4f8-97d71f844058",
+            "containerId": "",
+            "name": "http://localhost:8080/events/{eventid}",
+            "url": "http://localhost:8080/events/1",
+            "method": "PUT",
+            "sortNum": 130000,
+            "created": "2024-10-07T09:00:24.906Z",
+            "modified": "2024-10-07T11:12:10.536Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"eventName\": \"Update Concert name\",\n    \"eventDate\": \"2024-10-01T09:43:35.689+00:00\",\n    \"eventAddress\": \"Update Event Address 1\",\n    \"eventCity\": \"Testi update City\",\n    \"eventDescription\": \"Update description\",\n    \"eventTicketTypes\": [\n        {\n            \"id\": 1,\n            \"ticketType\": {\n                \"id\": 1,\n                \"name\": \"Aikuinen\"\n            },\n            \"price\": 20.0,\n            \"ticketsInStock\": 50\n        },\n        {\n            \"id\": 2,\n            \"ticketType\": {\n                \"id\": 2,\n                \"name\": \"Lapsi\"\n            },\n            \"price\": 10.0,\n            \"ticketsInStock\": 60\n        },\n        {\n            \"id\": 3,\n            \"ticketType\": {\n                \"id\": 3,\n                \"name\": \"VIP\"\n            },\n            \"price\": 100.0,\n            \"ticketsInStock\": 15\n        }\n    ]\n}\n",
+                "form": []
+            }
+        },
+        {
+            "_id": "5bf2c03b-567f-4164-8423-df1bc28be593",
+            "colId": "6698e90f-effc-44f9-a4f8-97d71f844058",
+            "containerId": "",
+            "name": "http://localhost:8080/events",
+            "url": "http://localhost:8080/events",
+            "method": "POST",
+            "sortNum": 140000,
+            "created": "2024-10-07T11:11:59.587Z",
+            "modified": "2024-10-07T11:13:29.842Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"eventName\": \"Concert 1\",\n    \"eventDate\": \"2024-10-01T05:08:30.651+00:00\",\n    \"eventAddress\": \"Event Address 1\",\n    \"eventCity\": \"Helsinki\",\n    \"eventDescription\": \"A great concert event\",\n    \"eventTicketTypes\": [ {\"ticketType\":{ \"id\":1, \"name\": \"aikuinen\"}, \"price\": 10, \"ticketsInStock\": 40}]\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "78c58b49-4bcf-4ab9-954b-1c70b2831fa9",
+            "colId": "6698e90f-effc-44f9-a4f8-97d71f844058",
+            "containerId": "",
+            "name": "http://localhost:8080/events",
+            "url": "http://localhost:8080/events",
+            "method": "GET",
+            "sortNum": 150000,
+            "created": "2024-10-07T11:13:22.682Z",
+            "modified": "2024-10-07T11:13:22.682Z",
+            "headers": []
+        }
+    ],
+    "ref": "_OH1isu6j2LUji07jua2Mb5RIDlbPU-nUatVPlTf5VBM89AbQU4zD8Dk3FafO2SG-7bkn4rxtVa_69WjOkq7pQ"
+}

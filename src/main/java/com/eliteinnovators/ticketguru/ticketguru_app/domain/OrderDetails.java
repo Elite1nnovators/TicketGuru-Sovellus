@@ -1,5 +1,8 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,10 +19,12 @@ public class OrderDetails {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference(value = "order-orderDetails")
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "ticket_id")
+    @JsonBackReference(value = "ticket-orderDetails")
     private Ticket ticket;
 
     private double unitPrice;

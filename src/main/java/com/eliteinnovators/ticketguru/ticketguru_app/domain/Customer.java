@@ -2,8 +2,9 @@ package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,8 +31,8 @@ public class Customer {
     private String firstName, lastName, phone, email, address, city;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "customer")
-    @JsonIgnore
-    private List<Order> orders;
+    @JsonManagedReference(value = "customer-order")
+    private List<Order> orders = new ArrayList<>();
 
 
     public Customer() {
@@ -132,6 +133,9 @@ public class Customer {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+        for (Order order : orders) {
+            order.setCustomer(this);
+        }
     }
 
     public Date getDateOfBirth() {

@@ -1,7 +1,7 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class EventTicketType {
@@ -19,12 +24,17 @@ public class EventTicketType {
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    @JsonBackReference 
+    @JsonBackReference(value = "event-eventTicketType")
     private Event event;
 
     @ManyToOne
     @JoinColumn(name = "ticket_type_id")
+    @JsonBackReference(value = "ticketType-eventTicketType")
     private TicketType ticketType;
+
+    @OneToMany(mappedBy = "eventTicketType", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "eventTicketType-ticket")
+    private List<Ticket> tickets = new ArrayList<>();
 
     private double price; 
     private int ticketsInStock; 
@@ -36,6 +46,17 @@ public class EventTicketType {
         this.ticketType = ticketType;
         this.price = price;
         this.ticketsInStock = ticketsInStock;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+    
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+        for (Ticket ticket : tickets) {
+            ticket.setEventTicketType(this);
+        }
     }
 
     public Long getId() {
@@ -75,4 +96,5 @@ public class EventTicketType {
     }
     
 }
+
 

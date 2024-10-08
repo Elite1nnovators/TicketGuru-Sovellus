@@ -1,49 +1,59 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
 
 @Entity
 public class Ticket {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String ticketCode;
     private boolean isValid;
 
-    @ManyToOne
-    @JoinColumn(name = "ticket_type_id")
-    @JsonBackReference
-    private TicketType ticketType;
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "ticket-orderDetails")
+    private List<OrderDetails> orderDetails = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
-    @JsonBackReference
-    private Event event;
+    @JoinColumn(name = "eventTicketType_id")
+    @JsonBackReference(value = "eventTicketType-ticket")
+    private EventTicketType eventTicketType;
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
+    
     public Ticket() {
     }
 
-    public Ticket(String ticketCode, boolean isValid, TicketType ticketType, Event event) {
+    public Ticket(EventTicketType eventTicketType, String ticketCode, boolean isValid) {
+        this.eventTicketType = eventTicketType;
         this.ticketCode = ticketCode;
         this.isValid = isValid;
-        this.ticketType = ticketType;
-        this.event = event;
+
+    }
+
+    public List<OrderDetails> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
+        for (OrderDetails orderDetail : orderDetails) {
+            orderDetail.setTicket(this);
+        }
     }
 
     public Long getId() {
@@ -70,11 +80,20 @@ public class Ticket {
         this.isValid = isValid;
     }
 
-    public TicketType getTicketType() {
-        return ticketType;
+    public EventTicketType getEventTicketType() {
+        return eventTicketType;
     }
 
-    public void setTicketType(TicketType ticketType) {
-        this.ticketType = ticketType;
+    public void setEventTicketType(EventTicketType eventTicketType) {
+        this.eventTicketType = eventTicketType;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket [id=" + id + ", ticketCode=" + ticketCode + ", isValid=" + isValid + ", orderDetails="
+                + orderDetails + ", eventTicketType=" + eventTicketType + "]";
+    }
+
+    
+
 }

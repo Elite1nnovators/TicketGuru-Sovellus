@@ -12,6 +12,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.Date;
 
 
@@ -22,14 +25,21 @@ public class Event {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
+
+    @NotBlank(message = "Event name is mandatory")
     private String eventName;
+
+   /* @FutureOrPresent  --- Tämä ei toimi ainakaan demodatalla */
     private Date eventDate;
+
     private String eventAddress;
+
+    @NotBlank(message = "Event city is mandatory")
     private String eventCity;
     private String eventDescription;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    @JsonManagedReference 
+    @JsonManagedReference(value = "event-eventTicketType")
     private List<EventTicketType> eventTicketTypes = new ArrayList<>(); 
 
     public Event() {
