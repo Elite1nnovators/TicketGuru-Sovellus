@@ -24,7 +24,7 @@ import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
 import jakarta.validation.Valid;
 
 @RestController
-public class TicketGuruController {
+public class EventController {
 
     @Autowired
     EventRepository eRepo;
