@@ -11,6 +11,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -36,7 +39,12 @@ public class EventTicketType {
     @JsonManagedReference(value = "eventTicketType-ticket")
     private List<Ticket> tickets = new ArrayList<>();
 
+    @NotNull(message = "Price cannot be null")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
     private double price; 
+
+    @NotNull(message = "Tickets in stock cannot be null")
+    @Min(value = 0, message = "Tickets in stock cannot be negative")
     private int ticketsInStock; 
 
     public EventTicketType() {}
