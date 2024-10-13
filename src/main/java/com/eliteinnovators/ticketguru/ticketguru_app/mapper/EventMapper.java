@@ -6,22 +6,24 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 // import com.eliteinnovators.ticketguru.ticketguru_app.web.EventDTO; -- Lisää tämä, kunhan EventDTO on luotu
 
 @Mapper (componentModel = "spring")
-public class EventMapper {
+public interface EventMapper {
 /* 
     @Mapping(source = "event.eventId", target = "eventId")
-    @Mapping(source = "eventName", target = "eventName")
-    @Mapping(source = "eventDate", target = "eventDate")
-    @Mapping(source = "eventCity", target = "eventCity")
-    @Mapping(source = "eventTicketTypes", target = "eventTicketTypes")
+    @Mapping(source = "event.eventName", target = "eventName")
+    @Mapping(source = "event.eventDate", target = "eventDate")
+    @Mapping(source = "event.eventCity", target = "eventCity")
+    @Mapping(source = "event.eventTicketTypes", target = "eventTicketTypes")
     EventDTO toEventDTO(Event event);
     
 
     @Mapping(target = "event.eventId", source = "eventId")
-    @Mapping(target = "eventName", source = "eventName")
-    @Mapping(target = "eventDate", source = "eventDate")
-    @Mapping(target = "eventCity", source = "eventCity")
-    @Mapping(target = "eventTicketTypes", source = "eventTicketTypes")
+    @Mapping(target = "event.eventName", source = "eventName")
+    @Mapping(target = "event.eventDate", source = "eventDate")
+    @Mapping(target = "event.eventCity", source = "eventCity")
+    @Mapping(target = "event.eventTicketTypes", source = "eventTicketTypes")
     Event toEvent(EventDTO eventDTO);
+
+    List<EventDTO> toEventDTOs(List<Event> events);
 
     Mapperilla määritellään, mitä tietoa halutaan siirtää Event luokasta EventDTO,
     sekä päinvastoin.
