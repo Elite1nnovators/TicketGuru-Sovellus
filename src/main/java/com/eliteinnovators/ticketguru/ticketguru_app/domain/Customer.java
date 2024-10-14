@@ -13,6 +13,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+
 
 @Entity
 public class Customer {
@@ -26,9 +31,24 @@ public class Customer {
     @Column(name = "password", nullable = false)
     private String passwordHash;
 
+    @Past(message = "Date of birth must be in the past")
     private Date dateOfBirth;
 
-    private String firstName, lastName, phone, email, address, city;
+    @NotBlank(message = "Customer's firstname is mandatory")
+    private String firstName;
+
+    @NotBlank(message = "Customer's lastname is mandatory")
+    private String lastName;
+
+    @NotBlank(message = "Customer's phone number is mandatory")
+    @Size(min = 7, max = 15, message = "Phone number must be between 7 and 15 characters long")
+    private String phone;
+
+    @Email(message = "Invalid email address")
+    private String email;
+
+    private String address;
+    private String city;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonManagedReference(value = "customer-order")
