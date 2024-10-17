@@ -1,14 +1,13 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.mapper;
 
-import java.util.List;
+import java.util.*;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
-import com.eliteinnovators.ticketguru.ticketguru_app.web.OrderDTO;
-import com.eliteinnovators.ticketguru.ticketguru_app.web.OrderDetailsDTO;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.*;
+import com.eliteinnovators.ticketguru.ticketguru_app.exception.*;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.*;
+import com.eliteinnovators.ticketguru.ticketguru_app.web.*;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
@@ -21,21 +20,35 @@ public interface OrderMapper {
     @Mapping(source = "salesperson.lastName", target = "salespersonLastName")
     OrderDTO toOrderDTO(Order order);
 
-    @Mapping(target = "customer.customerId", source = "customerId")
-    @Mapping(target = "salesperson.salespersonId", source = "salespersonId")
-    @Mapping(target = "customer.firstName", source = "customerFirstName")
-    @Mapping(target = "customer.lastName", source = "customerLastName")
-    @Mapping(target = "salesperson.firstName", source = "salespersonFirstName")
-    @Mapping(target = "salesperson.lastName", source = "salespersonLastName")
-    Order toOrder(OrderDTO orderDTO);
+    @Mapping(target = "customer", source = "customerId")
+    @Mapping(target = "salesperson", source = "salespersonId")
+    Order toOrder(OrderDTO orderDTO, @Context CustomerRepository customerRepository, @Context SalespersonRepository salespersonRepository);
 
     @Mapping(source = "ticket.id", target = "ticketId")
     OrderDetailsDTO toOrderDetailsDTO(OrderDetails orderDetails);
 
     @Mapping(target = "ticket.id", source = "ticketId")
-    OrderDetails toOrderDetails(OrderDetailsDTO orderDetailsDTO);
+    OrderDetails toOrderDetails(OrderDetailsDTO orderDetailsDTO, @Context TicketRepository ticketRepository);
 
     List<OrderDTO> toOrderDTOs(List<Order> orders);
     List<OrderDetailsDTO> toOrderDetailsDTOs(List<OrderDetails> orderDetails);
-    List<OrderDetails> toOrderDetailsList(List<OrderDetailsDTO> orderDetailsDTO);
+    List<OrderDetails> toOrderDetailsList(List<OrderDetailsDTO> orderDetailsDTO, @Context TicketRepository ticketRepository);
+
+    // TODO mapCustomer CustomerMapperiin kun valmis
+    default Customer mapCustomer(Long customerId, @Context CustomerRepository customerRepository) {
+        return customerRepository.findById(customerId)
+            .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + customerId + " not found"));
+    }
+
+    // TODO mapSalesperson SalespersonMapperiin kun valmis
+    default Salesperson mapSalesperson(Long salespersonId, @Context SalespersonRepository salespersonRepository) {
+        return salespersonRepository.findById(salespersonId)
+            .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with ID " + salespersonId + " not found"));
+    }
+
+    // TODO mapTicket TicketMapperiin kun valmis
+    default Ticket mapTicket(Long ticketId, @Context TicketRepository ticketRepository) {
+        return ticketRepository.findById(ticketId)
+            .orElseThrow(() -> new RuntimeException("Ticket with ID " + ticketId + " not found")); // TODO RTE -> ticketin omaksi erroriksi kun löytyy
+    }
 }
