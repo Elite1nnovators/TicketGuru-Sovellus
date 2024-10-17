@@ -86,15 +86,13 @@ public class OrderService {
 
     @Transactional
     public Order editOrder(OrderDTO editedOrderDTO, Long orderId) {
-        /*
-        ehkä tätä tarvitaan vielä? ei ainakaan nyt
-        Order existingOrder = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found")); 
-        */
+        Order existingOrder = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order with ID " + orderId + " not found")); 
         if(!orderRepository.findById(orderId).isPresent()) {
             throw new OrderNotFoundException("Order with ID " + orderId + " not found");
         }
 
         Order updatedOrder = orderMapper.toOrder(editedOrderDTO, customerRepository, salespersonRepository);
+        updatedOrder.setOrderDate(existingOrder.getOrderDate());
 
         List<OrderDetails> updatedOrderDetailsList = orderMapper.toOrderDetailsList(editedOrderDTO.getOrderDetails(), ticketRepository);
         updatedOrder.setOrderDetails(updatedOrderDetailsList);

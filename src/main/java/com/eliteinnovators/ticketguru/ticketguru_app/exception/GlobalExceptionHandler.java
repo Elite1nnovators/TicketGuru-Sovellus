@@ -1,9 +1,13 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.exception;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -63,4 +67,20 @@ public class GlobalExceptionHandler {
         errorResponse.put("error", ex.getMessage());
         return errorResponse;
     }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public List<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        return ex.getBindingResult().getFieldErrors().stream()
+            .map(error -> error.getDefaultMessage())
+            .collect(Collectors.toList());
+    }
+
+    // For validation errors on request parameters
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public List<String> handleConstraintViolationExceptions(ConstraintViolationException ex) {
+        return ex.getConstraintViolations().stream()
+            .map(violation -> violation.getMessage())
+            .collect(Collectors.toList());
+    } 
 }
