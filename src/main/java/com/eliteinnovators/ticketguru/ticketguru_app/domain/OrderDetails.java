@@ -2,13 +2,8 @@ package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class OrderDetails {
@@ -17,21 +12,25 @@ public class OrderDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderDetailId;
 
+    @NotNull(message = "OrderDetails: Order must not be null")
     @ManyToOne
     @JoinColumn(name = "order_id")
     @JsonBackReference(value = "order-orderDetails")
     private Order order;
 
+    @NotNull(message = "OrderDetails: Ticket must not be null")
     @ManyToOne
     @JoinColumn(name = "ticket_id")
     @JsonBackReference(value = "ticket-orderDetails")
     private Ticket ticket;
 
+    @DecimalMin(value = "0.0", inclusive = false, message = "OrderDetails: Unit price must be greater than 0")
     private double unitPrice;
+
+    @Min(value = 1, message = "OrderDetails: Quantity must be greater than 0")
     private int quantity;
 
     public OrderDetails () {
-
     }
 
     public OrderDetails(Order order, int quantity, Ticket ticket, double unitPrice) {

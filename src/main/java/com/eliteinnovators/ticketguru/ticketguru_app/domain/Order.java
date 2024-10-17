@@ -1,22 +1,11 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
+import com.fasterxml.jackson.annotation.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "order_entity")
@@ -26,24 +15,28 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
+    @NotEmpty(message = "Order: Order must have at least one order detail")
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "order-orderDetails")
     private List<OrderDetails> orderDetails = new ArrayList<>(); 
 
+    @NotNull(message = "Order: Customer is required for the order")
     @ManyToOne
     @JoinColumn(name = "customer_id")
     @JsonBackReference(value = "customer-order")
     private Customer customer;
 
+    @NotNull(message = "Order: Salesperson is required for the order")
     @ManyToOne
     @JoinColumn(name = "salesperson_id")
     @JsonBackReference(value = "salesperson-order")
     private Salesperson salesperson;
 
+    @NotNull(message = "Order: Order date is required")
+    @PastOrPresent(message = "Order date cannot be in the future")
     private Date orderDate;
 
     public Order() {
-
     }
 
     public Order(Customer customer, Date orderDate, Salesperson salesperson) {
