@@ -1,28 +1,14 @@
 package com.eliteinnovators.ticketguru.ticketguru_app;
 
-import java.util.Date;
+import java.util.*;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Customer;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.CustomerRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventTicketTypeRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderDetailsRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.SalespersonRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketTypeRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.*;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.*;
 
 @SpringBootApplication
 public class TicketguruAppApplication {
@@ -90,12 +76,15 @@ public class TicketguruAppApplication {
             ticketRepository.save(ticket2);
             ticketRepository.save(ticket3);
             Order order = new Order(customer, new Date(), salesperson);
-            orderRepository.save(order);
 
             OrderDetails orderDetails = new OrderDetails(order, 3, ticket2, 30);
             OrderDetails orderDetails2 = new OrderDetails(order, 4, ticket3, 10);
-            orderDetailsRepository.save(orderDetails);
-            orderDetailsRepository.save(orderDetails2);
+            List<OrderDetails> orderDetailsList = new ArrayList<>();
+            orderDetailsList.add(orderDetails);
+            orderDetailsList.add(orderDetails2);
+            order.setOrderDetails(orderDetailsList);
+
+            orderRepository.save(order);
         };
     }
 }
