@@ -77,8 +77,8 @@ public class TicketguruAppApplication {
             customerRepository.save(customer2);
 
             Salesperson admin = new Salesperson("maijameikalainen", "password", true, "Maija", "Meikäläinen", "0501234567", null);
-            Salesperson salesperson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "045123456", null);
-            Salesperson salesperson2 = new Salesperson("anna_kokkonen", "password", false, "Anna", "Kokkonen", "045456321", null);
+            Salesperson salesperson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "0451234567", null);
+            Salesperson salesperson2 = new Salesperson("anna_kokkonen", "password", false, "Anna", "Kokkonen", "0454563210", null);
             salespersonRepository.save(salesperson);
             salespersonRepository.save(salesperson2);
             salespersonRepository.save(admin);
