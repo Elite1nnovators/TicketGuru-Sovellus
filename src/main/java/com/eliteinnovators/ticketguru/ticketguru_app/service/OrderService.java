@@ -28,26 +28,9 @@ public class OrderService {
 
     public OrderDTO convertToOrderDTO(Order order) {
         OrderDTO orderDTO = orderMapper.toOrderDTO(order);
-        if(order.getCustomer() != null) {
-            orderDTO.setCustomerFirstName(order.getCustomer().getFirstName());
-            orderDTO.setCustomerLastName(order.getCustomer().getLastName());
-        }
-        if (order.getSalesperson() != null) {
-            orderDTO.setSalespersonFirstName(order.getSalesperson().getFirstName());
-            orderDTO.setSalespersonLastName(order.getSalesperson().getLastName());
-        }
 
-        // OrderDetailsDTO:n täyttö
-        List<OrderDetailsDTO> orderDetailsDTOs = new ArrayList<>();
-        for (OrderDetails orderDetails : order.getOrderDetails()) {
-            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
-            if (orderDetails.getTicket() != null) {
-                orderDetailsDTO.setTicketId(orderDetails.getTicket().getId());
-            }
-            orderDetailsDTO.setQuantity(orderDetails.getQuantity());
-            orderDetailsDTO.setUnitPrice(orderDetails.getUnitPrice());
-            orderDetailsDTOs.add(orderDetailsDTO);
-        }
+        List<OrderDetails> orderDetailsList = order.getOrderDetails();
+        List<OrderDetailsDTO> orderDetailsDTOs = orderMapper.toOrderDetailsDTOs(orderDetailsList);
 
         orderDTO.setOrderDetails(orderDetailsDTOs);
         return orderDTO;
