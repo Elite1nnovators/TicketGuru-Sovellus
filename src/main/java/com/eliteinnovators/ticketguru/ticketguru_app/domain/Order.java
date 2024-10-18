@@ -36,15 +36,25 @@ public class Order {
     @PastOrPresent(message = "Order date cannot be in the future")
     private Date orderDate;
 
-    public Order() {
-    }
+    @NotEmpty(message = "Order: Tickets must contain at least one ticket")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Ticket> tickets = new ArrayList<>();
 
-    public Order(Customer customer, Date orderDate, Salesperson salesperson) {
+    public Order() {}
+    public Order(Customer customer, Salesperson salesperson, Date orderDate) {
         this.customer = customer;
-        this.orderDate = orderDate;
         this.salesperson = salesperson;
+        this.orderDate = orderDate;
     }
-
+    public Order(Customer customer, Salesperson salesperson, Date orderDate, List<Ticket> tickets) {
+        this.customer = customer;
+        this.salesperson = salesperson;
+        this.orderDate = orderDate;
+        this.tickets = tickets;
+        for (Ticket ticket : tickets) {
+            ticket.setOrder(this);
+        }
+    }
     public List<OrderDetails> getOrderDetails() {
         return orderDetails;
     }
@@ -55,43 +65,34 @@ public class Order {
             orderDetail.setOrder(this);
         }
     }
-
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
     public Long getOrderId() {
         return orderId;
     }
-
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
-
     public Customer getCustomer() {
         return customer;
     }
-
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
     public Salesperson getSalesperson() {
         return salesperson;
     }
-
     public void setSalesperson(Salesperson salesperson) {
         this.salesperson = salesperson;
     }
-
     public Date getOrderDate() {
         return orderDate;
     }
-
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
-
-    @Override
-    public String toString() {
-        return "Order [orderId=" + orderId + ", customer=" + customer + ", salesperson=" + salesperson
-                + ", orderDate=" + orderDate;
-    }
-
 }

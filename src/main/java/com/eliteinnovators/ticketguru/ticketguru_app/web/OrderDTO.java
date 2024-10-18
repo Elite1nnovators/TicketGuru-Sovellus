@@ -1,36 +1,47 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import java.util.List;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
-
+// Toimii request ja response entitynä
+//response == tieto palautetaan responsena clientin pyyntöön
 public class OrderDTO {
-    private Long orderId;
-    private Long customerId;
-    private String customerFirstName;
-    private String customerLastName;
-    private Long salespersonId;
-    private String salespersonFirstName;
-    private String salespersonLastName;
-    private Date orderDate;
-    private List<OrderDetailsDTO> orderDetails;
-    
-    public OrderDTO() {}
 
-    public OrderDTO (Long orderId, Long customerId, String customerFirstName, String customerLastName,
-            Long salespersonId, String salespersonFirstName, String salespersonLastName, Date orderDate,
-            List<OrderDetailsDTO> orderDetails) {
-                
-        this.orderId = orderId;
+    @NotNull(message = "OrderDTO: Customer ID is required")
+    private Long customerId;
+    @NotNull(message = "OrderDTO: Salesperson ID is required")
+    private Long salespersonId;
+    @NotEmpty(message = "OrderDTO: Order must contain at least one order detail")
+    private List<@Valid OrderDetailsDTO> orderDetails;
+
+    private Long orderId; //response
+    private String customerFirstName; //response
+    private String customerLastName; //response
+    private String salespersonFirstName; //response
+    private String salespersonLastName; //response
+    private Date orderDate; //response
+    
+    public OrderDTO(@NotNull(message = "OrderDTO: Customer ID is required") Long customerId,
+            @NotNull(message = "OrderDTO: Salesperson ID is required") Long salespersonId,
+            @NotEmpty(message = "OrderDTO: Order must contain at least one order detail") List<@Valid OrderDetailsDTO> orderDetails,
+            Long orderId, String customerFirstName, String customerLastName, String salespersonFirstName,
+            String salespersonLastName, Date orderDate) {
         this.customerId = customerId;
+        this.salespersonId = salespersonId;
+        this.orderDetails = orderDetails;
+        this.orderId = orderId;
         this.customerFirstName = customerFirstName;
         this.customerLastName = customerLastName;
-        this.salespersonId = salespersonId;
         this.salespersonFirstName = salespersonFirstName;
         this.salespersonLastName = salespersonLastName;
         this.orderDate = orderDate;
-        this.orderDetails = orderDetails;
     }
+    public OrderDTO() {}
     public Long getOrderId() {
         return orderId;
     }
