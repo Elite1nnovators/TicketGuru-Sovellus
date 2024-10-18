@@ -1,24 +1,24 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 public class OrderDetailsDTO {
-    private Long ticketId;  
+    private Long eventTicketTypeId;  
     private int quantity;
     private double unitPrice;
 
     public OrderDetailsDTO() {}
 
-    public OrderDetailsDTO(Long ticketId, int quantity, double unitPrice) {
-        this.ticketId = ticketId;
+    public OrderDetailsDTO(Long eventTicketTypeId, int quantity, double unitPrice) {
+        this.eventTicketTypeId = eventTicketTypeId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
-    public Long getTicketId() {
-        return ticketId;
+    public Long getEventTicketTypeId() {
+        return eventTicketTypeId;
     }
 
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
+    public void setEventTicketTypeId(Long eventTicketTypeId) {
+        this.eventTicketTypeId = eventTicketTypeId;
     }
 
     public int getQuantity() {
