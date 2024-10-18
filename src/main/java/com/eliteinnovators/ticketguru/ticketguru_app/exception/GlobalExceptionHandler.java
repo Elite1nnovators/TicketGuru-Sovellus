@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.ConstraintViolationException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -75,12 +73,19 @@ public class GlobalExceptionHandler {
             .collect(Collectors.toList());
     }
 
-    // For validation errors on request parameters
-    @ExceptionHandler(ConstraintViolationException.class)
+    @ExceptionHandler(EventTicketTypeNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleEventTicketTypeNotFound(EventTicketTypeNotFoundException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        return errorResponse;
+    }
+
+    @ExceptionHandler(InsufficientTicketsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<String> handleConstraintViolationExceptions(ConstraintViolationException ex) {
-        return ex.getConstraintViolations().stream()
-            .map(violation -> violation.getMessage())
-            .collect(Collectors.toList());
-    } 
+    public Map<String, String> handleInsufficientTickets(InsufficientTicketsException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        return errorResponse;
+    }
 }
