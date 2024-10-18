@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
     @Autowired
-    private TicketRepository ticketRepository;
-
-    @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
@@ -31,57 +28,52 @@ public class OrderService {
     @Autowired
     private SalespersonRepository salespersonRepository;
 
-    public OrderDTO convertToOrderDTO(Order order) {
-        OrderDTO orderDTO = orderMapper.toOrderDTO(order);
-
-        List<OrderDetails> orderDetailsList = order.getOrderDetails();
-        List<OrderDetailsDTO> orderDetailsDTOs = orderMapper.toOrderDetailsDTOs(orderDetailsList);
-
-        orderDTO.setOrderDetails(orderDetailsDTOs);
-        return orderDTO;
-    }
-
-    public Order convertToOrder(OrderDTO orderDTO) {
-        Order order = orderMapper.toOrder(orderDTO, customerRepository, salespersonRepository);
-
-        Customer customer = customerRepository.findById(orderDTO.getCustomerId())
-                .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + orderDTO.getCustomerId() + " not found"));
-        order.setCustomer(customer);
-
-        Salesperson salesperson = salespersonRepository.findById(orderDTO.getSalespersonId())
-                .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with ID " + orderDTO.getSalespersonId() + " not found"));
-        order.setSalesperson(salesperson);
-
-        return order;
-    }
+    @Autowired
+    private EventTicketTypeRepository eventTicketTypeRepository;
 
     public List<OrderDTO> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
-        List<OrderDTO> orderDTOs = new ArrayList<>();
-        
-        for (Order order : orders) {
-            OrderDTO orderDTO = convertToOrderDTO(order);
-            orderDTOs.add(orderDTO);
-        }
+        List<OrderDTO> orderDTOs = orderMapper.toOrderDTOs(orders);
         return orderDTOs;
     }
 
     public OrderDTO getOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId)
             .orElseThrow(() -> new OrderNotFoundException("Order with ID " + orderId + " not found"));
-        
-        return convertToOrderDTO(order);
+        OrderDTO orderDTO = orderMapper.toOrderDTO(order);
+        return orderDTO;
     }
 
     @Transactional
-    public Order newOrder(OrderDTO newOrderDTO) {
-        Order newOrder = orderMapper.toOrder(newOrderDTO, customerRepository, salespersonRepository);
+    public OrderDTO newOrder(OrderDTO newOrderDTO) {
+        Order newOrder = orderMapper.toOrder(newOrderDTO, customerRepository, salespersonRepository, eventTicketTypeRepository);
         newOrder.setOrderDate(new Date());
 
-        List<OrderDetails> orderDetailsList = orderMapper.toOrderDetailsList(newOrderDTO.getOrderDetails(), ticketRepository);
-        newOrder.setOrderDetails(orderDetailsList);
+        List<Ticket> tickets = new ArrayList<>();
 
-        return orderRepository.save(newOrder);
+        // Päivitetään OrderDetails ja EventTicketType uutta tilausta tehdessä
+        for(OrderDetails orderDetails : newOrder.getOrderDetails()) {
+            EventTicketType eventTicketType = orderDetails.getEventTicketType();
+            if(eventTicketType.getTicketsInStock() < orderDetails.getQuantity()) {
+                throw new InsufficientTicketsException("Not enough tickets in stock");
+            }
+            orderDetails.setUnitPrice(eventTicketType.getPrice());
+            eventTicketType.setTicketsInStock(eventTicketType.getTicketsInStock() - orderDetails.getQuantity());
+            eventTicketTypeRepository.save(eventTicketType);
+
+            //Ticketin luonti jokaista tämän orderDetailin sisältämän eventTicketTypen ostomäärää kohden
+            for(int i = 0; i < orderDetails.getQuantity(); i++) {
+                Ticket ticket = new Ticket();
+                ticket.setEventTicketType(eventTicketType);
+                ticket.setTicketCode(generateUniqueTicketCode());
+                ticket.setValid(true);
+                ticket.setOrder(newOrder);
+                tickets.add(ticket);
+            }
+        }
+        newOrder.setTickets(tickets);
+        Order savedOrder = orderRepository.save(newOrder);
+        return orderMapper.toOrderDTO(savedOrder);
     }
 
     @Transactional
@@ -91,14 +83,12 @@ public class OrderService {
             throw new OrderNotFoundException("Order with ID " + orderId + " not found");
         }
 
-        Order updatedOrder = orderMapper.toOrder(editedOrderDTO, customerRepository, salespersonRepository);
+        Order updatedOrder = orderMapper.toOrder(editedOrderDTO, customerRepository, salespersonRepository, eventTicketTypeRepository);
         updatedOrder.setOrderDate(existingOrder.getOrderDate());
-
-        List<OrderDetails> updatedOrderDetailsList = orderMapper.toOrderDetailsList(editedOrderDTO.getOrderDetails(), ticketRepository);
-        updatedOrder.setOrderDetails(updatedOrderDetailsList);
 
         return orderRepository.save(updatedOrder);
     }
+
     @Transactional
     public Order patchOrder(OrderDTO patchOrderDTO, Long orderId) {
         Order existingOrder = orderRepository.findById(orderId)
@@ -109,7 +99,8 @@ public class OrderService {
         Order updatedOrder = orderRepository.save(existingOrder);
         return updatedOrder;
     }
-    //apumetodi luettavuuden vuoksi
+
+    //apumetodi patchOrderille luettavuuden vuoksi
     private void applyNonNullFieldsToOrder(OrderDTO patchOrderDTO, Order existingOrder) {
         if (patchOrderDTO.getCustomerId() != null) {
             Customer customer = customerRepository.findById(patchOrderDTO.getCustomerId())
@@ -121,9 +112,11 @@ public class OrderService {
                     .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with ID " + patchOrderDTO.getSalespersonId() + " not found"));
             existingOrder.setSalesperson(salesperson);
         }
-        if (patchOrderDTO.getOrderDetails() != null) {
-            List<OrderDetails> updatedOrderDetails = orderMapper.toOrderDetailsList(patchOrderDTO.getOrderDetails(), ticketRepository);
-            existingOrder.setOrderDetails(updatedOrderDetails);
-        }
+        //TODO onko vielä muuta jota voisi PATCHilla muuttaa?
+    }
+
+    // uniikin ticketCoden luonti (128 bit value)
+    private String generateUniqueTicketCode() {
+        return UUID.randomUUID().toString();
     }
 }
