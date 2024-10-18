@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.*;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.*;
-import com.eliteinnovators.ticketguru.ticketguru_app.exception.*;
+
+import jakarta.validation.Valid;
+
 import com.eliteinnovators.ticketguru.ticketguru_app.mapper.OrderMapper;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.*;
 
@@ -22,9 +24,6 @@ public class OrderController {
 
     @Autowired
     private OrderMapper orderMapper;
-
-    @Autowired
-    private OrderDetailsRepository orderDetailsRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -41,9 +40,8 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderDTO);
     }
     @PostMapping("/orders")
-    public ResponseEntity<OrderDTO> newOrder(@RequestBody OrderDTO newOrderDTO) {
-        Order createdOrder = orderService.newOrder(newOrderDTO);
-        OrderDTO createdOrderDTO = orderMapper.toOrderDTO(createdOrder);
+    public ResponseEntity<OrderDTO> newOrder(@Valid @RequestBody OrderDTO newOrderDTO) {
+        OrderDTO createdOrderDTO = orderService.newOrder(newOrderDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderDTO);
     }
 
@@ -67,7 +65,9 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // ORDERDETAILS REST -ENDPOINTIT
+    /* 
+    // ORDERDETAILS REST -ENDPOINTIT TODO Tarvitaanko näitä? OrderDetailsin tarvittavat tiedot näkyy Orderia hakiessa ja niitä voi myös muuttaa Orderia muuttamalla
+    Antaa olla vielä kommentoituna kunnes tiedetään tarvitaanko
     @GetMapping("/orderdetails")
     public ResponseEntity<List<OrderDetailsDTO>> getAllOrderDetails() {
         List<OrderDetailsDTO> orderDetailsDTOs = orderMapper.toOrderDetailsDTOs(orderDetailsRepository.findAll());
@@ -94,4 +94,5 @@ public class OrderController {
         orderDetailsRepository.deleteById(orderDetailsId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    */
 }
