@@ -46,10 +46,14 @@ public class TicketguruAppApplication {
 
             // 4. Create and save customers and salespersons
             Customer customer = new Customer("john_doe", "password", new Date(), "John", "Doe", "123456789", "john@example.com", "Street 1", "Helsinki", null);
+            Customer customer2 = new Customer("jane_doe", "password2", new Date(), "Jane", "Doe", "987654321", "jane@example.com", "Street 1", "Espoo", null);
             customerRepository.save(customer);
+            customerRepository.save(customer2);
 
             Salesperson salesperson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "0451234567", null);
+            Salesperson salesperson2 = new Salesperson("anna_brown", "password2", false, "Anna", "Brown", "0409876543", null);
             salespersonRepository.save(salesperson);
+            salespersonRepository.save(salesperson2);
 
             // 5. Create order details
             OrderDetailsDTO orderDetailDTO1 = new OrderDetailsDTO(eventTicketType.getId(), 2, eventTicketType.getPrice());

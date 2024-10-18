@@ -61,6 +61,9 @@ public class OrderService {
             eventTicketType.setTicketsInStock(eventTicketType.getTicketsInStock() - orderDetails.getQuantity());
             eventTicketTypeRepository.save(eventTicketType);
 
+            if(orderDetails.getQuantity() <= 0) {
+                throw new InvalidOrderException("Order quantity must be greater than 0");
+            }
             //Ticketin luonti jokaista tämän orderDetailin sisältämän eventTicketTypen ostomäärää kohden
             for(int i = 0; i < orderDetails.getQuantity(); i++) {
                 Ticket ticket = new Ticket();
@@ -79,14 +82,10 @@ public class OrderService {
     @Transactional
     public Order editOrder(OrderDTO editedOrderDTO, Long orderId) {
         Order existingOrder = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order with ID " + orderId + " not found")); 
-        if(!orderRepository.findById(orderId).isPresent()) {
-            throw new OrderNotFoundException("Order with ID " + orderId + " not found");
-        }
 
-        Order updatedOrder = orderMapper.toOrder(editedOrderDTO, customerRepository, salespersonRepository, eventTicketTypeRepository);
-        updatedOrder.setOrderDate(existingOrder.getOrderDate());
+        applyNonNullFieldsToOrder(editedOrderDTO, existingOrder);
 
-        return orderRepository.save(updatedOrder);
+        return orderRepository.save(existingOrder);
     }
 
     @Transactional
@@ -102,6 +101,11 @@ public class OrderService {
 
     //apumetodi patchOrderille luettavuuden vuoksi
     private void applyNonNullFieldsToOrder(OrderDTO patchOrderDTO, Order existingOrder) {
+        // EI sallita orderDetails / tickettien muuttamista sen jälkeen kun Order on luotu.
+        if (patchOrderDTO.getOrderDetails() != null) {
+            throw new OrderModificationNotAllowedException("Modifying order details is not allowed after order creation");
+        }
+        //Customer ja Salesperson saa muuttua
         if (patchOrderDTO.getCustomerId() != null) {
             Customer customer = customerRepository.findById(patchOrderDTO.getCustomerId())
                     .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + patchOrderDTO.getCustomerId() + " not found"));
@@ -112,9 +116,7 @@ public class OrderService {
                     .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with ID " + patchOrderDTO.getSalespersonId() + " not found"));
             existingOrder.setSalesperson(salesperson);
         }
-        //TODO onko vielä muuta jota voisi PATCHilla muuttaa?
     }
-
     // uniikin ticketCoden luonti (128 bit value)
     private String generateUniqueTicketCode() {
         return UUID.randomUUID().toString();

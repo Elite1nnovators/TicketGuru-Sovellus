@@ -56,12 +56,12 @@ add_new_order() {
             "salespersonId": 1,
             "orderDetails": [
                 {
-                    "ticketId": 2,
+                    "eventTicketTypeId": 1,
                     "unitPrice": 25.0,
                     "quantity": 2
                 },
                 {
-                    "ticketId": 1,
+                    "eventTicketTypeId": 2,
                     "unitPrice": 15.0,
                     "quantity": 5
                 }
@@ -79,7 +79,6 @@ add_new_order() {
         SUMMARY+=("Request: POST Add New Order returned $http_status. ERRORS: $errors")
     fi
 }
-
 # Function to perform a PUT request to edit an Order
 edit_order() {
     local order_id=$1
@@ -88,19 +87,7 @@ edit_order() {
         -H "Content-Type: application/json" \
         -d '{
             "customerId": 2,
-            "salespersonId": 3,
-            "orderDetails": [
-                {
-                    "ticketId": 2,
-                    "quantity": 23,
-                    "unitPrice": 25.0
-                },
-                {
-                    "ticketId": 1,
-                    "quantity": 51,
-                    "unitPrice": 15.0
-                }
-            ]
+            "salespersonId": 1
         }')
     local http_status=$(echo "$response" | tail -n1)
     local body=$(echo "$response" | sed '$d')
@@ -115,6 +102,41 @@ edit_order() {
     fi
 }
 
+# Function to perform a PUT request to edit an Order
+edit_order_details() {
+    local order_id=$1
+    echo "PUT Edit Order with ID: $order_id"
+    local response=$(curl -s -w "\n%{http_code}" -X PUT "$BASE_URL/orders/$order_id" \
+        -H "Content-Type: application/json" \
+        -d '{
+            "customerId": 1,
+            "salespersonId": 1,
+            "orderDetails": [
+                {
+                    "eventTicketTypeId": 1,
+                    "quantity": 1,
+                    "unitPrice": 24.0
+                },
+                {
+                    "eventTicketTypeId": 2,
+                    "quantity": 4,
+                    "unitPrice": 14.0
+                }
+            ]
+        }')
+    local http_status=$(echo "$response" | tail -n1)
+    local body=$(echo "$response" | sed '$d')
+    local errors=$(extract_errors "$http_status" "$body")
+    echo "Response Body:"
+    echo "$body" | jq
+    echo "------------------------"
+    if [ -z "$errors" ]; then
+        SUMMARY+=("Request: PUT Edit Order $order_id orderDetails returned $http_status. ")
+    else
+        SUMMARY+=("Request: PUT Edit Order $order_id orderDetails returned $http_status. ERRORS: $errors")
+    fi
+}
+
 # Function to perform a PATCH request to update an Order partially
 patch_order() {
     local order_id=$1
@@ -122,7 +144,7 @@ patch_order() {
     local response=$(curl -s -w "\n%{http_code}" -X PATCH "$BASE_URL/orders/$order_id" \
         -H "Content-Type: application/json" \
         -d '{
-            "customerId": 2
+            "salespersonId": 2
         }')
     local http_status=$(echo "$response" | tail -n1)
     local body=$(echo "$response" | sed '$d')
@@ -282,7 +304,7 @@ add_new_order_missing_customer() {
             "salespersonId": 1,
             "orderDetails": [
                 {
-                    "ticketId": 2,
+                    "eventTicketTypeId": 1,
                     "unitPrice": 25.0,
                     "quantity": 2
                 }
@@ -311,7 +333,7 @@ add_new_order_invalid_quantity() {
             "salespersonId": 1,
             "orderDetails": [
                 {
-                    "ticketId": 2,
+                    "eventTicketTypeId": 1,
                     "unitPrice": 25.0,
                     "quantity": -5
                 }
@@ -340,7 +362,7 @@ add_new_order_zero_quantity() {
             "salespersonId": 1,
             "orderDetails": [
                 {
-                    "ticketId": 2,
+                    "eventTicketTypeId": 1,
                     "unitPrice": 25.0,
                     "quantity": 0
                 }
@@ -371,6 +393,7 @@ print_summary() {
 get_order_by_id 1
 add_new_order
 edit_order 2
+edit_order_details 2
 patch_order 2
 get_all_orders
 delete_order_by_id 2
