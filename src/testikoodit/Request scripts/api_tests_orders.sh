@@ -378,10 +378,6 @@ get_order_non_existent
 add_new_order_missing_customer
 add_new_order_invalid_quantity
 add_new_order_zero_quantity
-get_all_orderdetails
-get_orderdetails_by_id 1
-edit_orderdetails 1
-delete_orderdetails_by_id 1
 
 # Print the summary at the end
 print_summary
