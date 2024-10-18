@@ -277,17 +277,15 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 <details>
 <summary> Tietohakemisto </summary>
 
-
-
 ### Event (Tapahtuma)
 
 <details>
-<summary>Tapahtumataulu sisältää tiedot järjestettävistä tapahtumista, joihin myydään lippuja. Yksi tapahtuma voi sisältää useita lippuja</summary>
+<summary>Tapahtumataulu sisältää tiedot järjestettävistä tapahtumista, joihin myydään lippuja. Yksi tapahtuma voi sisältää useita lippuja ja lipputyyppejä.</summary>
 </br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|----------------  | ------------------------------------------------------- |
-| Even_id           | int(AN) PK       | Tapahtuman yksilöllinen tunniste.                       |
+| ------------------|------------------| ------------------------------------------------------- |
+| Event_id          | int (AN) PK      | Tapahtuman yksilöllinen tunniste.                       |
 | Event_name        | varchar(50)      | Tapahtuman nimi.                                        |
 | Event_date        | date             | Tapahtuman päivämäärä.                                  |
 | Event_address     | varchar(50)      | Tapahtuman osoite.                                      |
@@ -300,18 +298,15 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 ### Ticket (Lippu)
 
 <details>
-<summary>Lipputaulu sisältää tiedot myydyistä lipuista tiettyihin tapahtumiin.  Yksi lippu kuuluu yhteen tapahtumaan ja yhteen lipputyyppiin . Yksi lippu voi kuulua useaan tilaukseen.</summary>
+<summary>Lipputaulu sisältää tiedot myydyistä lipuista tiettyihin tapahtumiin. Yksi lippu kuuluu yhteen tapahtuman lipputyyppiin. Yhdessä tilauksessa voi olla useita lippuja.</summary>
 </br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| ------------------------------------------------------- |
-| Ticket_id         | int(AN) PK       | Yksittäisen lipun tunniste.                             |
-| Ticket_Typeid     | int FK           | Viittaus lipun tyyppiin. (TicketType-taulu)             |
-| Event_id          | int FK           | Viittaus tapahtumaan, johon lippu kuuluu. (Event-taulu) |
-| TotalQuantity     | int              | Lippujen kokonaismäärä.                                 |
-| TicketsInStock    | int              | Jäljellä olevien lippujen määrä varastossa.             |
+| Ticket_id         | int (AN) PK      | Yksittäisen lipun tunniste.                             |
+| EventTicketType_id| int FK           | Viittaus tapahtuman lipputyyppiin (EventTicketType-taulu).|
 | TicketCode        | varchar(30)      | Lipun tarkistuskoodi (QR- tai viivakoodi).              |
-| TicketIsUsed      | boolean          | Indikaatio siitä, onko lippu käytetty.                  |
+| TicketIsValid     | boolean          | Indikaatio siitä, onko lippu vielä voimassa.            |
 
 </details>
 </br>
@@ -319,33 +314,31 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 ### TicketType (Lipputyyppi)
 
 <details>
-<summary> Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Yksi lipputyyppi voi liittyä useisiin lippuihin. </summary>
+<summary> Lipputyyppitaulu sisältää tiedot lipun erilaisista hinnoista ja tyypeistä. Yksi lipputyyppi voi liittyä useisiin tapahtuman lipputyyppeihin. </summary>
 </br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| ------------------------------------------------------- |
-| TicketType_id     | int(AN) PK       | Lipputyypin yksilöllinen tunniste.                      |
+| TicketType_id     | int (AN) PK      | Lipputyypin yksilöllinen tunniste.                      |
 | Type_name         | varchar(30)      | Lipputyypin nimi (esim. aikuinen, lapsi).               |
-| type_price        | double           | Lipputyypin hinta.                                      |
 
 </details>
 </br>
 
 ### EventTicketType (Tapahtuman lipputyyppi)
 
-
 <details>
-<summary>Tapahtuman lipputyyppitaulu sisältää tiedot tapahtuman lipputyypeistä ja niiden määristä. Jokainen tapahtuma voi sisältää useita lipputyyppejä. Lipputyypit ovat määritetty TicketType-taulussa ja viitattu tähän tapahtuman lippukohtaisilla määrillä ja hinnoilla. </summary>
+<summary>Tapahtuman lipputyyppitaulu sisältää tiedot tapahtuman lipputyypeistä ja niiden määristä. Jokainen tapahtuma voi sisältää useita lipputyyppejä. Lipputyypit ovat määritetty TicketType-taulussa ja viitattu tähän tapahtuman lippukohtaisilla määrillä ja hinnoilla.</summary>
 </br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
-| EventTicketType_id | int(AN) PK       | Tapahtuman lipputyypin yksilöllinen tunniste.            |
-| TicketType_id      | int FK           | Viittaus lipputyyppiin (TicketType-taulu).               |
-| Event_id           | int FK           | Viittaus tapahtumaan (Event-taulu).                      |
-| Price              | double           | Lipputyypin hinta tapahtumassa.                          |
-| TotalQuantity      | int              | Tapahtuman lipputyypin lippujen kokonaismäärä.           |
-| TicketsInStock     | int              | Tapahtuman lipputyypin jäljellä olevien lippujen määrä.  |
+| EventTicketType_id| int (AN) PK      | Tapahtuman lipputyypin yksilöllinen tunniste.            |
+| TicketType_id     | int FK           | Viittaus lipputyyppiin (TicketType-taulu).               |
+| Event_id          | int FK           | Viittaus tapahtumaan (Event-taulu).                      |
+| Price             | double           | Lipputyypin hinta tapahtumassa.                          |
+| TotalQuantity     | int              | Tapahtuman lipputyypin lippujen kokonaismäärä.           |
+| TicketsInStock    | int              | Tapahtuman lipputyypin jäljellä olevien lippujen määrä.  |
 
 </details>
 </br>
@@ -353,51 +346,44 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 ### OrderDetails (Tilauksen tiedot)
 
 <details>
-<summary>
-Tilausrivien taulu sisältää yksityiskohtaiset tiedot yksittäisistä lipuista, jotka kuuluvat tilauksiin. Yksi tilaus voi sisältää useita lippuja
-</summary>
+<summary>Tilausrivien taulu sisältää yksityiskohtaiset tiedot yksittäisistä lipuista, jotka kuuluvat tilauksiin. Yksi tilaus voi sisältää useita tapahtuman lipputyyppeihin liittyviä lippuja.</summary>
 </br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
-| OrderDetail_id    | int(AN)          | Tilauksen yksityiskohtien tunniste.                     |
+| OrderDetail_id    | int (AN) PK      | Tilauksen yksityiskohtien tunniste.                     |
 | Order_id          | int FK           | Viittaus tilaukseen (Order-taulu).                      |
-| Ticket_id         | int FK           | Viittaus lippuun (Ticket-taulu).                        |
+| EventTicketType_id| int FK           | Viittaus tapahtuman lipputyyppiin (EventTicketType-taulu).|
+| Quantity          | int              | Tilauksen määrä tiettyä tapahtuman lipputyyppiä.         |
 | UnitPrice         | double           | Lipun yksikköhinta tilauksen hetkellä.                  |
 
 </details>
 </br>
 
-### Customer
+### Customer (Asiakas)
 
 <details>
-<summary>
-Asiakastaulu sisältää tiedot asiakkaista, jotka ostavat lippuja. Yhdellä asiakkaalla voi olla useita tilauksia.
-</summary>
+<summary>Asiakastaulu sisältää tiedot asiakkaista, jotka ostavat lippuja. Yhdellä asiakkaalla voi olla useita tilauksia.</summary>
 </br>
-
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
-| Customer-id       | int(AN) PK       | Asiakkaan yksilöllinen tunniste.                        |
+| Customer_id       | int (AN) PK      | Asiakkaan yksilöllinen tunniste.                        |
 | Cust_lastName     | varchar(30)      | Asiakkaan sukunimi.                                     |
-| Cust_firsttName   | varchar(30)      | Asiakkaan etunimi.                                      |
+| Cust_firstName    | varchar(30)      | Asiakkaan etunimi.                                      |
 | Cust_phone        | varchar(30)      | Asiakkaan puhelinnumero.                                |
 | Cust_email        | varchar(30)      | Asiakkaan sähköpostiosoite.                             |
 | Cust_address      | varchar(30)      | Asiakkaan osoite.                                       |
-| Cust_City         | varchar(30)      | Asiakkaan asuinpaikkakunta.                             |
+| Cust_city         | varchar(30)      | Asiakkaan asuinpaikkakunta.                             |
 
 </details>
 </br>
 
-### Order
+### Order (Tilaus)
 
 <details>
-<summary>
-Tilaustaulu sisältää tiedot asiakkaiden tekemistä lippuostoista. Yksi asiakas voi tehdä useita tilauksia. Yhdessä tilauksessa voi olla useita lippuja.
-</summary>
+<summary>Tilaustaulu sisältää tiedot asiakkaiden tekemistä lippuostoista. Yksi asiakas voi tehdä useita tilauksia. Yhdessä tilauksessa voi olla useita tapahtuman lipputyyppeihin liittyviä tilauksia.</summary>
 </br>
-
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
@@ -409,12 +395,11 @@ Tilaustaulu sisältää tiedot asiakkaiden tekemistä lippuostoista. Yksi asiaka
 </details>
 </br>
 
-### SalesPerson
+### SalesPerson (Myyjä)
 
 <details>
-<summary>
-Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston työntekijöistä. Yksi myyjä voi käsitellä useita tilauksia.
-</summary>
+<summary>Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston työntekijöistä. Yksi myyjä voi käsitellä useita tilauksia.</summary>
+</br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
@@ -427,7 +412,7 @@ Myyjien tiedot sisältävä taulu, jossa säilytetään tietoa lipputoimiston ty
 </br>
 
 [Linkki tietokantakaavioon](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
-
+</details>
 
 ## REST API dokumentaatio
 
@@ -686,300 +671,428 @@ Sisältö:
 {}
 ```
 </details>
-<details>
-<summary>  Lisää myyntitapahtuma (POST) </summary>
 
-* Metodi: POST
-* Polku: /order
+## Myyntitapahtumien API-dokumentaatio
 
-Sisältö:
-
-```
-{
-    "customer": {
-        "id": 1,
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john@example.com"
-    },
-    "salesPerson": {
-        "id": 1,
-        "firstName": "Sales",
-        "lastName": "Person"
-    },
-    "orderDate": "2024-10-01T10:00:00.000+00:00",
-    "orderDetails": [
-        {
-            "ticket": {
-                "id": 1,
-                "ticketType": {
-                    "id": 1,
-                    "name": "Aikuinen"
-                },
-                "eventTicketType": {
-                    "id": 1,
-                    "price": 10.0
-                }
-            },
-            "unitPrice": 10.0,
-            "quantity": 2
-        },
-        {
-            "ticket": {
-                "id": 2,
-                "ticketType": {
-                    "id": 2,
-                    "name": "Lapsi"
-                },
-                "eventTicketType": {
-                    "id": 2,
-                    "price": 5.0
-                }
-            },
-            "unitPrice": 5.0,
-            "quantity": 3
-        }
-    ]
-}
-```
-
-* Paluukoodi: 201 Created
-
-```
-{
-    "orderId": 1,
-    "customer": {
-        "id": 1,
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john@example.com"
-    },
-    "salesPerson": {
-        "id": 1,
-        "firstName": "Sales",
-        "lastName": "Person"
-    },
-    "orderDate": "2024-10-01T10:00:00.000+00:00",
-    "orderDetails": [
-        {
-            "ticket": {
-                "id": 1,
-                "ticketType": {
-                    "id": 1,
-                    "name": "Aikuinen"
-                },
-                "eventTicketType": {
-                    "id": 1,
-                    "price": 10.0
-                }
-            },
-            "unitPrice": 10.0,
-            "quantity": 2
-        },
-        {
-            "ticket": {
-                "id": 2,
-                "ticketType": {
-                    "id": 2,
-                    "name": "Lapsi"
-                },
-                "eventTicketType": {
-                    "id": 2,
-                    "price": 5.0
-                }
-            },
-            "unitPrice": 5.0,
-            "quantity": 3
-        }
-    ]
-}
-```
-
-* Virhekoodit:
-    * 400 Bad Request: Pyynnössä oli virheellisiä tietoja (esim. puuttuvat tai väärän tyyppiset kentät).
-    * 404 Not Found: Pyydettyä resurssia (asiakas, myyjä, tapahtuma tai lippu) ei löytynyt.
-    * 403 Forbidden: Käyttäjällä ei ole oikeuksia luoda myyntitapahtumaa.
-    * 409 Conflict: Yritettiin tehdä tilaus lipuista, joita ei ole varastossa.
-
-Sisältö:
-```
-{}
-```
-</details>
 
 <details>
-<summary> Muokkaa myyntitapahtumaa (PUT) </summary>
+<summary> Lisää myyntitapahtuma (POST) </summary>
 
-* Metodi: PUT
-* Polku: /order/{id}
-* Polkuparametri:
-    * id: Muokattavan tilauksen yksilöivä tunnus
+### Lisää myyntitapahtuma (POST)
 
- Sisältö:   
+* **Metodi**: POST
+* **Polku**: `/orders`
 
-```
+#### Pyynnön sisältö:
+
+```json
 {
-    "customer": {
-        "id": 1,
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john@example.com"
+  "customerId": 1,
+  "salespersonId": 1,
+  "orderDetails": [
+    {
+      "eventTicketTypeId": 1,
+      "quantity": 2,
+      "unitPrice": 20.0
     },
-    "salesPerson": {
-        "id": 1,
-        "firstName": "Sales",
-        "lastName": "Person"
-    },
-    "orderDate": "2024-10-01T10:00:00.000+00:00",
-    "orderDetails": [
-        {
-            "ticket": {
-                "id": 1,
-                "ticketType": {
-                    "id": 1,
-                    "name": "Aikuinen"
-                },
-                "eventTicketType": {
-                    "id": 1,
-                    "price": 10.0
-                }
-            },
-            "unitPrice": 10.0,
-            "quantity": 2
-        }
-    ]
+    {
+      "eventTicketTypeId": 2,
+      "quantity": 1,
+      "unitPrice": 15.0
+    }
+  ]
 }
 ```
 
-* Paluukoodi: 200 OK
+#### Paluukoodi:
 
-```
+- **201 Created**
+
+#### Vastaus:
+
+```json
 {
-    "orderId": 1,
-    "customer": {
-        "id": 1,
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john@example.com"
+  "customerId": 1,
+  "salespersonId": 1,
+  "orderDetails": [
+    {
+      "eventTicketTypeId": 1,
+      "quantity": 2,
+      "unitPrice": 20.0
     },
-    "salesPerson": {
-        "id": 1,
-        "firstName": "Sales",
-        "lastName": "Person"
-    },
-    "orderDate": "2024-10-01T10:00:00.000+00:00",
-    "orderDetails": [
-        {
-            "ticket": {
-                "id": 1,
-                "ticketType": {
-                    "id": 1,
-                    "name": "Aikuinen"
-                },
-                "eventTicketType": {
-                    "id": 1,
-                    "price": 10.0
-                }
-            },
-            "unitPrice": 10.0,
-            "quantity": 2
-        }
-    ]
+    {
+      "eventTicketTypeId": 2,
+      "quantity": 1,
+      "unitPrice": 15.0
+    }
+  ],
+  "orderId": 1,
+  "customerFirstName": "John",
+  "customerLastName": "Doe",
+  "salespersonFirstName": "Peter",
+  "salespersonLastName": "Smith",
+  "orderDate": "2024-10-18T16:29:01.067+00:00"
 }
 ```
 
-* Virhekoodit:
-    * 400 Bad Request: Pyynnössä oli virheellisiä tietoja.
-    * 403 Forbidden: Käyttäjällä ei ole oikeuksia muokata tätä tilausta.
-    * 404 Not Found: Tilausta annetulla id:llä ei löytynyt.
-    * 409 Conflict: Yritettiin tehdä muokkaus, joka rikkoisi varastosaldon.
+#### Virhekoodit:
 
-Sisältö:
-```
-{}
-```
+- **400 Bad Request**: Pyynnössä oli virheellisiä tietoja (esim. puuttuvat tai väärän tyyppiset kentät).
+  - *Esimerkki*: Puuttuva `customerId`:
+    ```json
+    [
+      "OrderDTO: Customer ID is required"
+    ]
+    ```
+  - *Esimerkki*: Virheellinen `quantity` (nolla tai negatiivinen):
+    ```json
+    {
+      "error": "Order quantity must be greater than 0"
+    }
+    ```
+- **404 Not Found**: Pyydettyä resurssia (asiakas, myyjä, tapahtuma tai lipputyyppi) ei löytynyt.
+  - *Esimerkki*: Virheellinen `customerId`:
+    ```json
+    {
+      "error": "Customer with ID X not found"
+    }
+    ```
+- **409 Conflict**: Yritettiin tehdä tilaus lipuista, joita ei ole varastossa.
+  - *Esimerkki*: Tilaus ylittää varastosaldon:
+    ```json
+    {
+      "error": "Not enough tickets in stock"
+    }
+    ```
 
 </details>
 
 <details>
-<summary> Hae myyntitapahtuma (GET) </summary>
+<summary> Hae myyntitapahtuma (GET)</summary>
 
-* Metodi: GET
-* Polku: /order/{id}
-* Polkuparametri:
-    * id: Haettavan tilauksen yksilöivä tunnus
-* Paluukoodi: 200 OK
+### Hae myyntitapahtuma (GET)
 
-Vastaus:
+* **Metodi**: GET
+* **Polku**: `/orders/{orderId}`
+* **Polkuparametri**:
+  - `orderId`: Haettavan tilauksen yksilöivä tunnus
 
-```
+#### Paluukoodi:
+
+- **200 OK**
+
+#### Vastaus:
+
+```json
 {
-    "orderId": 1,
-    "customer": {
-        "id": 1,
-        "firstName": "John",
-        "lastName": "Doe",
-        "email": "john@example.com"
+  "customerId": 1,
+  "salespersonId": 1,
+  "orderDetails": [
+    {
+      "eventTicketTypeId": 1,
+      "quantity": 2,
+      "unitPrice": 20.0
     },
-    "salesPerson": {
-        "id": 1,
-        "firstName": "Sales",
-        "lastName": "Person"
-    },
-    "orderDate": "2024-10-01T10:00:00.000+00:00",
-    "orderDetails": [
-        {
-            "ticket": {
-                "id": 1,
-                "ticketType": {
-                    "id": 1,
-                    "name": "Aikuinen"
-                },
-                "eventTicketType": {
-                    "id": 1,
-                    "price": 10.0
-                }
-            },
-            "unitPrice": 10.0,
-            "quantity": 2
-        }
-    ]
+    {
+      "eventTicketTypeId": 2,
+      "quantity": 1,
+      "unitPrice": 15.0
+    }
+  ],
+  "orderId": 1,
+  "customerFirstName": "John",
+  "customerLastName": "Doe",
+  "salespersonFirstName": "Peter",
+  "salespersonLastName": "Smith",
+  "orderDate": "2024-10-18T16:29:01.067+00:00"
 }
 ```
 
-* Virhekoodit:
-    * 404 Not Found: Tilausta annetulla id:llä ei löytynyt.
+#### Virhekoodit:
 
-Sisältö:
-```
-{}
-```
+- **404 Not Found**: Tilausta annetulla `orderId`:llä ei löytynyt.
+  - *Vastaus*:
+    ```json
+    {
+      "error": "Order with ID 99999 not found"
+    }
+    ```
+
 </details>
 
+<details>
+<summary> Hae kaikki myyntitapahtumat (GET)</summary>
+
+### Hae kaikki myyntitapahtumat (GET)
+
+* **Metodi**: GET
+* **Polku**: `/orders`
+
+#### Paluukoodi:
+
+- **200 OK**
+
+#### Vastaus:
+
+```json
+[
+  {
+    "customerId": 1,
+    "salespersonId": 1,
+    "orderDetails": [
+      {
+        "eventTicketTypeId": 1,
+        "quantity": 2,
+        "unitPrice": 20.0
+      },
+      {
+        "eventTicketTypeId": 2,
+        "quantity": 1,
+        "unitPrice": 15.0
+      }
+    ],
+    "orderId": 1,
+    "customerFirstName": "John",
+    "customerLastName": "Doe",
+    "salespersonFirstName": "Peter",
+    "salespersonLastName": "Smith",
+    "orderDate": "2024-10-18T16:29:01.067+00:00"
+  },
+  {
+    "customerId": 2,
+    "salespersonId": 2,
+    "orderDetails": [
+      {
+        "eventTicketTypeId": 1,
+        "quantity": 2,
+        "unitPrice": 20.0
+      },
+      {
+        "eventTicketTypeId": 2,
+        "quantity": 5,
+        "unitPrice": 15.0
+      }
+    ],
+    "orderId": 2,
+    "customerFirstName": "Jane",
+    "customerLastName": "Doe",
+    "salespersonFirstName": "Anna",
+    "salespersonLastName": "Brown",
+    "orderDate": "2024-10-18T16:29:05.538+00:00"
+  }
+]
+```
+
+</details>
+
+<details>
+<summary> Muokkaa myyntitapahtumaa (PUT)</summary>
+
+### Muokkaa myyntitapahtumaa (PUT)
+
+* **Metodi**: PUT
+* **Polku**: `/orders/{orderId}`
+* **Polkuparametri**:
+  - `orderId`: Muokattavan tilauksen yksilöivä tunnus
+
+#### Pyynnön sisältö:
+
+Voit päivittää `customerId` ja `salespersonId`, mutta **`orderDetails`-kenttää ei voi muokata** tilauksen luomisen jälkeen.
+
+*Esimerkki*:
+
+```json
+{
+  "customerId": 2,
+  "salespersonId": 1
+}
+```
+
+#### Paluukoodi:
+
+- **200 OK**
+
+#### Vastaus:
+
+```json
+{
+  "customerId": 2,
+  "salespersonId": 1,
+  "orderDetails": [
+    {
+      "eventTicketTypeId": 1,
+      "quantity": 2,
+      "unitPrice": 20.0
+    },
+    {
+      "eventTicketTypeId": 2,
+      "quantity": 5,
+      "unitPrice": 15.0
+    }
+  ],
+  "orderId": 2,
+  "customerFirstName": "Jane",
+  "customerLastName": "Doe",
+  "salespersonFirstName": "Peter",
+  "salespersonLastName": "Smith",
+  "orderDate": "2024-10-18T16:29:05.538+00:00"
+}
+```
+
+#### Virhekoodit:
+
+- **400 Bad Request**: Yritettiin muokata `orderDetails`-kenttää, mikä ei ole sallittua.
+  - *Vastaus*:
+    ```json
+    {
+      "error": "Modifying order details is not allowed after order creation."
+    }
+    ```
+- **404 Not Found**: Tilausta annetulla `orderId`:llä ei löytynyt.
+
+</details>
+
+<details>
+<summary> Päivitä myyntitapahtumaa osittain (PATCH)</summary>
+
+### Päivitä myyntitapahtumaa osittain (PATCH)
+
+* **Metodi**: PATCH
+* **Polku**: `/orders/{orderId}`
+* **Polkuparametri**:
+  - `orderId`: Muokattavan tilauksen yksilöivä tunnus
+
+#### Pyynnön sisältö:
+
+Voit päivittää yhden tai useamman seuraavista kentistä: `customerId`, `salespersonId`.
+
+*Esimerkki*:
+
+```json
+{
+  "salespersonId": 2
+}
+```
+
+#### Paluukoodi:
+
+- **200 OK**
+
+#### Vastaus:
+
+```json
+{
+  "customerId": 2,
+  "salespersonId": 2,
+  "orderDetails": [
+    {
+      "eventTicketTypeId": 1,
+      "quantity": 2,
+      "unitPrice": 20.0
+    },
+    {
+      "eventTicketTypeId": 2,
+      "quantity": 5,
+      "unitPrice": 15.0
+    }
+  ],
+  "orderId": 2,
+  "customerFirstName": "Jane",
+  "customerLastName": "Doe",
+  "salespersonFirstName": "Anna",
+  "salespersonLastName": "Brown",
+  "orderDate": "2024-10-18T16:29:05.538+00:00"
+}
+```
+
+#### Virhekoodit:
+
+- **400 Bad Request**: Yritettiin muokata `orderDetails`-kenttää, mikä ei ole sallittua.
+  - *Vastaus*:
+    ```json
+    {
+      "error": "Modifying order details is not allowed after order creation."
+    }
+    ```
+- **404 Not Found**: Tilausta annetulla `orderId`:llä ei löytynyt.
+
+</details>
 
 <details>
 <summary> Poista myyntitapahtuma (DELETE) </summary>
 
-* Metodi: DELETE
-* Polku: /order/{id}
-* Polkuparametri:
-    * id: Poistettavan tilauksen yksilöivä tunnus
-* Paluukoodi: 204 No Content
+### Poista myyntitapahtuma (DELETE)
 
-Sisältö:
-```
-{}
-```
+* **Metodi**: DELETE
+* **Polku**: `/orders/{orderId}`
+* **Polkuparametri**:
+  - `orderId`: Poistettavan tilauksen yksilöivä tunnus
 
-* Virhekoodit:
-    * 404 Not Found: Tilausta annetulla id:llä ei löytynyt.
-    * 403 Forbidden: Käyttäjällä ei ole oikeuksia poistaa tätä tilausta.
+#### Paluukoodi:
 
-Sisältö:
-```
-{}
-```
+- **204 No Content**
 
+#### Virhekoodit:
+
+- **404 Not Found**: Tilausta annetulla `orderId`:llä ei löytynyt.
+
+</details>
+
+<details>
+<summary> Huomioita </summary>
+
+### Huomioita
+
+- **OrderDTO** sisältää seuraavat kentät:
+
+  - `customerId` (pakollinen): Asiakkaan tunniste.
+  - `salespersonId` (pakollinen): Myyjän tunniste.
+  - `orderDetails` (pakollinen tilauksen luomisessa): Lista tilauksen yksityiskohdista.
+  - `orderId`: Tilauksen tunniste (vastauksessa).
+  - `customerFirstName`: Asiakkaan etunimi (vastauksessa).
+  - `customerLastName`: Asiakkaan sukunimi (vastauksessa).
+  - `salespersonFirstName`: Myyjän etunimi (vastauksessa).
+  - `salespersonLastName`: Myyjän sukunimi (vastauksessa).
+  - `orderDate`: Tilauksen päivämäärä (vastauksessa).
+
+- **OrderDetailsDTO** sisältää seuraavat kentät:
+
+  - `eventTicketTypeId` (pakollinen): Tapahtuman lipputyypin tunniste.
+  - `quantity` (pakollinen, positiivinen kokonaisluku): Lipun määrä.
+  - `unitPrice` (pakollinen): Yksikköhinta.
+
+- **Tilauksen muokkaus**:
+
+  - Tilauksen luomisen jälkeen **`orderDetails`-kenttää ei voi muokata**. Yritettäessä muokata sitä, saadaan virhe:
+    ```json
+    {
+      "error": "Modifying order details is not allowed after order creation."
+    }
+    ```
+
+- **Virheiden käsittely**:
+
+  - Virheet palautetaan JSON-muodossa, jossa on `error`-kenttä ja virheviesti.
+  - Validointivirheet voivat palauttaa listan virheistä:
+    ```json
+    [
+      "OrderDTO: Customer ID is required",
+      "OrderDetailsDTO: Quantity must be greater than 0"
+    ]
+    ```
+
+- **Varastosaldot**:
+
+  - Tilauksia ei voi tehdä, jos liput ovat loppuneet varastosta. Yritettäessä tehdään virhe:
+    ```json
+    {
+      "error": "Not enough tickets in stock"
+    }
+    ```
+
+- **Käyttäjäoikeudet**:
+
+  - API ei tällä hetkellä käsittele käyttäjäoikeuksia (kuten `403 Forbidden` -virhettä). Tämä voidaan lisätä myöhemmin, jos tarvitaan.
 </details>
 <br/>
 
