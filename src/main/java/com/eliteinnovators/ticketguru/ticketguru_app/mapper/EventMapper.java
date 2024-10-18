@@ -2,7 +2,7 @@ package com.eliteinnovators.ticketguru.ticketguru_app.mapper;
 
 import org.mapstruct.Mapper;
 
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
+//import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 // import com.eliteinnovators.ticketguru.ticketguru_app.web.EventDTO; -- Lisää tämä, kunhan EventDTO on luotu
 
 @Mapper (componentModel = "spring")
