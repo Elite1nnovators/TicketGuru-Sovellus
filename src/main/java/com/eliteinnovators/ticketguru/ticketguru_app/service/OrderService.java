@@ -61,9 +61,6 @@ public class OrderService {
             eventTicketType.setTicketsInStock(eventTicketType.getTicketsInStock() - orderDetails.getQuantity());
             eventTicketTypeRepository.save(eventTicketType);
 
-            if(orderDetails.getQuantity() <= 0) {
-                throw new InvalidOrderException("Order quantity must be greater than 0");
-            }
             //Ticketin luonti jokaista tämän orderDetailin sisältämän eventTicketTypen ostomäärää kohden
             for(int i = 0; i < orderDetails.getQuantity(); i++) {
                 Ticket ticket = new Ticket();

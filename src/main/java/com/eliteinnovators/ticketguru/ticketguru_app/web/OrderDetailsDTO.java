@@ -1,9 +1,15 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
+import jakarta.validation.constraints.*;
+
 public class OrderDetailsDTO {
+    @NotNull(message = "OrderDetailsDTO: eventTicketTypeId must not be null")
     private Long eventTicketTypeId;  
+    @Min(value = 1, message = "OrderDetailsDTO: Quantity must be greater than 0")
     private int quantity;
+    @DecimalMin(value = "0.0", inclusive = false, message = "OrderDetailsDTO: Unit price must be greater than 0")
     private double unitPrice;
+
 
     public OrderDetailsDTO() {}
 

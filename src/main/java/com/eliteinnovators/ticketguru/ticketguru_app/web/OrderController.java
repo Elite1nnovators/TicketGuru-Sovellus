@@ -35,7 +35,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {
+    public ResponseEntity<OrderDTO> getOrderById(@Valid @PathVariable Long orderId) {
         OrderDTO orderDTO = orderService.getOrderById(orderId);
         return ResponseEntity.status(HttpStatus.OK).body(orderDTO);
     }
@@ -46,14 +46,14 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDTO> editOrder(@RequestBody OrderDTO editedOrderDTO, @PathVariable Long orderId) {
+    public ResponseEntity<OrderDTO> editOrder(@Valid @RequestBody OrderDTO editedOrderDTO, @PathVariable Long orderId) {
         Order editedOrder = orderService.editOrder(editedOrderDTO, orderId);
         OrderDTO updatedOrderDTO = orderMapper.toOrderDTO(editedOrder);
         return ResponseEntity.status(HttpStatus.OK).body(updatedOrderDTO);
     }
 
     @PatchMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDTO> patchOrder(@RequestBody OrderDTO patchOrderDTO, @PathVariable Long orderId) {
+    public ResponseEntity<OrderDTO> patchOrder(@Valid @RequestBody OrderDTO patchOrderDTO, @PathVariable Long orderId) {
         Order patchedOrder = orderService.patchOrder(patchOrderDTO, orderId);
         OrderDTO updatedOrderDTO = orderMapper.toOrderDTO(patchedOrder);
         return ResponseEntity.status(HttpStatus.OK).body(updatedOrderDTO);
