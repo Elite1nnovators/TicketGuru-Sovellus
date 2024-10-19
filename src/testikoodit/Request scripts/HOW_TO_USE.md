@@ -42,10 +42,15 @@
    ```bash
    ./api_test.sh
    ```
+   (if you use wsl use "wsl sed -i 's/\r$//' api_tests_orders.sh" )
+
 2. The script will perform the following actions:
    - Execute various API requests (GET, POST, PUT, DELETE).
    - Display the response for each request.
    - Provide a summary of all requests and their HTTP status codes at the end.
+
+   (if you use wsl use:  wsl curl -X GET "http://iroutenumber:8080/orders/1" 
+   to find ip route: wsl ip route)
 
 ### Step 4: Customizing the Script
 
