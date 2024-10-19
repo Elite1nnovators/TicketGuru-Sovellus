@@ -49,7 +49,7 @@
    - Display the response for each request.
    - Provide a summary of all requests and their HTTP status codes at the end.
 
-   (if you use wsl use:  wsl curl -X GET "http://iroutenumber:8080/orders/1" 
+   (if you use wsl use:  wsl curl -X GET "http://iroutenumber:8080/orders | wsl jq" 
    to find ip route: wsl ip route)
 
 ### Step 4: Customizing the Script
