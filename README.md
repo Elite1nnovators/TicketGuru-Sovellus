@@ -429,32 +429,37 @@ Sisältö:
 
 ```
 {
-    "eventName": "Concert 1",
-    "eventDate": "2024-10-01T05:08:30.651+00:00",
-    "eventAddress": "Event Address 1",
-    "eventCity": "Helsinki",
-    "eventDescription": "A great concert event",
-    "eventTicketTypes": [ {"ticketType":{ "id":1, "name": "aikuinen"}, "price": 10, "ticketsInStock": 40}]
-}
+            "eventName": "Concert 1",
+            "eventDate": "2024-10-01T05:08:30.651+00:00",
+            "eventAddress": "Event Address 1",
+            "eventCity": "Helsinki",
+            "eventDescription": "A great concert event",
+            "eventTicketTypes": [
+                {
+                    "ticketType": {
+                        "id": 1,
+                        "name": "Aikuinen"
+                    },
+                    "price": 10,
+                    "ticketsInStock": 40
+                }
+            ]
+        }
 
 ```
 * Paluukoodi: 201 Created
 
 ```
 {
-    "eventId": 5,
-    "eventName": "Concert 4",
+    "eventId": 1,
+    "eventName": "Concert 1",
     "eventDate": "2024-10-01T05:08:30.651+00:00",
     "eventAddress": "Event Address 1",
     "eventCity": "Helsinki",
     "eventDescription": "A great concert event",
     "eventTicketTypes": [
         {
-            "id": 10,
-            "ticketType": {
-                "id": 1,
-                "name": "aikuinen"
-            },
+            "id": 3,
             "price": 10.0,
             "ticketsInStock": 40
         }
