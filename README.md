@@ -581,7 +581,7 @@ Sisältö:
 <summary> Hae tapahtuma (GET) </summary>
 
 * Metodi: GET
-* Polku: /event/{id}
+* Polku: /events/{id}
 * Polkuparametri:
     * id: Haettavan tapahtuman yksilöivä tunnus
 * Paluukoodi: 200 OK
@@ -592,37 +592,20 @@ Vastaus:
 {
     "eventId": 1,
     "eventName": "Concert 1",
-    "eventDate": "2024-10-01T09:43:35.689+00:00",
+    "eventDate": "2024-10-20T11:56:35.830+00:00",
     "eventAddress": "Event Address 1",
     "eventCity": "Helsinki",
     "eventDescription": "A great concert event",
     "eventTicketTypes": [
         {
             "id": 1,
-            "ticketType": {
-                "id": 1,
-                "name": "Aikuinen"
-            },
             "price": 20.0,
-            "ticketsInStock": 50
+            "ticketsInStock": 48
         },
         {
             "id": 2,
-            "ticketType": {
-                "id": 2,
-                "name": "Lapsi"
-            },
-            "price": 10.0,
-            "ticketsInStock": 60
-        },
-        {
-            "id": 3,
-            "ticketType": {
-                "id": 3,
-                "name": "VIP"
-            },
-            "price": 100.0,
-            "ticketsInStock": 15
+            "price": 15.0,
+            "ticketsInStock": 99
         }
     ]
 }
