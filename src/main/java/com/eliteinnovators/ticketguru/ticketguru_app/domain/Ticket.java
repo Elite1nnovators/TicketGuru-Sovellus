@@ -1,6 +1,12 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Ticket {
@@ -15,6 +21,7 @@ public class Ticket {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @NotNull(message = "Ticket: EventTicketType is required for the ticket")
     @ManyToOne
     @JoinColumn(name = "eventTicketType_id")
     private EventTicketType eventTicketType;
