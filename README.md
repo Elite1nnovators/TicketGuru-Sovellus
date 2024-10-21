@@ -343,16 +343,16 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 </details>
 </br>
 
-### OrderDetails (Myyntitapahtuman tiedot)
+### OrderDetails (Tilauksen tiedot)
 
 <details>
-<summary>Myyntitapahtuman tiedot -taulu sisältää tiedot siitä, kuinka monta tietyn tapahtuman lipputyypin lippua ostetaan ja mikä yhden lipun hinta on ostohetkellä. Sama myyntitapahtuma (Order) voi sisältää useita eri lipputyyppejä tapahtumiin.</summary>
+<summary>Tilauksen tiedot -taulu sisältää yksityiskohtaiset tiedot siitä, kuinka monta tietyn tapahtuman lipputyypin lippua ostetaan ja mikä yhden lipun hinta on ostohetkellä. Sama tilaus (Order) voi sisältää useita eri lipputyyppejä tapahtumiin.</summary>
 </br>
 
 | Kenttä           | Tyyppi           | Kuvaus                                                  |
 | -----------------|------------------| --------------------------------------------------------|
 | orderDetailId    | int (AN) PK      | Tilauksen yksityiskohtien tunniste.                     |
-| orderId          | int FK           | Viittaus myyntitapahtumaan (Order).                     |
+| orderId          | int FK           | Viittaus tilaukseen (Order).                            |
 | eventTicketTypeId| int FK           | Viittaus tapahtuman lipputyyppiin (EventTicketType).    |
 | unitPrice        | double           | Tilauksen määrä tiettyä tapahtuman lipputyyppiä.        |
 | quantity         | int              | Lipun yksikköhinta tilauksen hetkellä.                  |
@@ -360,15 +360,15 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 </details>
 </br>
 
-### Order (Myyntitapahtuma)
+### Order (Tilaus)
 
 <details>
-<summary>Myyntitapahtuma -taulu sisältää tiedon tiettyyn myyntitapahtumaan liittyvästä asiakkaasta ja myyjästä sekä myyntitapahtuman päivämäärästä. Yhdessä myyntitapahtumassa voi olla useita eri tapahtumien lippuihin liittyviä ostoja.</summary>
+<summary>Tilaus -taulu sisältää tiedot tiettyyn tilaukseen liittyvästä asiakkaasta ja myyjästä sekä päivämäärästä. Yhdessä tilauksessa voi olla useita eri tapahtumien lippuihin liittyviä ostoja.</summary>
 </br>
 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
-| orderId           | int (AN) PK      | Myyntitapahtuman yksilöllinen tunniste.                 |
+| orderId           | int (AN) PK      | Tilauksen yksilöllinen tunniste.                        |
 | customerId        | int FK           | Viittaus asiakkaaseen (Customer-taulu).                 |
 | salespersonId     | int FK           | Viittaus myyjään (SalesPerson-taulu).                   |
 | orderDate         | date             | Tilauksen päivämäärä.                                   |
