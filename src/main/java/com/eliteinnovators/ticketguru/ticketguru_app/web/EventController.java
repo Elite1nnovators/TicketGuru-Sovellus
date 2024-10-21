@@ -2,16 +2,14 @@ package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.mapper.EventMapper;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,54 +23,65 @@ public class EventController {
     @Autowired
     private EventMapper eventMapper;
 
-    @Autowired
-    private EventRepository eventRepository;
-
-    @GetMapping("/events")
-    public List<Event> getAllEvents() {
-        return eventService.getAllEvents();
+    
+    @GetMapping
+    public ResponseEntity<List<Event>> getAllEvents() {
+        return ResponseEntity.status(HttpStatus.OK).body(eventService.getAllEvents());
     }
-    // HTTP statukset kun EventMapper on luotu toimivasti
 
+    
     @GetMapping("/{eventId}")
-    public Event getEventById(@PathVariable Long eventId) {
-        return eventService.getEventById(eventId);
+    public ResponseEntity<Event> getEventById(@PathVariable Long eventId) {
+        Event event = eventService.getEventById(eventId);
+        return ResponseEntity.status(HttpStatus.OK).body(event);
     }
 
-    @PostMapping()
+    
+    @PostMapping
     public ResponseEntity<?> createEvent(@Valid @RequestBody Event newEvent, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
         }
         Event createdEvent = eventService.createNewEvent(newEvent);
-        return ResponseEntity.ok(createdEvent);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
 
+    
     @PutMapping("/{eventId}")
     public ResponseEntity<?> editEvent(@Valid @RequestBody Event editedEvent, BindingResult bindingResult, @PathVariable Long eventId) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
         }
         Event updatedEvent = eventService.editEvent(editedEvent, eventId);
-        return ResponseEntity.ok(updatedEvent);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedEvent);
     }
 
+    
     @DeleteMapping("/{eventId}")
-    public void deleteEvent(@PathVariable Long eventId) {
+    public ResponseEntity<Object> deleteEvent(@PathVariable Long eventId) {
         eventService.deleteEvent(eventId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    
     @GetMapping("/search")
-    public List<Event> searchEventsByCity(@RequestParam(required = false) String eventCity) {
+    public ResponseEntity<List<Event>> searchEventsByCity(@RequestParam(required = false) String eventCity) {
+        List<Event> events;
         if (eventCity != null && !eventCity.isEmpty()) {
-            return eventService.searchEventsByCity(eventCity);
+            events = eventService.searchEventsByCity(eventCity);
+            if (events.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(events);
+            }
         } else {
-            return eventService.getAllEvents();
+            events = eventService.getAllEvents();
         }
+        return ResponseEntity.status(HttpStatus.OK).body(events);
     }
 
+    
     @PatchMapping("/{eventId}")
-    public Event patchEvent(@PathVariable Long eventId, @RequestBody Map<String, Object> updates) {
-        return eventService.patchEvent(eventId, updates);
+    public ResponseEntity<Event> patchEvent(@PathVariable Long eventId, @RequestBody Map<String, Object> updates) {
+        Event patchedEvent = eventService.patchEvent(eventId, updates);
+        return ResponseEntity.status(HttpStatus.OK).body(patchedEvent);
     }
 }

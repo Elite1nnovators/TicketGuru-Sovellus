@@ -12,18 +12,22 @@ public class EventDTO {
     private LocalDate eventDate;
     private String eventCity;
     private List<EventTicketType> eventTicketTypes;
+    private String eventAddress;
+    private String eventDescription;
 
    
     public EventDTO() {
     }
 
  
-    public EventDTO(Long eventId, String eventName, LocalDate eventDate, String eventCity, List<EventTicketType> eventTicketTypes) {
+    public EventDTO(Long eventId, String eventName, LocalDate eventDate, String eventCity, List<EventTicketType> eventTicketTypes, String eventAddress, String eventDescription) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventCity = eventCity;
         this.eventTicketTypes = eventTicketTypes;
+        this.eventAddress = eventAddress;
+        this.eventDescription = eventDescription;
     }
 
     
@@ -66,4 +70,21 @@ public class EventDTO {
     public void setEventTicketTypes(List<EventTicketType> eventTicketTypes) {
         this.eventTicketTypes = eventTicketTypes;
     }
+
+    public String getEventAddress() {
+        return eventAddress;
+    }
+    
+    public void setEventAddress(String eventAddress) {
+        this.eventAddress = eventAddress;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
+    
 }
