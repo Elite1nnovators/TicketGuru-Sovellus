@@ -29,9 +29,26 @@ public class SecurityConfig {
         
         return http.build();
     }
---> "Admin & Salesperson" käyttäjätiedot (UserDetailsService)?
 
 
+//Toinen versio SecurityFilterChain, mutta tässäkin jotain pielessä..
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authorize -> authorize
+            .anyRequest().authenticated()
+            )
+            .and() 
+        .httpBasic()    
+        .and()                          
+        .csrf().disable();                         
+
+    return http.build();
+}
+
+
+
+//--> "Admin & Salesperson" käyttäjätiedot (UserDetailsService)?
     @Bean
     public UserDetailsService userDetailsService() {
         var userDetailsManager = new InMemoryUserDetailsManager();
@@ -52,7 +69,6 @@ public class SecurityConfig {
 
         return userDetailsManager;
     }
-
 
 //--> Mitkä ovat järkevät käyttäjänimet/roolit ja mitä endpointteja niillä voi käsitellä?
 
