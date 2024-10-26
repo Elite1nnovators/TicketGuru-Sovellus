@@ -428,7 +428,7 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 <summary>  Lisää tapahtuma (POST)</summary>
 
 * Metodi: POST
-* Polku: /event
+* Polku: /events
 
 Sisältö:
 
@@ -486,7 +486,7 @@ Sisältö:
 <summary> Muokkaa tapahtumaa (PUT) </summary>
 
 * Metodi: PUT
-* Polku: /event/{id}
+* Polku: /events/{id}
 * Polkuparametri:
     * id: Muokattavan tapahtuman yksilöivä tunnus
 
@@ -1095,7 +1095,88 @@ Voit päivittää yhden tai useamman seuraavista kentistä: `customerId`, `sales
 <summary> Autentikointiprosessi </summary>
 <br/>
 
-TicketGuru-sovelluksessa käytetään perinteistä käyttäjätunnus-salasana -autentikaatiota. Sovelluksen käyttäjät jaetaan kahteen pääasialliseen rooliin: **asiakkaat** ja **myyjät** (Salesperson), joilla on eri oikeudet ja pääsyoikeudet sovelluksen eri toimintoihin.
+TicketGuru-sovelluksessa käytetään perinteistä käyttäjätunnus-salasana -autentikaatiota. Sovelluksen käyttäjät jaetaan kahteen pääasialliseen rooliin: **asiakkaat** (Customer) ja **myyjät** (Salesperson), joilla on eri oikeudet ja pääsyoikeudet sovelluksen eri toimintoihin.
+
+## Perustason autentikointi (Basic Authentication)
+
+Perustason autentikointi on määritetty Spring Boot -sovelluksessa käyttäen SecurityFilterChain-luokkaa. Autentikointi tapahtuu HTTP-pyyntöjen yhteydessä, joissa käyttäjätunnus ja salasana lähetetään base64-koodattuna Authorization-otsikossa. Tämä mahdollistaa käyttäjän todennuksen, ennen kuin he saavat pääsyn sovelluksen API-pyyntöihin.
+
+## Turvallisuuskonfiguraation selitys
+
+Sovelluksen turvallisuuskonfiguraatio on määritelty `SecurityConfig`-luokassa, joka hallitsee autentikoinnin ja valtuutuksen sääntöjä. Tämä luokka käyttää Spring Security -kirjastoa, joka tarjoaa joustavan ja tehokkaan tavan hallita käyttäjien pääsyä sovellukseen.
+
+### Turvallisuuskonfiguraation Ominaisuudet
+
+1. **Autentikointi**: `SecurityConfig` määrittelee, että kaikki API-pyynnöt vaativat käyttäjän tunnistamista. Tämä tapahtuu perustason autentikoinnin (Basic Authentication) avulla, jossa käyttäjätunnus ja salasana lähetetään base64-koodattuna HTTP-otsikossa.
+
+2. **Käyttöoikeudet**: Luokassa määritellään myös, mitkä käyttäjäroolit voivat käyttää mitäkin sovelluksen toimintoja. Esimerkiksi:
+   - Admin-käyttäjät voivat käyttää kaikkia päätepisteitä.
+   - Salesperson-käyttäjät saavat vain rajoitetun pääsyn myyntitoimintoihin.
+   - Customer-käyttäjät voivat ainoastaan tarkastella tapahtumia.
+
+3. **CSRF-suojaus**: CSRF-suojauksen tarkastukset on toistaiseksi poistettu käytöstä testauksen helpottamiseksi.
+
+4. **Virheiden käsittely**: Turvallisuuskonfiguraatio sisältää myös säännöt siitä, miten autentikointi- ja valtuutusvirheitä käsitellään. Jos käyttäjä ei pysty tunnistautumaan oikein tai ei omaa tarvittavia käyttöoikeuksia, sovellus palauttaa asianmukaiset virhekoodit.
+
+### Esimerkki SecurityConfig-luokasta
+
+```java
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .authorizeRequests()
+            .anyRequest().authenticated()  // Kaikki API-pyynnöt vaativat autentikoinnin
+            .and()
+        .httpBasic()                       // Perustason autentikointi
+        .and()
+        .csrf().disable();                 // CSRF-suojaus poistettu testauksen helpottamiseksi
+
+    return http.build();
+}
+```
+
+Tämä rakenne varmistaa, että vain oikeutetut käyttäjät voivat käyttää sovelluksen eri toimintoja, ja se parantaa tietoturvaa koko sovelluksessa.
+
+## Endpoint-yhteenveto
+
+Sovelluksessa on useita API-päätepisteitä, jotka tarjoavat erilaisia toimintoja. Jokaiselle päätepisteelle on määritelty käyttöoikeudet, jotka perustuvat käyttäjärooleihin. Alla on luettelo keskeisistä päätepisteistä ja niiden vaatimista käyttöoikeuksista:
+
+### TicketController
+
+| Päätepiste                        | Kuvaus                                         | Vaadittu rooli         |
+|-----------------------------------|------------------------------------------------|------------------------|
+| `GET /tickets`                   | Hakee kaikki liput.                          | **SALESPERSON**, **ADMIN**  |
+| `GET /tickets/{id}`              | Hakee lipun ID:n perusteella.                | **SALESPERSON**, **ADMIN**  |
+| `GET /tickets/event/{eventId}`   | Hakee liput tietyn tapahtuman perusteella.   | **SALESPERSON**, **ADMIN**  |
+| `GET /tickets/order/{orderId}`   | Hakee liput tietyn tilauksen perusteella.    | **SALESPERSON**, **ADMIN**  |
+
+### OrderController
+
+| Päätepiste                        | Kuvaus                                         | Vaadittu rooli         |
+|-----------------------------------|------------------------------------------------|------------------------|
+| `GET /orders`                    | Hakee kaikki tilaukset.                       | **SALESPERSON**, **ADMIN**  |
+| `GET /orders/{orderId}`          | Hakee tilauksen ID:n perusteella.             | **SALESPERSON**, **ADMIN**  |
+| `POST /orders`                   | Luo uuden tilauksen.                          | **SALESPERSON**, **ADMIN**  |
+| `PUT /orders/{orderId}`          | Muokkaa olemassa olevaa tilausta.             | **SALESPERSON**, **ADMIN**  |
+| `PATCH /orders/{orderId}`        | Päivittää osia olemassa olevasta tilauksesta. | **SALESPERSON**, **ADMIN**  |
+| `DELETE /orders/{orderId}`       | Poistaa tilauksen.                            | **ADMIN**              |
+
+
+### EventController
+
+| Päätepiste                        | Kuvaus                                         | Vaadittu rooli         |
+|-----------------------------------|------------------------------------------------|------------------------|
+| `GET /events`                    | Hakee kaikki tapahtumat.                      | **CUSTOMER**, **SALESPERSON**, **ADMIN**  |
+| `GET /events/{eventId}`          | Hakee tapahtuman ID:n perusteella.            | **CUSTOMER**, **SALESPERSON**, **ADMIN**  |
+| `POST /events`                   | Luo uuden tapahtuman.                          | **ADMIN**              |
+| `PUT /events/{eventId}`          | Muokkaa olemassa olevaa tapahtumaa.           | **ADMIN**              |
+| `PATCH /events/{eventId}`        | Päivittää osia olemassa olevasta tapahtumasta. | **ADMIN**              |
+| `DELETE /events/{eventId}`       | Poistaa tapahtuman.                            | **ADMIN**              |
+| `GET /events/search`             | Hakee tapahtumat kaupungin perusteella.       | **CUSTOMER**, **SALESPERSON**, **ADMIN**  |
+
+## Määritellyt käyttäjätunnukset ja salasanat
+
+Käyttäjätiedot on tallennettu muistiin käyttämällä `InMemoryUserDetailsManager`-komponenttia. Sovelluksessa on määritelty seuraavat käyttäjätunnukset ja salasanat:
 
 ## Käyttäjätiedot
 
@@ -1114,7 +1195,24 @@ Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `Customer` tai `Sales
 - **salespersonId**: Myyjän yksilöllinen ID.
 - **username**: Myyjän käyttäjätunnus.
 - **passwordHash**: Salasanan hajautusarvo.
-- **isAdmin**: Boolean-arvo, joka määrittää onko myyjä järjestelmän pääkäyttäjä (admin).
+- **isAdmin**: Boolean-arvo, joka määrittää onko myyjä järjestelmän pääkäyttäjä (admin). Tämä ominaisuus mahdollistaa erilaisten pääsyoikeuksien hallinnan eri käyttäjien välillä.
+
+### Käyttäjät
+
+- **Admin** (isAdmin = true)
+  - **Käyttäjätunnus**: `admin`
+  - **Salasana**: `admin` (hajautettuna)
+  - **Rooli**: `ADMIN`
+
+- **Salesperson** (isAdmin = false)
+  - **Käyttäjätunnus**: `salesperson`
+  - **Salasana**: `salesperson` (hajautettuna)
+  - **Rooli**: `SALESPERSON`
+
+- **Customer**
+  - **Käyttäjätunnus**: `customer`
+  - **Salasana**: `customer` (hajautettuna)
+  - **Rooli**: `CUSTOMER`
 
 ### Salasanan tallennus
 
@@ -1122,7 +1220,80 @@ Salasana tallennetaan tietokantaan hajautettuna, eli se ei ole selkokielinen. T�
 
 ```java
 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-String hashedPassword = encoder.encode("salasana123");
+String hashedAdminPassword = encoder.encode("admin");
+String hashedSalespersonPassword = encoder.encode("salesperson");
 ```
+
+## Käyttäjäroolit ja pääsy (Authorization Policies)
+
+Sovelluksessa on kaksi pääasiallista käyttäjäroolia, jotka määrittävät käyttäjien pääsyoikeudet:
+
+- **Admin**: Käyttäjät, joilla on `isAdmin`-arvo `true`. Salesperson tasoisilla käyttäjillä on täysi pääsy kaikkiin sovelluksen toimintoihin ja API-pyyntöihin, mukaan lukien:
+  - Käyttäjien hallinta (luonti, muokkaus, poisto).
+  - Tapahtumien luominen ja hallinta.
+  - Kaikkien varausten tarkastelu ja hallinta.
+  - Sovelluksen asetusten muokkaaminen.
+
+- **Salesperson**: Käyttäjät, joilla on `isAdmin`-arvo `false`. Salesperson tasoisilla käyttäjillä on rajoitetut oikeudet, joilla voivat:
+  - Myydä lippuja olemassa oleviin tapahtumiin.
+  - Tarkastella omia myyntitietojaan.
+
+- **Customer**: Käyttäjät, jotka ovat asiakkaita on oikeus ainoastaan:
+  - Tarkastella tapahtumia.
+
+## Käyttöoikeudet
+
+Käyttöoikeudet on määritelty seuraavasti:
+
+- Kaikki API-pyynnöt vaativat autentikoinnin.
+- Admin-käyttäjät voivat käyttää kaikkia sovelluksen päätepisteitä, kun taas Salesperson-käyttäjät saavat vain rajoitetun pääsyn.
+- Customer-käyttäjät voivat ainoastaan tarkastella tapahtumia (GET events).
+- CSRF-suojauksen (Cross-Site Request Forgery) tarkastukset on poistettu käytöstä testauksen helpottamiseksi, mutta tuotantoympäristössä suositellaan sen käyttämistä.
+
+Tämä rakenne varmistaa, että vain oikeutetut käyttäjät voivat käyttää sovelluksen eri toimintoja, mikä parantaa tietoturvaa ja käyttäjäkokemusta.
+
+## Virheenkäsittely
+
+Sovelluksessa on otettu käyttöön virheenkäsittely autentikoinnin ja käyttöoikeuksien osalta. Virhetilanteissa käyttäjät saavat selkeät ja informatiiviset vastaukset, jotka auttavat heitä ymmärtämään, mitä on tapahtunut ja miten edetä.
+
+### Autentikointivirheet
+
+- **Virheellinen käyttäjätunnus tai salasana**: Mikäli käyttäjä syöttää virheelliset käyttäjätunnukset tai salasanat, sovellus palauttaa `401 Unauthorized` -vastauksen. Tämä tarkoittaa, että käyttäjän on tarkistettava syöttämänsä tiedot ja yritettävä uudelleen.
+
+- **Metodi:** GET
+  - **Polku:** /tickets
+  - **Otsikot:**
+    ```
+    Authorization: Basic base64(username:password)  // Syötä virheellinen käyttäjätunnus ja salasana
+    ```
+  - **Paluukoodi:** `401 Unauthorized`
+  - **Vastaus:**
+    ```json
+    {
+        "error": "Unauthorized",
+        "message": "Invalid username or password."
+    }
+    ```
+
+### Käyttöoikeusvirheet
+
+- **Käyttöoikeus kielletään**: Jos käyttäjä yrittää käyttää päätepistettä, johon hänellä ei ole oikeuksia (esimerkiksi **Salesperson**-käyttäjä yrittää luoda uuden tapahtuman), sovellus palauttaa `403 Forbidden` -vastauksen. Tämä viestii käyttäjälle, että hänellä ei ole riittäviä oikeuksia kyseisen toiminnon suorittamiseen.
+
+- **Metodi:** POST
+  - **Polku:** /events
+  - **Otsikot:**
+    ```
+    Authorization: Basic base64(salesperson:correct_password)  // Salesperson käyttäjätunnus
+    ```
+  - **Paluukoodi:** `403 Forbidden`
+  - **Vastaus:**
+    ```json
+    {
+        "error": "Forbidden",
+        "message": "You do not have sufficient permissions for this action."
+    }
+    ```
+
+Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon tietoa ongelman syystä, jotta he voivat korjata virheet ja jatkaa sovelluksen käyttöä.
 
 </details>

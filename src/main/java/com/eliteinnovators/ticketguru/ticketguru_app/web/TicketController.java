@@ -33,4 +33,19 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(ticket);
     }
 
+    // Hae liput tapahtuman mukaan
+    @GetMapping("/tickets/event/{eventId}")
+    public ResponseEntity<List<Ticket>> getTicketsByEvent(@PathVariable Long eventId) {
+        List<Ticket> tickets = ticketService.getTicketsByEvent(eventId);
+        return ResponseEntity.status(HttpStatus.OK).body(tickets);
+    }
+
+    // Hae liput tilauksen mukaan
+    @GetMapping("/tickets/order/{orderId}")
+    public ResponseEntity<List<Ticket>> getTicketsByOrder(@PathVariable Long orderId) {
+        List<Ticket> tickets = ticketService.getTicketsByOrder(orderId);
+        return ResponseEntity.status(HttpStatus.OK).body(tickets);
+    }
+    
+
 }
