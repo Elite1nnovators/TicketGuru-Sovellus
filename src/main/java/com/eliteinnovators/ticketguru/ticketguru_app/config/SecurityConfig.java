@@ -2,6 +2,7 @@ package com.eliteinnovators.ticketguru.ticketguru_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,35 +14,20 @@ import org.springframework.security.web.SecurityFilterChain;
 
 // Kommentoituna sillä jos ottaa toimintaan ennen UserDetailsServiceä -> Ei ole oikeuksia suorittaa API-pyyntöjä :)
 
-/*
 @Configuration
 public class SecurityConfig {
- 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
-                .anyRequest().authenticated()  // Vielä tässä vaiheessa kaikille API-pyynnöille
-                .and()
-            .httpBasic();                       // Basic autorisointi ja csfr
-             .and()
-            .csrf().disable();  
-        
-        return http.build();
-    }
-
-
-//Toinen versio SecurityFilterChain, mutta tässäkin jotain pielessä..
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-            .anyRequest().authenticated()
+            .requestMatchers("/tickets").hasAnyAuthority("ROLE_SALESPERSON", "ROLE_ADMIN") 
+            .requestMatchers("/orders").hasAnyAuthority("ROLE_SALESPERSON", "ROLE_ADMIN") // TODO lisää esto että vain ADMIN voi suorittaa DELETE (Service-luokassa)
+            .requestMatchers("/events").permitAll() // TODO lisää estot että vain ADMIN voi suorittaa POST/PUT/DELETE (Service-luokassa)
+            .anyRequest().permitAll()
             )
-            .and() 
-        .httpBasic()    
-        .and()                          
-        .csrf().disable();                         
+        .httpBasic(Customizer.withDefaults());
 
     return http.build();
 }
@@ -82,5 +68,3 @@ public class SecurityConfig {
     }
 
 }
-
-*/
