@@ -53,6 +53,13 @@ public class SecurityConfig {
                 .build()
         );
 
+        userDetailsManager.createUser(
+            User.withUsername("customer")
+                .password(passwordEncoder().encode("customer"))
+                .roles("CUSTOMER")
+                .build()
+        );
+
         return userDetailsManager;
     }
 
