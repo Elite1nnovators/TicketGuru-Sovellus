@@ -369,31 +369,8 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
 | orderId           | int (AN) PK      | Tilauksen yksilöllinen tunniste.                        |
-| customerId        | int FK           | Viittaus asiakkaaseen (Customer-taulu).                 |
 | salespersonId     | int FK           | Viittaus myyjään (SalesPerson-taulu).                   |
 | orderDate         | date             | Tilauksen päivämäärä.                                   |
-
-</details>
-</br>
-
-### Customer (Asiakas)
-
-<details>
-<summary>Asiakastaulu sisältää tiedot asiakkaista, jotka ostavat lippuja. Yhdellä asiakkaalla voi olla useita tilauksia.</summary>
-</br>
-
-| Kenttä            | Tyyppi           | Kuvaus                                                  |
-| ------------------|------------------| --------------------------------------------------------|
-| customerId        | int (AN) PK      | Asiakkaan yksilöllinen tunniste.                        |
-| username          | varchar(30)      | Asiakkaan käyttäjätunnus.                                |
-| passwordHash      | varchar(30)      | Asiakkaan salasana.                                      |
-| dateOfBirth       | date             | Asiakkaan syntymäaika.                                   |
-| firstName         | varchar(30)      | Asiakkaan etunimi.                                      |
-| lastName          | varchar(30)      | Asiakkaan sukunimi.                                     |
-| phone             | varchar(30)      | Asiakkaan puhelinnumero.                                |
-| email             | varchar(30)      | Asiakkaan sähköpostiosoite.                             |
-| address           | varchar(30)      | Asiakkaan osoite.                                       |
-| city              | varchar(30)      | Asiakkaan asuinpaikkakunta.                             |
 
 </details>
 </br>
@@ -680,7 +657,6 @@ Sisältö:
 
 ```json
 {
-  "customerId": 1,
   "salespersonId": 1,
   "orderDetails": [
     {
@@ -705,7 +681,6 @@ Sisältö:
 
 ```json
 {
-  "customerId": 1,
   "salespersonId": 1,
   "orderDetails": [
     {
@@ -720,8 +695,6 @@ Sisältö:
     }
   ],
   "orderId": 1,
-  "customerFirstName": "John",
-  "customerLastName": "Doe",
   "salespersonFirstName": "Peter",
   "salespersonLastName": "Smith",
   "orderDate": "2024-10-18T16:29:01.067+00:00"
@@ -730,26 +703,6 @@ Sisältö:
 
 #### Virhekoodit:
 
-- **400 Bad Request**: Pyynnössä oli virheellisiä tietoja (esim. puuttuvat tai väärän tyyppiset kentät).
-  - *Esimerkki*: Puuttuva `customerId`:
-    ```json
-    [
-      "OrderDTO: Customer ID is required"
-    ]
-    ```
-  - *Esimerkki*: Virheellinen `quantity` (nolla tai negatiivinen):
-    ```json
-    {
-      "error": "Order quantity must be greater than 0"
-    }
-    ```
-- **404 Not Found**: Pyydettyä resurssia (asiakas, myyjä, tapahtuma tai lipputyyppi) ei löytynyt.
-  - *Esimerkki*: Virheellinen `customerId`:
-    ```json
-    {
-      "error": "Customer with ID X not found"
-    }
-    ```
 - **409 Conflict**: Yritettiin tehdä tilaus lipuista, joita ei ole varastossa.
   - *Esimerkki*: Tilaus ylittää varastosaldon:
     ```json
@@ -778,7 +731,6 @@ Sisältö:
 
 ```json
 {
-  "customerId": 1,
   "salespersonId": 1,
   "orderDetails": [
     {
@@ -793,8 +745,6 @@ Sisältö:
     }
   ],
   "orderId": 1,
-  "customerFirstName": "John",
-  "customerLastName": "Doe",
   "salespersonFirstName": "Peter",
   "salespersonLastName": "Smith",
   "orderDate": "2024-10-18T16:29:01.067+00:00"
@@ -830,7 +780,6 @@ Sisältö:
 ```json
 [
   {
-    "customerId": 1,
     "salespersonId": 1,
     "orderDetails": [
       {
@@ -845,14 +794,11 @@ Sisältö:
       }
     ],
     "orderId": 1,
-    "customerFirstName": "John",
-    "customerLastName": "Doe",
     "salespersonFirstName": "Peter",
     "salespersonLastName": "Smith",
     "orderDate": "2024-10-18T16:29:01.067+00:00"
   },
   {
-    "customerId": 2,
     "salespersonId": 2,
     "orderDetails": [
       {
@@ -867,8 +813,6 @@ Sisältö:
       }
     ],
     "orderId": 2,
-    "customerFirstName": "Jane",
-    "customerLastName": "Doe",
     "salespersonFirstName": "Anna",
     "salespersonLastName": "Brown",
     "orderDate": "2024-10-18T16:29:05.538+00:00"
@@ -890,13 +834,12 @@ Sisältö:
 
 #### Pyynnön sisältö:
 
-Voit päivittää `customerId` ja `salespersonId`, mutta **`orderDetails`-kenttää ei voi muokata** tilauksen luomisen jälkeen.
+Voit päivittää `salespersonId`, mutta **`orderDetails`-kenttää ei voi muokata** tilauksen luomisen jälkeen.
 
 *Esimerkki*:
 
 ```json
 {
-  "customerId": 2,
   "salespersonId": 1
 }
 ```
@@ -909,7 +852,6 @@ Voit päivittää `customerId` ja `salespersonId`, mutta **`orderDetails`-kentt�
 
 ```json
 {
-  "customerId": 2,
   "salespersonId": 1,
   "orderDetails": [
     {
@@ -924,8 +866,6 @@ Voit päivittää `customerId` ja `salespersonId`, mutta **`orderDetails`-kentt�
     }
   ],
   "orderId": 2,
-  "customerFirstName": "Jane",
-  "customerLastName": "Doe",
   "salespersonFirstName": "Peter",
   "salespersonLastName": "Smith",
   "orderDate": "2024-10-18T16:29:05.538+00:00"
@@ -957,7 +897,7 @@ Voit päivittää `customerId` ja `salespersonId`, mutta **`orderDetails`-kentt�
 
 #### Pyynnön sisältö:
 
-Voit päivittää yhden tai useamman seuraavista kentistä: `customerId`, `salespersonId`.
+Voit päivittää `salespersonId`.
 
 *Esimerkki*:
 
@@ -975,7 +915,6 @@ Voit päivittää yhden tai useamman seuraavista kentistä: `customerId`, `sales
 
 ```json
 {
-  "customerId": 2,
   "salespersonId": 2,
   "orderDetails": [
     {
@@ -990,8 +929,6 @@ Voit päivittää yhden tai useamman seuraavista kentistä: `customerId`, `sales
     }
   ],
   "orderId": 2,
-  "customerFirstName": "Jane",
-  "customerLastName": "Doe",
   "salespersonFirstName": "Anna",
   "salespersonLastName": "Brown",
   "orderDate": "2024-10-18T16:29:05.538+00:00"
@@ -1038,12 +975,9 @@ Voit päivittää yhden tai useamman seuraavista kentistä: `customerId`, `sales
 
 - **OrderDTO** sisältää seuraavat kentät:
 
-  - `customerId` (pakollinen): Asiakkaan tunniste.
   - `salespersonId` (pakollinen): Myyjän tunniste.
   - `orderDetails` (pakollinen tilauksen luomisessa): Lista tilauksen yksityiskohdista.
   - `orderId`: Tilauksen tunniste (vastauksessa).
-  - `customerFirstName`: Asiakkaan etunimi (vastauksessa).
-  - `customerLastName`: Asiakkaan sukunimi (vastauksessa).
   - `salespersonFirstName`: Myyjän etunimi (vastauksessa).
   - `salespersonLastName`: Myyjän sukunimi (vastauksessa).
   - `orderDate`: Tilauksen päivämäärä (vastauksessa).
@@ -1069,7 +1003,6 @@ Voit päivittää yhden tai useamman seuraavista kentistä: `customerId`, `sales
   - Validointivirheet voivat palauttaa listan virheistä:
     ```json
     [
-      "OrderDTO: Customer ID is required",
       "OrderDetailsDTO: Quantity must be greater than 0"
     ]
     ```
@@ -1095,7 +1028,7 @@ Voit päivittää yhden tai useamman seuraavista kentistä: `customerId`, `sales
 <summary> Autentikointiprosessi </summary>
 <br/>
 
-TicketGuru-sovelluksessa käytetään perinteistä käyttäjätunnus-salasana -autentikaatiota. Sovelluksen käyttäjät jaetaan kahteen pääasialliseen rooliin: **asiakkaat** (Customer) ja **myyjät** (Salesperson), joilla on eri oikeudet ja pääsyoikeudet sovelluksen eri toimintoihin.
+TicketGuru-sovelluksessa käytetään perinteistä käyttäjätunnus-salasana -autentikaatiota. 
 
 ## Perustason autentikointi (Basic Authentication)
 
@@ -1112,7 +1045,6 @@ Sovelluksen turvallisuuskonfiguraatio on määritelty `SecurityConfig`-luokassa,
 2. **Käyttöoikeudet**: Luokassa määritellään myös, mitkä käyttäjäroolit voivat käyttää mitäkin sovelluksen toimintoja. Esimerkiksi:
    - Admin-käyttäjät voivat käyttää kaikkia päätepisteitä.
    - Salesperson-käyttäjät saavat vain rajoitetun pääsyn myyntitoimintoihin.
-   - Customer-käyttäjät voivat ainoastaan tarkastella tapahtumia.
 
 3. **CSRF-suojaus**: CSRF-suojauksen tarkastukset on toistaiseksi poistettu käytöstä testauksen helpottamiseksi.
 
@@ -1166,13 +1098,13 @@ Sovelluksessa on useita API-päätepisteitä, jotka tarjoavat erilaisia toiminto
 
 | Päätepiste                        | Kuvaus                                         | Vaadittu rooli         |
 |-----------------------------------|------------------------------------------------|------------------------|
-| `GET /events`                    | Hakee kaikki tapahtumat.                      | **CUSTOMER**, **SALESPERSON**, **ADMIN**  |
-| `GET /events/{eventId}`          | Hakee tapahtuman ID:n perusteella.            | **CUSTOMER**, **SALESPERSON**, **ADMIN**  |
+| `GET /events`                    | Hakee kaikki tapahtumat.                      | **SALESPERSON**, **ADMIN**  |
+| `GET /events/{eventId}`          | Hakee tapahtuman ID:n perusteella.            | **SALESPERSON**, **ADMIN**  |
 | `POST /events`                   | Luo uuden tapahtuman.                          | **ADMIN**              |
 | `PUT /events/{eventId}`          | Muokkaa olemassa olevaa tapahtumaa.           | **ADMIN**              |
 | `PATCH /events/{eventId}`        | Päivittää osia olemassa olevasta tapahtumasta. | **ADMIN**              |
 | `DELETE /events/{eventId}`       | Poistaa tapahtuman.                            | **ADMIN**              |
-| `GET /events/search`             | Hakee tapahtumat kaupungin perusteella.       | **CUSTOMER**, **SALESPERSON**, **ADMIN**  |
+| `GET /events/search`             | Hakee tapahtumat kaupungin perusteella.       | **SALESPERSON**, **ADMIN**  |
 
 ## Määritellyt käyttäjätunnukset ja salasanat
 
@@ -1180,16 +1112,8 @@ Käyttäjätiedot on tallennettu muistiin käyttämällä `InMemoryUserDetailsMa
 
 ## Käyttäjätiedot
 
-Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `Customer` tai `Salesperson` -entiteetteinä. Käyttäjätunnukset ja salasanat tallennetaan tietokantaan seuraavasti:
+Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `Salesperson` -entiteetteinä. Käyttäjätunnukset ja salasanat tallennetaan tietokantaan seuraavasti:
 
-### Customer (Asiakas)
-- **customerId**: Asiakkaan yksilöllinen ID
-- **username**: Asiakkaan käyttäjätunnus
-- **passwordHash**: Salasanan hajautusarvo (hash), joka takaa tietoturvan.
-- **firstName**: Asiakkaan etunimi.
-- **lastName**: Asiakkaan sukunimi.
-- **phone**: Puhelinnumero.
-- **email**: Sähköpostiosoite.
 
 ### Salesperson (Myyjä)
 - **salespersonId**: Myyjän yksilöllinen ID.
@@ -1208,11 +1132,6 @@ Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `Customer` tai `Sales
   - **Käyttäjätunnus**: `salesperson`
   - **Salasana**: `salesperson` (hajautettuna)
   - **Rooli**: `SALESPERSON`
-
-- **Customer**
-  - **Käyttäjätunnus**: `customer`
-  - **Salasana**: `customer` (hajautettuna)
-  - **Rooli**: `CUSTOMER`
 
 ### Salasanan tallennus
 
@@ -1238,16 +1157,12 @@ Sovelluksessa on kaksi pääasiallista käyttäjäroolia, jotka määrittävät 
   - Myydä lippuja olemassa oleviin tapahtumiin.
   - Tarkastella omia myyntitietojaan.
 
-- **Customer**: Käyttäjät, jotka ovat asiakkaita on oikeus ainoastaan:
-  - Tarkastella tapahtumia.
-
 ## Käyttöoikeudet
 
 Käyttöoikeudet on määritelty seuraavasti:
 
 - Kaikki API-pyynnöt vaativat autentikoinnin.
 - Admin-käyttäjät voivat käyttää kaikkia sovelluksen päätepisteitä, kun taas Salesperson-käyttäjät saavat vain rajoitetun pääsyn.
-- Customer-käyttäjät voivat ainoastaan tarkastella tapahtumia (GET events).
 - CSRF-suojauksen (Cross-Site Request Forgery) tarkastukset on poistettu käytöstä testauksen helpottamiseksi, mutta tuotantoympäristössä suositellaan sen käyttämistä.
 
 Tämä rakenne varmistaa, että vain oikeutetut käyttäjät voivat käyttää sovelluksen eri toimintoja, mikä parantaa tietoturvaa ja käyttäjäkokemusta.
