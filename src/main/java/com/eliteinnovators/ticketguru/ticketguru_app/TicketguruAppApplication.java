@@ -21,7 +21,6 @@ public class TicketguruAppApplication {
 
     @Bean
     public CommandLineRunner demo(
-            CustomerRepository customerRepository, 
             EventRepository eventRepository, 
             TicketRepository ticketRepository, 
             TicketTypeRepository ticketTypeRepository, 
@@ -44,12 +43,6 @@ public class TicketguruAppApplication {
             EventTicketType eventTicketType2 = new EventTicketType(event, ticketType2, 15, 100);
             eventTicketTypeRepository.saveAll(Arrays.asList(eventTicketType, eventTicketType2));
 
-            // 4. Create and save customers and salespersons
-            Customer customer = new Customer("john_doe", "password", new Date(), "John", "Doe", "123456789", "john@example.com", "Street 1", "Helsinki", null);
-            Customer customer2 = new Customer("jane_doe", "password2", new Date(), "Jane", "Doe", "987654321", "jane@example.com", "Street 1", "Espoo", null);
-            customerRepository.save(customer);
-            customerRepository.save(customer2);
-
             Salesperson salesperson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "0451234567", null);
             Salesperson salesperson2 = new Salesperson("anna_brown", "password2", false, "Anna", "Brown", "0409876543", null);
             salespersonRepository.save(salesperson);
@@ -61,11 +54,9 @@ public class TicketguruAppApplication {
 
             // 6. Create an OrderDTO
             OrderDTO orderDTO = new OrderDTO(
-                    customer.getCustomerId(), 
                     salesperson.getSalespersonId(), 
                     Arrays.asList(orderDetailDTO1, orderDetailDTO2),
                     null, // Order ID will be generated
-                    null, null, // Customer's first and last name will be set by the service
                     null, null, // Salesperson's first and last name will be set by the service
                     new Date()
             );

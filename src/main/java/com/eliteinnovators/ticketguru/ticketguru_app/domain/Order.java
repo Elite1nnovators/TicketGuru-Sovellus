@@ -20,12 +20,6 @@ public class Order {
     @JsonManagedReference(value = "order-orderDetails")
     private List<OrderDetails> orderDetails = new ArrayList<>(); 
 
-    @NotNull(message = "Order: Customer is required for the order")
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    @JsonBackReference(value = "customer-order")
-    private Customer customer;
-
     @NotNull(message = "Order: Salesperson is required for the order")
     @ManyToOne
     @JoinColumn(name = "salesperson_id")
@@ -41,13 +35,11 @@ public class Order {
     private List<Ticket> tickets = new ArrayList<>();
 
     public Order() {}
-    public Order(Customer customer, Salesperson salesperson, Date orderDate) {
-        this.customer = customer;
+    public Order(Salesperson salesperson, Date orderDate) {
         this.salesperson = salesperson;
         this.orderDate = orderDate;
     }
-    public Order(Customer customer, Salesperson salesperson, Date orderDate, List<Ticket> tickets) {
-        this.customer = customer;
+    public Order(Salesperson salesperson, Date orderDate, List<Ticket> tickets) {
         this.salesperson = salesperson;
         this.orderDate = orderDate;
         this.tickets = tickets;
@@ -76,12 +68,6 @@ public class Order {
     }
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
-    }
-    public Customer getCustomer() {
-        return customer;
-    }
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
     public Salesperson getSalesperson() {
         return salesperson;

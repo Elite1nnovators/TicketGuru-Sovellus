@@ -23,9 +23,6 @@ public class OrderService {
     private OrderMapper orderMapper;
 
     @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
     private SalespersonRepository salespersonRepository;
 
     @Autowired
@@ -46,7 +43,7 @@ public class OrderService {
 
     @Transactional
     public OrderDTO newOrder(OrderDTO newOrderDTO) {
-        Order newOrder = orderMapper.toOrder(newOrderDTO, customerRepository, salespersonRepository, eventTicketTypeRepository);
+        Order newOrder = orderMapper.toOrder(newOrderDTO, salespersonRepository, eventTicketTypeRepository);
         newOrder.setOrderDate(new Date());
 
         List<Ticket> tickets = new ArrayList<>();
@@ -101,12 +98,6 @@ public class OrderService {
         // EI sallita orderDetails / tickettien muuttamista sen jälkeen kun Order on luotu.
         if (patchOrderDTO.getOrderDetails() != null) {
             throw new OrderModificationNotAllowedException("Modifying order details is not allowed after order creation");
-        }
-        //Customer ja Salesperson saa muuttua
-        if (patchOrderDTO.getCustomerId() != null) {
-            Customer customer = customerRepository.findById(patchOrderDTO.getCustomerId())
-                    .orElseThrow(() -> new CustomerNotFoundException("Customer with ID " + patchOrderDTO.getCustomerId() + " not found"));
-            existingOrder.setCustomer(customer);
         }
         if (patchOrderDTO.getSalespersonId() != null) {
             Salesperson salesperson = salespersonRepository.findById(patchOrderDTO.getSalespersonId())
