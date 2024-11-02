@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.*;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.*;
@@ -19,6 +20,7 @@ public class TicketguruAppApplication {
         SpringApplication.run(TicketguruAppApplication.class, args);
     }
 
+    @SuppressWarnings("unused")
     @Bean
     public CommandLineRunner demo(
             EventRepository eventRepository, 
@@ -29,32 +31,38 @@ public class TicketguruAppApplication {
             OrderService orderService) {
 
         return (args) -> {
-            // 1. Create and save ticket types
-            TicketType ticketType = new TicketType("Aikuinen");
-            TicketType ticketType2 = new TicketType("Lapsi");
-            ticketTypeRepository.saveAll(Arrays.asList(ticketType, ticketType2));
+            // 1. Create and save ticket types if they don't exist
+            TicketType aikuinen = ticketTypeRepository.findByName("Aikuinen")
+                    .orElseGet(() -> ticketTypeRepository.save(new TicketType("Aikuinen")));
+            TicketType lapsi = ticketTypeRepository.findByName("Lapsi")
+                    .orElseGet(() -> ticketTypeRepository.save(new TicketType("Lapsi")));
 
-            // 2. Create and save events
-            Event event = new Event("Concert 1", new Date(), "Event Address 1", "Helsinki", "A great concert event");
-            eventRepository.save(event);
+            // 2. Create and save events if they don't exist
+            Event concert1 = eventRepository.findByEventName("Concert 1")
+                    .orElseGet(() -> {
+                        Event event = new Event("Concert 1", new Date(), "Event Address 1", "Helsinki", "A great concert event");
+                        return eventRepository.save(event);
+                    });
 
-            // 3. Create and save event ticket types
-            EventTicketType eventTicketType = new EventTicketType(event, ticketType, 20, 50);
-            EventTicketType eventTicketType2 = new EventTicketType(event, ticketType2, 15, 100);
-            eventTicketTypeRepository.saveAll(Arrays.asList(eventTicketType, eventTicketType2));
+            // 3. Create and save event ticket types if they don't exist
+            EventTicketType etc1 = eventTicketTypeRepository.findByEventAndTicketType(concert1, aikuinen)
+                    .orElseGet(() -> eventTicketTypeRepository.save(new EventTicketType(concert1, aikuinen, 20, 50)));
+            EventTicketType etc2 = eventTicketTypeRepository.findByEventAndTicketType(concert1, lapsi)
+                    .orElseGet(() -> eventTicketTypeRepository.save(new EventTicketType(concert1, lapsi, 15, 100)));
 
-            Salesperson salesperson = new Salesperson("peter_smith", "password", false, "Peter", "Smith", "0451234567", null);
-            Salesperson salesperson2 = new Salesperson("anna_brown", "password2", false, "Anna", "Brown", "0409876543", null);
-            salespersonRepository.save(salesperson);
-            salespersonRepository.save(salesperson2);
+            // 4. Create and save salespersons if they don't exist
+            Salesperson peter = salespersonRepository.findByUsername("peter_smith")
+                    .orElseGet(() -> salespersonRepository.save(new Salesperson("peter_smith", "password", false, "Peter", "Smith", "0451234567", null)));
+            Salesperson anna = salespersonRepository.findByUsername("anna_brown")
+                    .orElseGet(() -> salespersonRepository.save(new Salesperson("anna_brown", "password2", false, "Anna", "Brown", "0409876543", null)));
 
             // 5. Create order details
-            OrderDetailsDTO orderDetailDTO1 = new OrderDetailsDTO(eventTicketType.getId(), 2, eventTicketType.getPrice());
-            OrderDetailsDTO orderDetailDTO2 = new OrderDetailsDTO(eventTicketType2.getId(), 1, eventTicketType2.getPrice());
+            OrderDetailsDTO orderDetailDTO1 = new OrderDetailsDTO(etc1.getId(), 2, etc1.getPrice());
+            OrderDetailsDTO orderDetailDTO2 = new OrderDetailsDTO(etc2.getId(), 1, etc2.getPrice());
 
             // 6. Create an OrderDTO
             OrderDTO orderDTO = new OrderDTO(
-                    salesperson.getSalespersonId(), 
+                    peter.getSalespersonId(), 
                     Arrays.asList(orderDetailDTO1, orderDetailDTO2),
                     null, // Order ID will be generated
                     null, null, // Salesperson's first and last name will be set by the service
@@ -62,8 +70,12 @@ public class TicketguruAppApplication {
             );
 
             // 7. Create a new order using the OrderService
-            OrderDTO createdOrder = orderService.newOrder(orderDTO);
-            System.out.println("Created Order: " + createdOrder);
+            try {
+                OrderDTO createdOrder = orderService.newOrder(orderDTO);
+                System.out.println("Created Order: " + createdOrder);
+            } catch (DataIntegrityViolationException e) {
+                System.out.println("Order already exists or data integrity violation occurred.");
+            }
         };
     }
 
