@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "9f006c5b-16f8-48dd-bf44-87647a8805d8",
-		"name": "API tests",
+		"_postman_id": "a6fcc71e-5e60-412b-ae7f-3a3998a6c011",
+		"name": "TICKETGURU",
+		"description": "TODO : PATCH ja PUT-pyyntöjen korjaus koodissa.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "39230813"
+		"_exporter_id": "38434098"
 	},
 	"item": [
 		{
@@ -33,12 +34,9 @@
 											"\r",
 											"    pm.expect(responseData).to.be.an('array');\r",
 											"    responseData.forEach(function(order) {\r",
-											"        pm.expect(order).to.have.property('customerId');\r",
 											"        pm.expect(order).to.have.property('salespersonId');\r",
 											"        pm.expect(order).to.have.property('orderDetails');\r",
 											"        pm.expect(order).to.have.property('orderId');\r",
-											"        pm.expect(order).to.have.property('customerFirstName');\r",
-											"        pm.expect(order).to.have.property('customerLastName');\r",
 											"        pm.expect(order).to.have.property('salespersonFirstName');\r",
 											"        pm.expect(order).to.have.property('salespersonLastName');\r",
 											"        pm.expect(order).to.have.property('orderDate');\r",
@@ -60,27 +58,15 @@
 											"});\r",
 											"\r",
 											"\r",
-											"pm.test(\"CustomerFirstName and CustomerLastName are non-empty strings\", function () {\r",
-											"  const responseData = pm.response.json();\r",
-											"  \r",
-											"  pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
-											"  responseData.forEach(function(order) {\r",
-											"    pm.expect(order.customerFirstName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"CustomerFirstName should not be empty\");\r",
-											"    pm.expect(order.customerLastName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"CustomerLastName should not be empty\");\r",
-											"  });\r",
-											"});\r",
-											"\r",
-											"\r",
 											"pm.test(\"SalespersonFirstName and salespersonLastName should be non-empty strings\", function () {\r",
-											"  const responseData = pm.response.json();\r",
-											"  \r",
-											"  pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
-											"  responseData.forEach(function(order) {\r",
-											"    pm.expect(order.salespersonFirstName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"SalespersonFirstName should not be empty\");\r",
-											"    pm.expect(order.salespersonLastName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"SalespersonLastName should not be empty\");\r",
-											"  });\r",
+											"    const responseData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+											"    responseData.forEach(function(order) {\r",
+											"        pm.expect(order.salespersonFirstName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"SalespersonFirstName should not be empty\");\r",
+											"        pm.expect(order.salespersonLastName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"SalespersonLastName should not be empty\");\r",
+											"    });\r",
 											"});\r",
-											"\r",
 											""
 										],
 										"type": "text/javascript",
@@ -121,26 +107,20 @@
 							"response": []
 						},
 						{
-							"name": "/orders admin-success",
+							"name": "/orders admin-unauthorized",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Response status code is 201\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Status code is 401 for incorrect username/password\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Content-Type header is present and has value 'application/json'\", function () {\r",
-											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.exist;\r",
-											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.equal(\"application/json\");\r",
-											"});\r",
-											"\r",
-											"\r",
-											"pm.test(\"Response time is within acceptable range\", function () {\r",
-											"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
-											"});\r",
-											""
+											"pm.test(\"Response message is 'Unauthorized'\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    pm.expect(responseData.message || responseData.error).to.include(\"Unauthorized\");\r",
+											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -152,28 +132,19 @@
 									"type": "basic",
 									"basic": [
 										{
-											"key": "password",
-											"value": "admin",
+											"key": "username",
+											"value": "wrongadmin",
 											"type": "string"
 										},
 										{
-											"key": "username",
+											"key": "password",
 											"value": "admin",
 											"type": "string"
 										}
 									]
 								},
-								"method": "POST",
+								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"customerId\": 1,\r\n  \"salespersonId\": 1,\r\n  \"orderDetails\": [\r\n    {\r\n      \"eventTicketTypeId\": 1,\r\n      \"quantity\": 2,\r\n      \"unitPrice\": 20.0\r\n    },\r\n    {\r\n      \"eventTicketTypeId\": 2,\r\n      \"quantity\": 1,\r\n      \"unitPrice\": 15.0\r\n    }\r\n  ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "http://localhost:8080/orders",
 									"protocol": "http",
@@ -234,7 +205,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/orders/1",
+									"raw": "http://localhost:8080/orders/2",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -242,7 +213,75 @@
 									"port": "8080",
 									"path": [
 										"orders",
-										"1"
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/orders admin-success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type header is present and has value 'application/json'\", function () {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.exist;\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.equal(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is within acceptable range\", function () {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"salespersonId\": 1,\r\n  \"orderDetails\": [\r\n    {\r\n      \"eventTicketTypeId\": 1,\r\n      \"quantity\": 2,\r\n      \"unitPrice\": 20.0\r\n    },\r\n    {\r\n      \"eventTicketTypeId\": 2,\r\n      \"quantity\": 1,\r\n      \"unitPrice\": 15.0\r\n    }\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/orders",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"orders"
 									]
 								}
 							},
@@ -321,7 +360,7 @@
 							"response": []
 						},
 						{
-							"name": "/orders/id salesperson-success Copy",
+							"name": "/orders/id admin-success",
 							"event": [
 								{
 									"listen": "test",
@@ -367,7 +406,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"customerId\": 2,\r\n  \"salespersonId\": 1\r\n}",
+									"raw": "{\r\n    \"salespersonId\": 2\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -396,20 +435,14 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Response status code is 200\", function () {\r",
+											"pm.test(\"Status code is 200\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Content-Type header is present and has value 'application/json'\", function () {\r",
-											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.exist;\r",
-											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.equal(\"application/json\");\r",
-											"});\r",
-											"\r",
-											"\r",
-											"pm.test(\"Response time is within acceptable range\", function () {\r",
-											"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
-											"});\r",
-											""
+											"pm.test(\"Check updated salespersonId\", function () {\r",
+											"    let responseJson = pm.response.json();\r",
+											"    pm.expect(responseJson.salespersonId).to.eql(2);\r",
+											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -436,7 +469,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"salespersonId\": 2\r\n}",
+									"raw": "{\r\n    \"salespersonId\": 2\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -484,12 +517,9 @@
 											"\r",
 											"    pm.expect(responseData).to.be.an('array');\r",
 											"    responseData.forEach(function(order) {\r",
-											"        pm.expect(order).to.have.property('customerId');\r",
 											"        pm.expect(order).to.have.property('salespersonId');\r",
 											"        pm.expect(order).to.have.property('orderDetails');\r",
 											"        pm.expect(order).to.have.property('orderId');\r",
-											"        pm.expect(order).to.have.property('customerFirstName');\r",
-											"        pm.expect(order).to.have.property('customerLastName');\r",
 											"        pm.expect(order).to.have.property('salespersonFirstName');\r",
 											"        pm.expect(order).to.have.property('salespersonLastName');\r",
 											"        pm.expect(order).to.have.property('orderDate');\r",
@@ -510,16 +540,6 @@
 											"    });\r",
 											"});\r",
 											"\r",
-											"\r",
-											"pm.test(\"CustomerFirstName and CustomerLastName are non-empty strings\", function () {\r",
-											"  const responseData = pm.response.json();\r",
-											"  \r",
-											"  pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
-											"  responseData.forEach(function(order) {\r",
-											"    pm.expect(order.customerFirstName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"CustomerFirstName should not be empty\");\r",
-											"    pm.expect(order.customerLastName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"CustomerLastName should not be empty\");\r",
-											"  });\r",
-											"});\r",
 											"\r",
 											"\r",
 											"pm.test(\"SalespersonFirstName and salespersonLastName should be non-empty strings\", function () {\r",
@@ -632,6 +652,60 @@
 							"response": []
 						},
 						{
+							"name": "/orders/id salesperson-Unauthorized",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401 for incorrect username/password\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response message is 'Unauthorized'\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    pm.expect(responseData.message || responseData.error).to.include(\"Unauthorized\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "salesperson",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/orders/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"orders",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "/orders salesperson-success",
 							"event": [
 								{
@@ -678,7 +752,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"customerId\": 1,\r\n  \"salespersonId\": 1,\r\n  \"orderDetails\": [\r\n    {\r\n      \"eventTicketTypeId\": 1,\r\n      \"quantity\": 2,\r\n      \"unitPrice\": 20.0\r\n    },\r\n    {\r\n      \"eventTicketTypeId\": 2,\r\n      \"quantity\": 1,\r\n      \"unitPrice\": 15.0\r\n    }\r\n  ]\r\n}",
+									"raw": "{\r\n  \"salespersonId\": 1,\r\n  \"orderDetails\": [\r\n    {\r\n      \"eventTicketTypeId\": 1,\r\n      \"quantity\": 2,\r\n      \"unitPrice\": 20.0\r\n    },\r\n    {\r\n      \"eventTicketTypeId\": 2,\r\n      \"quantity\": 1,\r\n      \"unitPrice\": 15.0\r\n    }\r\n  ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -746,7 +820,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"customerId\": 2,\r\n  \"salespersonId\": 1\r\n}",
+									"raw": "{\r\n  \"salespersonId\": 1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -838,22 +912,29 @@
 							"response": []
 						},
 						{
-							"name": "/orders/id salesperson-success",
+							"name": "/orders/id salesperson-Forbidden",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
+											"pm.test(\"Response status code is 403 for forbidden access\", function () {\r",
 											"    pm.response.to.have.status(401);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
+											"pm.test(\"Response body includes the message 'forbidden' for forbidden access\", function () {\r",
+											"    pm.expect(pm.response.json().message).to.include('Forbidden');\r",
 											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"packages": {},
+										"type": "text/javascript"
 									}
 								}
 							],
@@ -894,239 +975,6 @@
 									"path": [
 										"orders",
 										"1"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Orders Customer",
-					"item": [
-						{
-							"name": "/orders customer-failed",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/orders",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"orders"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/orders/id customer-failed",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/orders/1",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"orders",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/orders/id customer-failed",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"customerId\": 1,\r\n  \"salespersonId\": 1,\r\n  \"orderDetails\": [\r\n    {\r\n      \"eventTicketTypeId\": 1,\r\n      \"quantity\": 2,\r\n      \"unitPrice\": 20.0\r\n    },\r\n    {\r\n      \"eventTicketTypeId\": 2,\r\n      \"quantity\": 1,\r\n      \"unitPrice\": 15.0\r\n    }\r\n  ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/orders",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"orders"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/orders/id customer-failed",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"salespersonId\": 2\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/orders/2",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"orders",
-										"2"
 									]
 								}
 							},
@@ -1134,7 +982,8 @@
 						}
 					]
 				}
-			]
+			],
+			"description": "Odottaa PUT ja PATCH bugin korjausta"
 		},
 		{
 			"name": "Tickets",
@@ -1198,7 +1047,7 @@
 							"response": []
 						},
 						{
-							"name": "/tickets/event/{eventId} admin-success Copy",
+							"name": "/tickets/event/{eventId} admin-success",
 							"event": [
 								{
 									"listen": "test",
@@ -1227,6 +1076,62 @@
 										{
 											"key": "password",
 											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/tickets/event/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"tickets",
+										"event",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/tickets/event/{eventId} admin-Unauthorized",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
+											"    pm.expect(pm.response.json().message).to.include('unauthorized');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "password",
 											"type": "string"
 										},
 										{
@@ -1431,7 +1336,7 @@
 							"response": []
 						},
 						{
-							"name": "/tickers salesperson-success",
+							"name": "/tickets salesperson-success",
 							"event": [
 								{
 									"listen": "test",
@@ -1484,14 +1389,9 @@
 								}
 							},
 							"response": []
-						}
-					]
-				},
-				{
-					"name": "Tickets Customer",
-					"item": [
+						},
 						{
-							"name": "/tickets unauthorized",
+							"name": "/tickets salesperson-Unauthorized",
 							"event": [
 								{
 									"listen": "test",
@@ -1502,8 +1402,11 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
+											"    pm.expect(pm.response.json().message).to.include('unauthorized');\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -1516,12 +1419,12 @@
 									"basic": [
 										{
 											"key": "password",
-											"value": "customer",
+											"value": "password",
 											"type": "string"
 										},
 										{
 											"key": "username",
-											"value": "customer",
+											"value": "salesperson",
 											"type": "string"
 										}
 									]
@@ -1537,114 +1440,6 @@
 									"port": "8080",
 									"path": [
 										"tickets"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/tickets/event/1 unauthorized",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/tickets/event/1",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"tickets",
-										"event",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/tickets/order/{orderId}\tunauthorized",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/tickets/order/1",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"tickets",
-										"order",
-										"1"
 									]
 								}
 							},
@@ -1690,6 +1485,60 @@
 										{
 											"key": "password",
 											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/events",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"events"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/events admin-Unauthorized",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
+											"    pm.expect(pm.response.json().message).to.include('unauthorized');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "password",
 											"type": "string"
 										},
 										{
@@ -2281,18 +2130,18 @@
 							"response": []
 						},
 						{
-							"name": "/events salesperson-unauthorized",
+							"name": "/events salesperson-Forbidden",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
+											"pm.test(\"Response status code is 403 for forbidden access\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
+											"pm.test(\"Response body includes the message 'Forbidden' for forbidden access\", function () {\r",
+											"    pm.expect(pm.response.json().message).to.include(\"Forbidden\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -2342,18 +2191,18 @@
 							"response": []
 						},
 						{
-							"name": "/events salesperson-unauthorized",
+							"name": "/events salesperson-Forbidden",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
+											"pm.test(\"Response status code is 403 for forbidden access\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
+											"pm.test(\"Response body includes the message 'Forbidden' for forbidden access\", function () {\r",
+											"    pm.expect(pm.response.json().message).to.include(\"Forbidden\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -2404,18 +2253,18 @@
 							"response": []
 						},
 						{
-							"name": "/events salesperson-unauthorized",
+							"name": "/events salesperson-Forbidden",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
+											"pm.test(\"Response status code is 403 for forbidden access\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
+											"pm.test(\"Response body includes the message 'Forbidden' for forbidden access\", function () {\r",
+											"    pm.expect(pm.response.json().message).to.include(\"Forbidden\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -2466,18 +2315,18 @@
 							"response": []
 						},
 						{
-							"name": "/events/{eventId} salesperson-unathorized",
+							"name": "/events/{eventId} salesperson-Forbidden",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
+											"pm.test(\"Response status code is 403 for forbidden access\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
+											"pm.test(\"Response body includes the message 'Forbidden' for forbidden access\", function () {\r",
+											"    pm.expect(pm.response.json().message).to.include(\"Forbidden\");\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -2497,422 +2346,6 @@
 										{
 											"key": "username",
 											"value": "salesperson",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/events/2",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"events",
-										"2"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Events Customer",
-					"item": [
-						{
-							"name": "/events customer-success",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response Content-Type is application/json\", function () {\r",
-											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
-											"});\r",
-											"\r",
-											"\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/events",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"events"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/events/{eventId} customer-success",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response Content-Type is application/json\", function () {\r",
-											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
-											"});\r",
-											"\r",
-											"\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"events",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/events/search customer-success",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {\r",
-											"    pm.response.to.have.status(200);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response Content-Type is application/json\", function () {\r",
-											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
-											"});\r",
-											"\r",
-											"\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/events/search?=helsinki",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"events",
-										"search"
-									],
-									"query": [
-										{
-											"key": "",
-											"value": "helsinki"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/events customer-unauthorized",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n            \"eventName\": \"Concert 1\",\r\n            \"eventDate\": \"2024-10-01T05:08:30.651+00:00\",\r\n            \"eventAddress\": \"Event Address 1\",\r\n            \"eventCity\": \"Helsinki\",\r\n            \"eventDescription\": \"A great concert event\",\r\n            \"eventTicketTypes\": [\r\n                {\r\n                    \"ticketType\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"Aikuinen\"\r\n                    },\r\n                    \"price\": 10,\r\n                    \"ticketsInStock\": 40\r\n                }\r\n            ]\r\n        }\r\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/events",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"events"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/events customer-unauthorized",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n        \"eventName\": \"Concert 1\",\r\n        \"eventDate\": \"2024-10-28T13:02:19.524+00:00\",\r\n        \"eventAddress\": \"Event Address 1\",\r\n        \"eventCity\": \"Helsinki\",\r\n        \"eventDescription\": \"A great concert event\",\r\n        \"eventTicketTypes\": [\r\n            {\r\n                \"id\": 1,\r\n                \"price\": 20.0,\r\n                \"ticketsInStock\": 38\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"price\": 15.0,\r\n                \"ticketsInStock\": 94\r\n            }\r\n        ]\r\n    }",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"events",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/events customer-unauthorized",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n        \"eventName\": \"Testi patch 1\"\r\n    }",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"events",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "/events/{eventId} customer-unathorized",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Response status code is 401 for a failed login attempt\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response body includes the message 'unauthorized' for a failed login attempt\", function () {\r",
-											"    pm.expect(pm.response.json().message).to.include('Unauthorized');\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "customer",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "customer",
 											"type": "string"
 										}
 									]
