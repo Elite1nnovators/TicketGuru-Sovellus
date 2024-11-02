@@ -46,14 +46,14 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDTO> editOrder(@Valid @RequestBody OrderDTO editedOrderDTO, @PathVariable Long orderId) {
+    public ResponseEntity<OrderDTO> editOrder(@RequestBody OrderDTO editedOrderDTO, @PathVariable Long orderId) {
         Order editedOrder = orderService.editOrder(editedOrderDTO, orderId);
         OrderDTO updatedOrderDTO = orderMapper.toOrderDTO(editedOrder);
         return ResponseEntity.status(HttpStatus.OK).body(updatedOrderDTO);
     }
 
     @PatchMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDTO> patchOrder(@Valid @RequestBody OrderDTO patchOrderDTO, @PathVariable Long orderId) {
+    public ResponseEntity<OrderDTO> patchOrder(@RequestBody OrderDTO patchOrderDTO, @PathVariable Long orderId) {
         Order patchedOrder = orderService.patchOrder(patchOrderDTO, orderId);
         OrderDTO updatedOrderDTO = orderMapper.toOrderDTO(patchedOrder);
         return ResponseEntity.status(HttpStatus.OK).body(updatedOrderDTO);
@@ -64,35 +64,4 @@ public class OrderController {
         orderRepository.deleteById(orderId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-    /* 
-    // ORDERDETAILS REST -ENDPOINTIT TODO Tarvitaanko näitä? OrderDetailsin tarvittavat tiedot näkyy Orderia hakiessa ja niitä voi myös muuttaa Orderia muuttamalla
-    Antaa olla vielä kommentoituna kunnes tiedetään tarvitaanko
-    @GetMapping("/orderdetails")
-    public ResponseEntity<List<OrderDetailsDTO>> getAllOrderDetails() {
-        List<OrderDetailsDTO> orderDetailsDTOs = orderMapper.toOrderDetailsDTOs(orderDetailsRepository.findAll());
-        return ResponseEntity.status(HttpStatus.OK).body(orderDetailsDTOs);
-    }
-
-    @GetMapping("/orderdetails/{orderDetailsId}")
-    public ResponseEntity<OrderDetailsDTO> getOrderDetailsById(@PathVariable Long orderDetailsId) {
-        OrderDetailsDTO orderDetailsDTO = orderMapper.toOrderDetailsDTO(orderDetailsRepository.findById(orderDetailsId)
-            .orElseThrow(() -> new OrderDetailsNotFoundException("OrderDetails with ID " + orderDetailsId + " not found")));
-        return ResponseEntity.status(HttpStatus.OK).body(orderDetailsDTO);
-    }
-
-    @PutMapping("orderdetails/{orderDetailsId}")
-    public ResponseEntity<OrderDetailsDTO> editOrderDetails(@RequestBody OrderDetails editedOrderDetails, @PathVariable Long orderDetailsId) {
-        editedOrderDetails.setOrderDetailId(orderDetailsId);
-        OrderDetails orderDetails = orderDetailsRepository.save(editedOrderDetails);
-        OrderDetailsDTO orderDetailsDTO = orderMapper.toOrderDetailsDTO(orderDetails);
-        return ResponseEntity.status(HttpStatus.OK).body(orderDetailsDTO);
-    }
-
-    @DeleteMapping("orderdetails/{orderDetailsId}")
-    public ResponseEntity<Object> deleteOrderDetails(@PathVariable("orderDetailsId") Long orderDetailsId) {
-        orderDetailsRepository.deleteById(orderDetailsId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-    */
 }
