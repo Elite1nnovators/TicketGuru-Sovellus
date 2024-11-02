@@ -32,6 +32,7 @@ public class Order {
 
     @NotEmpty(message = "Order: Tickets must contain at least one ticket")
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "order-tickets")
     private List<Ticket> tickets = new ArrayList<>();
 
     public Order() {}

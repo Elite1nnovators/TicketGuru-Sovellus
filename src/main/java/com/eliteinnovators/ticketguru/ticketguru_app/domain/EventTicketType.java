@@ -1,5 +1,8 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.*;
 
 import jakarta.persistence.*;
@@ -29,6 +32,10 @@ public class EventTicketType {
     @NotNull(message = "Tickets in stock cannot be null")
     @Min(value = 0, message = "Tickets in stock cannot be negative")
     private int ticketsInStock; 
+
+    @OneToMany(mappedBy = "eventTicketType", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "eventTicketType-ticket")
+    private List<Ticket> ticket = new ArrayList<>();
 
     public EventTicketType() {}
     public EventTicketType(Event event, TicketType ticketType, double price, int ticketsInStock) {
