@@ -34,7 +34,7 @@ public class SecurityConfig {
 
 
 
-//--> "Admin & Salesperson" käyttäjätiedot (UserDetailsService)?
+//--> "Admin & Salesperson" käyttäjätiedot (UserDetailsService)? TODO
     @Bean
     public UserDetailsService userDetailsService() {
         var userDetailsManager = new InMemoryUserDetailsManager();
