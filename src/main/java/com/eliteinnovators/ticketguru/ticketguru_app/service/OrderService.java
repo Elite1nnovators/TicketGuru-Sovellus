@@ -75,7 +75,8 @@ public class OrderService {
 
     @Transactional
     public Order editOrder(OrderDTO editedOrderDTO, Long orderId) {
-        Order existingOrder = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order with ID " + orderId + " not found")); 
+        Order existingOrder = orderRepository.findById(orderId).orElseThrow(
+            () -> new OrderNotFoundException("Order with ID " + orderId + " not found")); 
 
         applyNonNullFieldsToOrder(editedOrderDTO, existingOrder);
 

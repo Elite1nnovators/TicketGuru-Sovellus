@@ -9,7 +9,6 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
 import com.eliteinnovators.ticketguru.ticketguru_app.exception.TicketNotFoundException;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventTicketTypeRepository;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
 
 // TODO TicketDto
@@ -21,9 +20,6 @@ public class TicketService {
 
     @Autowired
     private EventTicketTypeRepository eventTicketTypeRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
 
     // Haetaan kaikki liput
     public List<Ticket> getAllTickets() {

@@ -1,7 +1,6 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
-import com.eliteinnovators.ticketguru.ticketguru_app.mapper.EventMapper;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +18,6 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
-
-    @Autowired
-    private EventMapper eventMapper;
-
     
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
