@@ -1,5 +1,7 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,11 +21,13 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference(value = "order-ticket")
     private Order order;
 
     @NotNull(message = "Ticket: EventTicketType is required for the ticket")
     @ManyToOne
     @JoinColumn(name = "eventTicketType_id")
+    @JsonBackReference(value = "eventTicketType-ticket")
     private EventTicketType eventTicketType;
     
     public Ticket() {}
