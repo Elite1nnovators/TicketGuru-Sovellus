@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.*;
@@ -29,22 +30,28 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     // ORDER REST -ENDPOINTIT
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
     @GetMapping("/orders")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllOrders());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
     @GetMapping("/orders/{orderId}")
     public ResponseEntity<OrderDTO> getOrderById(@Valid @PathVariable Long orderId) {
         OrderDTO orderDTO = orderService.getOrderById(orderId);
         return ResponseEntity.status(HttpStatus.OK).body(orderDTO);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/orders")
     public ResponseEntity<OrderDTO> newOrder(@Valid @RequestBody OrderDTO newOrderDTO) {
         OrderDTO createdOrderDTO = orderService.newOrder(newOrderDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderDTO);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/orders/{orderId}")
     public ResponseEntity<OrderDTO> editOrder(@RequestBody OrderDTO editedOrderDTO, @PathVariable Long orderId) {
         Order editedOrder = orderService.editOrder(editedOrderDTO, orderId);
@@ -52,6 +59,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedOrderDTO);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PatchMapping("/orders/{orderId}")
     public ResponseEntity<OrderDTO> patchOrder(@RequestBody OrderDTO patchOrderDTO, @PathVariable Long orderId) {
         Order patchedOrder = orderService.patchOrder(patchOrderDTO, orderId);
@@ -59,6 +67,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedOrderDTO);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("orders/{orderId}")
     public ResponseEntity<Object> deleteOrder(@PathVariable("orderId") Long orderId) {
         orderRepository.deleteById(orderId);
