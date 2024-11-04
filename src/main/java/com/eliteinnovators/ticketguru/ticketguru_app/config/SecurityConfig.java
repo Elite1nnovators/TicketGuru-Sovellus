@@ -29,12 +29,14 @@ public class SecurityConfig {
             )
         .httpBasic(Customizer.withDefaults());
 
+        http.headers(headers -> headers.frameOptions().sameOrigin());
+
     return http.build();
 }
 
 
 
-//--> "Admin & Salesperson" käyttäjätiedot (UserDetailsService)? TODO
+//--> "Admin & Salesperson" käyttäjätiedot (UserDetailsService)?
     @Bean
     public UserDetailsService userDetailsService() {
         var userDetailsManager = new InMemoryUserDetailsManager();
