@@ -2,10 +2,12 @@ package com.eliteinnovators.ticketguru.ticketguru_app.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
@@ -72,6 +74,20 @@ public class TicketService {
         .orElseThrow(() -> new TicketNotFoundException("Ticket with code " + ticketCode + " not found"));
     }
         
+    @Transactional
+    public Ticket patchTicketByTicketCode(String ticketCode, Map<String, Object> updates) {
+        Ticket ticket = getTicketByCode(ticketCode);
+
+        if (updates.containsKey("ticketCode")) {
+            ticket.setTicketCode((String) updates.get("ticketCode"));
+        }
+    
+        if (updates.containsKey("isValid")) {
+            ticket.setValid((boolean) updates.get("isValid"));
+        }
+
+        return ticketRepository.save(ticket);
+    }
 
 
 }

@@ -1,17 +1,19 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.TicketService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -51,11 +53,18 @@ public class TicketController {
     }
 
       // Hae liput lippukoodin mukaan
-    @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
+  //  @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
     @GetMapping("/tickets/ticketcode/{ticketCode}")
     public ResponseEntity<Ticket> getTicketByTicketCode(@PathVariable String ticketCode) {
         Ticket ticket = ticketService.getTicketByCode(ticketCode);
         return ResponseEntity.status(HttpStatus.OK).body(ticket);
+    }
+
+   // @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
+    @PatchMapping("/tickets/ticketcode/{ticketCode}")
+    public ResponseEntity<Ticket> patchTicketByTicketCode(@PathVariable String ticketCode, @RequestBody Map<String, Object> updates) {
+        Ticket patchedTicket = ticketService.patchTicketByTicketCode(ticketCode, updates);
+        return ResponseEntity.status(HttpStatus.OK).body(patchedTicket);
     }
     
     
