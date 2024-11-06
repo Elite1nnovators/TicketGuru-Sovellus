@@ -23,8 +23,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/tickets").hasAnyAuthority("ROLE_SALESPERSON", "ROLE_ADMIN")
-            .requestMatchers("/orders").hasAnyAuthority("ROLE_SALESPERSON", "ROLE_ADMIN") // TODO lisää esto että vain ADMIN voi suorittaa DELETE (Service-luokassa)
+            .requestMatchers("/tickets").hasAnyRole("SALESPERSON", "ADMIN")
+            .requestMatchers("/orders").hasAnyRole("SALESPERSON", "ADMIN") // TODO lisää esto että vain ADMIN voi suorittaa DELETE (Service-luokassa)
             .requestMatchers("/events").permitAll() // TODO lisää estot että vain ADMIN voi suorittaa POST/PUT/DELETE (Service-luokassa)
             .anyRequest().permitAll()
             )
