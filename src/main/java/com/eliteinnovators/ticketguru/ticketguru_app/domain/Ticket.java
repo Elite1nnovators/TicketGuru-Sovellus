@@ -21,7 +21,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    @JsonBackReference(value = "order-ticket")
+    @JsonBackReference(value = "order-tickets")
     private Order order;
 
     @NotNull(message = "Ticket: EventTicketType is required for the ticket")
