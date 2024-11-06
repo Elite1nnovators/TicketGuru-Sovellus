@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a6fcc71e-5e60-412b-ae7f-3a3998a6c011",
+		"_postman_id": "2ce3514b-5130-4eec-8297-46b193383655",
 		"name": "TICKETGURU",
 		"description": "TODO : PATCH ja PUT-pyyntöjen korjaus koodissa.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -93,12 +93,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/orders",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders"
 									]
@@ -146,12 +144,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/orders",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders"
 									]
@@ -205,12 +201,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/orders/2",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/2",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"2"
@@ -274,12 +268,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/orders",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders"
 									]
@@ -345,12 +337,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/orders/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"1"
@@ -414,12 +404,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/orders/2",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/2",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"2"
@@ -477,12 +465,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/orders/2",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/2",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"2"
@@ -578,12 +564,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/orders",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders"
 									]
@@ -637,12 +621,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/orders/2",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/2",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"2"
@@ -691,12 +673,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/orders/2",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/2",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"2"
@@ -760,12 +740,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/orders",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders"
 									]
@@ -828,12 +806,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/orders/2",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/2",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"2"
@@ -897,12 +873,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/orders/2",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/2",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"2"
@@ -919,7 +893,7 @@
 									"script": {
 										"exec": [
 											"pm.test(\"Response status code is 403 for forbidden access\", function () {\r",
-											"    pm.response.to.have.status(401);\r",
+											"    pm.response.to.have.status(403);\r",
 											"});\r",
 											"\r",
 											"pm.test(\"Response body includes the message 'forbidden' for forbidden access\", function () {\r",
@@ -933,8 +907,11 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"packages": {},
-										"type": "text/javascript"
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -966,12 +943,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/orders/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/orders/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"orders",
 										"1"
@@ -1033,12 +1008,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/tickets",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/tickets",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"tickets"
 									]
@@ -1088,12 +1061,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/tickets/event/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/tickets/event/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"tickets",
 										"event",
@@ -1144,12 +1115,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/tickets/event/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/tickets/event/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"tickets",
 										"event",
@@ -1201,12 +1170,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/tickets/order/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/tickets/order/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"tickets",
 										"order",
@@ -1263,12 +1230,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/tickets/event/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/tickets/event/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"tickets",
 										"event",
@@ -1320,12 +1285,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/tickets/order/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/tickets/order/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"tickets",
 										"order",
@@ -1377,12 +1340,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/tickets",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/tickets",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"tickets"
 									]
@@ -1432,12 +1393,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/tickets",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/tickets",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"tickets"
 									]
@@ -1497,12 +1456,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events"
 									]
@@ -1551,12 +1508,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events"
 									]
@@ -1606,12 +1561,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"1"
@@ -1662,12 +1615,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events/search?=helsinki",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/search?=helsinki",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"search"
@@ -1737,12 +1688,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/events",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events"
 									]
@@ -1805,12 +1754,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"1"
@@ -1874,12 +1821,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"1"
@@ -1937,12 +1882,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"1"
@@ -1998,12 +1941,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events"
 									]
@@ -2053,12 +1994,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"1"
@@ -2109,12 +2048,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events/search?=helsinki",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/search?=helsinki",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"search"
@@ -2177,12 +2114,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/events",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events"
 									]
@@ -2238,12 +2173,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"1"
@@ -2300,12 +2233,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/events/1",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/1",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"1"
@@ -2353,12 +2284,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/events/2",
-									"protocol": "http",
+									"raw": "{{BASE_URL}}/events/2",
 									"host": [
-										"localhost"
+										"{{BASE_URL}}"
 									],
-									"port": "8080",
 									"path": [
 										"events",
 										"2"
