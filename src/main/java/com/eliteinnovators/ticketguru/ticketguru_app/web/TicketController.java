@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.TicketService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class TicketController {
@@ -47,6 +49,15 @@ public class TicketController {
         List<Ticket> tickets = ticketService.getTicketsByOrder(orderId);
         return ResponseEntity.status(HttpStatus.OK).body(tickets);
     }
+
+      // Hae liput lippukoodin mukaan
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
+    @GetMapping("/tickets/ticketcode/{ticketCode}")
+    public ResponseEntity<Ticket> getTicketByTicketCode(@PathVariable String ticketCode) {
+        Ticket ticket = ticketService.getTicketByCode(ticketCode);
+        return ResponseEntity.status(HttpStatus.OK).body(ticket);
+    }
+    
     
 
 }

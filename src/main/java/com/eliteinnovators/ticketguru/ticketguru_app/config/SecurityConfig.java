@@ -2,6 +2,7 @@ package com.eliteinnovators.ticketguru.ticketguru_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -22,7 +23,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/tickets").hasAnyAuthority("ROLE_SALESPERSON", "ROLE_ADMIN") 
+            .requestMatchers("/tickets").hasAnyAuthority("ROLE_SALESPERSON", "ROLE_ADMIN")
             .requestMatchers("/orders").hasAnyAuthority("ROLE_SALESPERSON", "ROLE_ADMIN") // TODO lisää esto että vain ADMIN voi suorittaa DELETE (Service-luokassa)
             .requestMatchers("/events").permitAll() // TODO lisää estot että vain ADMIN voi suorittaa POST/PUT/DELETE (Service-luokassa)
             .anyRequest().permitAll()
