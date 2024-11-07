@@ -1016,6 +1016,8 @@ Voit päivittää `salespersonId`.
     }
     ```
 
+</details>
+
 
 ## Lippujen (Ticket) API-pyynnöt
 
@@ -1197,7 +1199,6 @@ Vastaus:
   "isValid": false
 }
 ```
-</details>
 
 * **Paluukoodit**:
  - 200 OK - Kutsu onnistui, lipun tiedot päivitettiin.
@@ -1213,6 +1214,7 @@ Vastaus:
         "valid": false
     }
 ```
+</details>
 
 # Autentikaatio
 
