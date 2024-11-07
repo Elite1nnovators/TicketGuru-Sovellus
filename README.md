@@ -1016,11 +1016,203 @@ Voit päivittää `salespersonId`.
     }
     ```
 
-- **Käyttäjäoikeudet**:
 
-  - API ei tällä hetkellä käsittele käyttäjäoikeuksia (kuten `403 Forbidden` -virhettä). Tämä voidaan lisätä myöhemmin, jos tarvitaan.
+## Lippujen (Ticket) API-pyynnöt
+
+### CORS ominaisuudet
+
+Tähän sovellukseen on määritetty CORS-säännöt seuraavasti:
+- Endpoint `/tickets/ticketcode/**` on julkisesti saatavilla, eikä se vaadi autentikointia. Tämä endpoint sallii kaikki alkuperät (`*`) ja seuraavat metodit: `GET` ja `PATCH`.
+- Kaikki muut `TicketController`-endpointit ovat suojattuja ja vaativat käyttäjäroolin (`ADMIN` tai `SALESPERSON`). Näitä ei ole avattu julkisesti CORS-säännöissä.
+- Lisätietoja CORS-määrityksistä löytyy sovelluksen lähdekoodista `SecurityConfig`-luokasta.
+
+<details> <summary>Hae kaikki liput (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickets`
+* **Käyttöoikeudet**: ADMIN, SALESPERSON
+* **Paluukoodit**:
+ - 200 OK - Kutsu onnistui, liput löytyivät.
+ - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+ - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+
+Vastaus:
+
+```
+[
+    {
+        "id": 4,
+        "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
+        "valid": true
+    },
+    {
+        "id": 5,
+        "ticketCode": "abdb4c97-c258-49e5-85e5-6c9b4df1cb36",
+        "valid": true
+    },
+    {
+        "id": 6,
+        "ticketCode": "6c51d8f2-59c3-4780-9b22-2d6cd974d9d9",
+        "valid": true
+    }
+]
+```
 </details>
-<br/>
+
+<details> <summary>Hae lippu ID:n perusteella (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickets/{id}`
+* **Käyttöoikeudet**: ADMIN, SALESPERSON
+* **Paluukoodit**:
+ - 200 OK - Kutsu onnistui, lippu löytyi.
+ - 400 Bad Request - Id ei ole kelvollinen (esim. väärässä muodossa).
+ - 404 Not Found - Lippua ei löydy annetulla Id:llä.
+ - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+ - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+
+#### **Vastaus**
+
+```
+{
+        "id": 6,
+        "ticketCode": "6c51d8f2-59c3-4780-9b22-2d6cd974d9d9",
+        "valid": true
+    }
+```
+</details>
+
+<details> <summary>Hae liput tapahtuman mukaan (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickets/event/{eventId}`
+* **Käyttöoikeudet**: ADMIN, SALESPERSON
+* **Paluukoodit**:
+ - 200 OK - Kutsu onnistui, lippu löytyi.
+ - 400 Bad Request - Tapahtuman id ei ole kelvollinen (esim. väärässä muodossa).
+ - 404 Not Found - Lippua ei löydy annetulla tapahtuman id:llä.
+ - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+ - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+
+#### Vastaus:
+
+```
+[
+    {
+        "id": 4,
+        "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
+        "valid": true
+    },
+    {
+        "id": 5,
+        "ticketCode": "abdb4c97-c258-49e5-85e5-6c9b4df1cb36",
+        "valid": true
+    },
+    {
+        "id": 7,
+        "ticketCode": "08d99549-1009-4b5a-90e4-3b60f7ee5d56",
+        "valid": true
+    },
+    {
+        "id": 8,
+        "ticketCode": "60c19382-d3b9-4511-b28f-8eaa7c2eba61",
+        "valid": true
+    },
+    {
+        "id": 10,
+        "ticketCode": "7b0bbe91-ef65-4758-80de-373c7e23146e",
+        "valid": true
+    }
+]
+```
+</details>
+
+<details> <summary>Hae liput tilauksen mukaan (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickets/order/{orderId}`
+* **Käyttöoikeudet**: ADMIN, SALESPERSON
+* **Paluukoodit**:
+ - 200 OK - Kutsu onnistui, lippu löytyi.
+ - 400 Bad Request - Tilauksen id ei ole kelvollinen (esim. väärässä muodossa).
+ - 404 Not Found - Lippua ei löydy annetulla tilauseb id:llä.
+ - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+ - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+
+#### Vastaus:
+
+```
+[
+    {
+        "id": 4,
+        "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
+        "valid": true
+    },
+    {
+        "id": 5,
+        "ticketCode": "abdb4c97-c258-49e5-85e5-6c9b4df1cb36",
+        "valid": true
+    },
+    {
+        "id": 6,
+        "ticketCode": "6c51d8f2-59c3-4780-9b22-2d6cd974d9d9",
+        "valid": true
+    }
+]
+```
+</details>
+
+<details> <summary>Hae lippu lippukoodin perusteella (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickets/ticketcode/{ticketCode}`
+* **Käyttöoikeudet**: Julkinen (ei vaadi autentikointia)
+* **Paluukoodit**:
+ - 200 OK - Kutsu onnistui, lippu löytyi.
+ - 400 Bad Request - Lippukoodi ei ole kelvollinen (esim. väärässä muodossa).
+ - 404 Not Found - Lippua ei löydy annetulla lippukoodilla.
+
+#### Vastaus:
+
+```
+    {
+        "id": 4,
+        "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
+        "valid": true
+    }
+```
+  
+</details>
+
+<details> <summary>Päivitä lippukoodin tiedot (PATCH)</summary>
+
+* **Metodi**: PATCH
+* **Polku**: `/tickets/ticketcode/{ticketCode}`
+* **Käyttöoikeudet**: Julkinen (ei vaadi autentikointia)
+
+#### Pyynnön runko:
+
+```
+{
+  "isValid": false
+}
+```
+</details>
+
+* **Paluukoodit**:
+ - 200 OK - Kutsu onnistui, lipun tiedot päivitettiin.
+ - 400 Bad Request - Pyyntö on puutteellinen tai sisältää virheellistä tietoa (esim. päivitettävät kentät puuttuvat).
+ - 404 Not Found - Lippua ei löydy annetulla lippukoodilla.
+
+#### Vastaus:
+
+```
+{
+        "id": 4,
+        "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
+        "valid": false
+    }
+```
 
 # Autentikaatio
 
