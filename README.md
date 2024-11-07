@@ -1186,7 +1186,7 @@ Vastaus:
   
 </details>
 
-<details> <summary>Päivitä lippukoodin tiedot (PATCH)</summary>
+<details> <summary>Päivitä lipun tietoja lippukoodin perusteella (PATCH)</summary>
 
 * **Metodi**: PATCH
 * **Polku**: `/tickets/ticketcode/{ticketCode}`
