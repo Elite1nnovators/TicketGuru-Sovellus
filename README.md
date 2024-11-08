@@ -1021,12 +1021,13 @@ Voit päivittää `salespersonId`.
 
 ## Lippujen (Ticket) API-pyynnöt
 
-### CORS ominaisuudet
+<details><summary>### CORS ominaisuudet</summary>
 
 Tähän sovellukseen on määritetty CORS-säännöt seuraavasti:
-- Endpoint `/tickets/ticketcode/**` on julkisesti saatavilla, eikä se vaadi autentikointia. Tämä endpoint sallii kaikki alkuperät (`*`) ja seuraavat metodit: `GET` ja `PATCH`.
+- Endpoint `/tickets/event/**` on julkisesti saatavilla, eikä se vaadi autentikointia. Tämä endpoint sallii kaikki alkuperät (`*`) ja seuraavat metodit: `GET` ja `PATCH`.
 - Kaikki muut `TicketController`-endpointit ovat suojattuja ja vaativat käyttäjäroolin (`ADMIN` tai `SALESPERSON`). Näitä ei ole avattu julkisesti CORS-säännöissä.
 - Lisätietoja CORS-määrityksistä löytyy sovelluksen lähdekoodista `SecurityConfig`-luokasta.
+</details>
 
 <details> <summary>Hae kaikki liput (GET)</summary>
 
@@ -1084,17 +1085,17 @@ Vastaus:
 ```
 </details>
 
-<details> <summary>Hae liput tapahtuman mukaan (GET)</summary>
+<details> <summary>Hae liput/lippu tapahtuman mukaan (GET)</summary>
 
 * **Metodi**: GET
 * **Polku**: `/tickets/event/{eventId}`
-* **Käyttöoikeudet**: ADMIN, SALESPERSON
+* **Käyttöoikeudet**: Julkinen (Ei vaadi autentikointia)
+* **Pyyntöparamtrit**:
+  - `ticketCode` (valinnainen query-parametri): Syötettäessä, palautetaan vain kyseisen lipun tiedot
 * **Paluukoodit**:
  - 200 OK - Kutsu onnistui, lippu löytyi.
  - 400 Bad Request - Tapahtuman id ei ole kelvollinen (esim. väärässä muodossa).
- - 404 Not Found - Lippua ei löydy annetulla tapahtuman id:llä.
- - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
- - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+ - 404 Not Found - Tapahtumaa tai lippua ei löydy annetuilla tiedoilla.
 
 #### Vastaus:
 
@@ -1126,6 +1127,37 @@ Vastaus:
         "valid": true
     }
 ]
+```
+</details>
+
+<details> <summary>Merkitse lippu käytetyksi (PATCH)</summary>
+
+* **Metodi**: PATCH
+* **Polku**: `/tickets/event/{eventId}`
+* **Käyttöoikeudet**: Julkinen (ei vaadi autentikointia)
+* **Pyyntöparametrit**:
+  - `eventId` (pakollinen): Tapahtuman id, jonka lippua halutaan päivittää.
+  - `ticketCode` (pakollinen): Lippukoodi, jonka tietoja halutaan päivittää.
+
+#### Pyynnön runko:
+
+```
+{}
+```
+
+* **Paluukoodit**:
+ - 200 OK - Kutsu onnistui, lipun tiedot päivitettiin ja lippu merkittiin käytetyksi (`isValid` on asetettu automaattisesti `false`).	
+ - 400 Bad Request - Pyyntö on puutteellinen tai lippu on jo käytetty.
+ - 404 Not Found - Tapahtumaa ei löydy ID:llä tai lippua ei löydy annetulla lippukoodilla.
+
+#### Vastaus:
+
+```
+{
+        "id": 4,
+        "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
+        "valid": false
+    }
 ```
 </details>
 
@@ -1164,57 +1196,6 @@ Vastaus:
 ```
 </details>
 
-<details> <summary>Hae lippu lippukoodin perusteella (GET)</summary>
-
-* **Metodi**: GET
-* **Polku**: `/tickets/ticketcode/{ticketCode}`
-* **Käyttöoikeudet**: Julkinen (ei vaadi autentikointia)
-* **Paluukoodit**:
- - 200 OK - Kutsu onnistui, lippu löytyi.
- - 400 Bad Request - Lippukoodi ei ole kelvollinen (esim. väärässä muodossa).
- - 404 Not Found - Lippua ei löydy annetulla lippukoodilla.
-
-#### Vastaus:
-
-```
-    {
-        "id": 4,
-        "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
-        "valid": true
-    }
-```
-  
-</details>
-
-<details> <summary>Päivitä lipun tietoja lippukoodin perusteella (PATCH)</summary>
-
-* **Metodi**: PATCH
-* **Polku**: `/tickets/ticketcode/{ticketCode}`
-* **Käyttöoikeudet**: Julkinen (ei vaadi autentikointia)
-
-#### Pyynnön runko:
-
-```
-{
-  "isValid": false
-}
-```
-
-* **Paluukoodit**:
- - 200 OK - Kutsu onnistui, lipun tiedot päivitettiin.
- - 400 Bad Request - Pyyntö on puutteellinen tai sisältää virheellistä tietoa (esim. päivitettävät kentät puuttuvat).
- - 404 Not Found - Lippua ei löydy annetulla lippukoodilla.
-
-#### Vastaus:
-
-```
-{
-        "id": 4,
-        "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
-        "valid": false
-    }
-```
-</details>
 
 # Autentikaatio
 

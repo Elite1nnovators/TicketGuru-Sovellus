@@ -70,13 +70,15 @@ public class TicketguruAppApplication {
             );
 
             // 7. Create a new order using the OrderService
-            try {
+         /* Tämä kommentoitu pois, sillä luo aina uuden tilauksen käynnistyessään
+             try {
                 OrderDTO createdOrder = orderService.newOrder(orderDTO);
                 System.out.println("Created Order: " + createdOrder);
             } catch (DataIntegrityViolationException e) {
                 System.out.println("Order already exists or data integrity violation occurred.");
-            }
+            } */
         };
+
     }
 
 }

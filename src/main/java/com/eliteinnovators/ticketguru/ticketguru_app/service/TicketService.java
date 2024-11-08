@@ -69,25 +69,39 @@ public class TicketService {
     }
 
     // Hae lippukoodin mukaan
-    public Ticket getTicketByCode(String ticketCode) {
-        return ticketRepository.findByTicketCode(ticketCode)
+    public Ticket getTicketByEventAndCode(Long eventId, String ticketCode) {
+        return ticketRepository.findByEventTicketType_Event_EventIdAndTicketCode(eventId, ticketCode)
+        .stream()
+        .findFirst()
         .orElseThrow(() -> new TicketNotFoundException("Ticket with code " + ticketCode + " not found"));
     }
         
     @Transactional
-    public Ticket patchTicketByTicketCode(String ticketCode, Map<String, Object> updates) {
-        Ticket ticket = getTicketByCode(ticketCode);
+    public Ticket patchTicketByTicketCode(String ticketCode, Long eventId, Map<String, Object> updates) {
+        Ticket ticket = ticketRepository.findByTicketCode(ticketCode)
+        .orElseThrow(() -> new TicketNotFoundException("Ticket with code " + ticketCode + " not found"));
 
-        if (updates.containsKey("ticketCode")) {
-            ticket.setTicketCode((String) updates.get("ticketCode"));
+        if (!ticket.getEventTicketType().getEvent().getEventId().equals(eventId)) {
+            throw new TicketNotFoundException("Ticket with code " + ticketCode + " does not belong to event " + eventId);
         }
-    
-        if (updates.containsKey("isValid")) {
-            ticket.setValid((boolean) updates.get("isValid"));
+        if (!ticket.isValid()) {
+            throw new IllegalStateException("Ticket with code " + ticketCode + " has already been used");
         }
 
+        ticket.setValid(false);
+
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "ticketCode":
+                    ticket.setTicketCode((String) value);
+                default:
+                    throw new IllegalArgumentException("Invalid update key: " + key);
+            }
+        });
+        
         return ticketRepository.save(ticket);
     }
+        
 
 
 }

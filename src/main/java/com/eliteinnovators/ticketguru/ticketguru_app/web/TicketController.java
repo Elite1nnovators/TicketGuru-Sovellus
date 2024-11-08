@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.TicketService;
@@ -36,12 +37,16 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(ticket);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
     // Hae liput tapahtuman mukaan
     @GetMapping("/tickets/event/{eventId}")
-    public ResponseEntity<List<Ticket>> getTicketsByEvent(@PathVariable Long eventId) {
+    public ResponseEntity<?> getTicketsByEventAndTicketCode(@PathVariable Long eventId, @RequestParam(required = false) String ticketCode) {
+        if (ticketCode != null) {
+            Ticket ticket = ticketService.getTicketByEventAndCode(eventId, ticketCode);
+            return ResponseEntity.status(HttpStatus.OK).body(ticket);
+        } else {
         List<Ticket> tickets = ticketService.getTicketsByEvent(eventId);
         return ResponseEntity.status(HttpStatus.OK).body(tickets);
+        }
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
@@ -52,18 +57,10 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(tickets);
     }
 
-      // Hae liput lippukoodin mukaan
-  //  @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
-    @GetMapping("/tickets/ticketcode/{ticketCode}")
-    public ResponseEntity<Ticket> getTicketByTicketCode(@PathVariable String ticketCode) {
-        Ticket ticket = ticketService.getTicketByCode(ticketCode);
-        return ResponseEntity.status(HttpStatus.OK).body(ticket);
-    }
 
-   // @PreAuthorize("hasAnyRole('ADMIN', 'SALESPERSON')")
-    @PatchMapping("/tickets/ticketcode/{ticketCode}")
-    public ResponseEntity<Ticket> patchTicketByTicketCode(@PathVariable String ticketCode, @RequestBody Map<String, Object> updates) {
-        Ticket patchedTicket = ticketService.patchTicketByTicketCode(ticketCode, updates);
+    @PatchMapping("/tickets/event/{eventId}")
+    public ResponseEntity<Ticket> patchTicketByTicketCode(@PathVariable Long eventId, @RequestParam String ticketCode, @RequestBody Map<String, Object> updates) {
+        Ticket patchedTicket = ticketService.patchTicketByTicketCode(ticketCode, eventId, updates);
         return ResponseEntity.status(HttpStatus.OK).body(patchedTicket);
     }
     
