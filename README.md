@@ -398,8 +398,7 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 
 ## REST API dokumentaatio
 
-**Base URL: kehityksen aikana käytettävä base URL on http://localhost:8080/**
-**BASE URL: sovellus on julkaistu Rahti2 palvelussa ja API pyynnöt käytettävissä https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi**
+**Base URL: sovellus on julkaistu Rahti2 palvelussa ja API pyynnöt käytettävissä https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi**
 
 
 <details>
