@@ -1022,7 +1022,7 @@ Voit päivittää `salespersonId`.
 
 ## Lippujen (Ticket) API-pyynnöt
 
-<details><summary>### CORS ominaisuudet</summary>
+<details><summary>CORS ominaisuudet</summary>
 
 Tähän sovellukseen on määritetty CORS-säännöt seuraavasti:
 - Endpoint `/tickets/event/**` on julkisesti saatavilla, eikä se vaadi autentikointia. Tämä endpoint sallii kaikki alkuperät (`*`) ja seuraavat metodit: `GET` ja `PATCH`.
