@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Ticket Client</title>
+</head>
+<body>
+  <h1>Ticket Client</h1>
+  <div>
+    <h2>Fetch Ticket by Code</h2>
+    <input type="text" id="ticketCode" placeholder="Enter ticket code">
+    <button onclick="fetchTicket()">Fetch Ticket</button>
+    <pre id="ticketResult"></pre>
+  </div>
+  <div>
+    <h2>Mark Ticket as Used</h2>
+    <button onclick="markTicketAsUsed()">Mark as Used</button>
+    <pre id="useTicketResult"></pre>
+  </div>
+  <script>
+    async function fetchTicket() {
+  const code = document.getElementById('ticketCode').value;
+  const response = await fetch(`https://ticket-guruver2-bugivelhot-ticketguru.2.rahtiapp.fi/api/liput?koodi=${code}`);
+
+  if (!response.ok) {
+    document.getElementById('ticketResult').textContent = 'Error: Failed to fetch the ticket. Please try again.';
+    return;
+  }
+
+  const data = await response.json();
+
+  // Tarkistaa, onko lippu löytynyt
+  if (data && Object.keys(data).length > 0) {
+    document.getElementById('ticketResult').textContent = `Ticket found: ${JSON.stringify(data, null, 2)}`;
+  } else {
+    document.getElementById('ticketResult').textContent = 'No ticket found with the provided code.';
+  }
+}
+
+    async function markTicketAsUsed() {
+  const code = document.getElementById('ticketCode').value;
+  const response = await fetch(`https://ticket-guruver2-bugivelhot-ticketguru.2.rahtiapp.fi/api/liput/${code}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tila: 0 }) // Tämän pitäisi päivittää 'tila' kentän arvoon 0
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    document.getElementById('useTicketResult').textContent = JSON.stringify(result, null, 2);
+  } else {
+    document.getElementById('useTicketResult').textContent = `Error: ${response.statusText}`;
+  }
+}
+
+  </script>
+</body>
+</html>
