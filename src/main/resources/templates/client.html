@@ -17,41 +17,62 @@
     <pre id="useTicketResult"></pre>
   </div>
   <script>
+    // Käyttäjätunnus ja salasana
+    const username = 'user';
+    const password = 'user';
+
+    // Funktio, joka luo Authorization-headerin perusautentikointia varten
+    function getAuthHeader() {
+      const credentials = `${username}:${password}`;
+      const encodedCredentials = btoa(credentials); // Base64-koodaus
+      return {
+        'Authorization': `Basic ${encodedCredentials}`
+      };
+    }
+
+    // Funktio lipun hakemiseen
     async function fetchTicket() {
-  const code = document.getElementById('ticketCode').value;
-  const response = await fetch(`https://ticket-guruver2-bugivelhot-ticketguru.2.rahtiapp.fi/api/liput?koodi=${code}`);
+      const code = document.getElementById('ticketCode').value;
+      console.log("Fetching ticket with code:", code);
 
-  if (!response.ok) {
-    document.getElementById('ticketResult').textContent = 'Error: Failed to fetch the ticket. Please try again.';
-    return;
-  }
+      const response = await fetch(`https://ticket-guruver2-bugivelhot-ticketguru.2.rahtiapp.fi/api/liput?koodi=${code}`, {
+        headers: getAuthHeader()  // Lisää autentikointitiedot headeriin
+      });
 
-  const data = await response.json();
+      if (!response.ok) {
+        document.getElementById('ticketResult').textContent = 'Error: Failed to fetch the ticket.';
+        return;
+      }
 
-  // Tarkistaa, onko lippu löytynyt
-  if (data && Object.keys(data).length > 0) {
-    document.getElementById('ticketResult').textContent = `Ticket found: ${JSON.stringify(data, null, 2)}`;
-  } else {
-    document.getElementById('ticketResult').textContent = 'No ticket found with the provided code.';
-  }
-}
+      const data = await response.json();
+      if (data && Object.keys(data).length > 0) {
+        document.getElementById('ticketResult').textContent = `Ticket found: ${JSON.stringify(data, null, 2)}`;
+      } else {
+        document.getElementById('ticketResult').textContent = 'No ticket found with the provided code.';
+      }
+    }
 
+    // Funktio lipun merkitsemiseen käytetyksi
     async function markTicketAsUsed() {
-  const code = document.getElementById('ticketCode').value;
-  const response = await fetch(`https://ticket-guruver2-bugivelhot-ticketguru.2.rahtiapp.fi/api/liput/${code}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ tila: 0 }) // Tämän pitäisi päivittää 'tila' kentän arvoon 0
-  });
+      const code = document.getElementById('ticketCode').value;
+      console.log("Marking ticket as used with code:", code);
 
-  if (response.ok) {
-    const result = await response.json();
-    document.getElementById('useTicketResult').textContent = JSON.stringify(result, null, 2);
-  } else {
-    document.getElementById('useTicketResult').textContent = `Error: ${response.statusText}`;
-  }
-}
+      const response = await fetch(`https://ticket-guruver2-bugivelhot-ticketguru.2.rahtiapp.fi/api/liput/${code}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeader()  // Lisää autentikointitiedot headeriin
+        },
+        body: JSON.stringify({ tila: 0 })
+      });
 
+      if (response.ok) {
+        const result = await response.json();
+        document.getElementById('useTicketResult').textContent = JSON.stringify(result, null, 2);
+      } else {
+        document.getElementById('useTicketResult').textContent = `Error: ${response.statusText}`;
+      }
+    }
   </script>
 </body>
 </html>
