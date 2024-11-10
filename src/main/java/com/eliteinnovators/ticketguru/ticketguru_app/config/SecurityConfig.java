@@ -78,14 +78,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); //CLIENT SOVELLUKSEN OSOITE
-        configuration.setAllowedMethods(List.of("GET", "PATCH"));
-        configuration.setAllowedHeaders(List.of("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/tickets/event/**", configuration);
+CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration generalConfiguration = new CorsConfiguration();
+    generalConfiguration.setAllowedOrigins(List.of("*")); //CLIENT SOVELLUKSEN OSOITE
+    generalConfiguration.setAllowedMethods(List.of("GET", "PATCH")); 
+    generalConfiguration.setAllowedHeaders(List.of("*"));
+
+    CorsConfiguration eventsConfiguration = new CorsConfiguration();
+    eventsConfiguration.setAllowedOrigins(List.of("*")); 
+    eventsConfiguration.setAllowedMethods(List.of("GET")); 
+    eventsConfiguration.setAllowedHeaders(List.of("*"));
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/tickets/event/**", generalConfiguration); 
+    source.registerCorsConfiguration("/events", eventsConfiguration); 
+
     return source;
+
     }
 
 }
