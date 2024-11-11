@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <br>
+    <button type="button" onclick="login()">Login</button>
+  </form>
+
+  <script>
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Tallennetaan käyttäjätunnus ja salasana sessionStorageen
+      sessionStorage.setItem('username', username);
+      sessionStorage.setItem('password', password);
+
+      // Ohjataan käyttäjä client-sivulle
+      window.location.href = '/client';
+    }
+  </script>
+</body>
+</html>
