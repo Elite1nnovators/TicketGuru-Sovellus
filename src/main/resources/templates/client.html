@@ -5,22 +5,30 @@
 </head>
 <body>
   <h1>Ticket Client</h1>
+
   <div>
     <h2>Fetch Ticket by Code</h2>
     <input type="text" id="ticketCode" placeholder="Enter ticket code">
     <button onclick="fetchTicket()">Fetch Ticket</button>
     <pre id="ticketResult"></pre>
   </div>
+
   <div>
     <h2>Mark Ticket as Used</h2>
     <button onclick="markTicketAsUsed()">Mark as Used</button>
     <pre id="useTicketResult"></pre>
   </div>
-  <script>
 
-    // Käyttäjätunnus ja salasana
-    const username = 'user';
-    const password = 'user';
+  <script>
+    // Hakee käyttäjätunnuksen ja salasanan sessionStoragesta
+    const username = sessionStorage.getItem('username');
+    const password = sessionStorage.getItem('password');
+
+    // Tarkistaa, onko käyttäjätiedot olemassa
+    if (!username || !password) {
+      // Jos tietoja ei ole, ohjataan käyttäjä takaisin login-sivulle
+      window.location.href = '/bugivelhot';
+    }
 
     // Funktio, joka luo Authorization-headerin perusautentikointia varten
     function getAuthHeader() {
@@ -90,3 +98,4 @@
   </script>
 </body>
 </html>
+
