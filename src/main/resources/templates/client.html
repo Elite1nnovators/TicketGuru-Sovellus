@@ -1,8 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ticket Client</title>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+  <style>
+    #reader {
+      width: 300px;
+      margin: auto;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 1.2em;
+    }
+  </style>
 </head>
+
 <body>
   <h1>Ticket Client</h1>
 
@@ -19,7 +37,19 @@
     <pre id="useTicketResult"></pre>
   </div>
 
+  <h2 style="text-align: center;">QR Code Reader</h2>
+  <div id="reader"></div>
+  <div id="result">Upload a QR-Code and scan</div>
+  <div id="upload-section" style="text-align: center; display: block; margin: 20px auto;">
+    <input type="file" accept="image/*" id="file-input" onchange="scanQRCodeFromFile(event)">
+
+
+  </div>
   <script>
+
+
+    
+
     // Hakee käyttäjätunnuksen ja salasanan sessionStoragesta
     const username = sessionStorage.getItem('username');
     const password = sessionStorage.getItem('password');
@@ -85,7 +115,7 @@
         body: JSON.stringify({ tila: 0 })  // Merkkaa lippu käytetyksi
       });
 
-      console.log("Response status:", response.status);  
+      console.log("Response status:", response.status);
       console.log("Response headers:", response.headers);
 
       if (response.ok) {
@@ -95,7 +125,26 @@
         document.getElementById('useTicketResult').textContent = `Error: ${response.statusText}`;
       }
     }
+
+    function scanQRCodeFromFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const html5QrCode = new Html5Qrcode("reader");
+
+      html5QrCode.scanFile(file, true)
+        .then(decodedText => {
+          document.getElementById("result").innerHTML = `QR Code Result: ${decodedText}`;
+        })
+        .catch(err => {
+          document.getElementById("result").innerHTML = `Error scanning file: ${err}`;
+        })
+        .finally(() => {
+          html5QrCode.clear();
+        });
+    }
+
   </script>
 </body>
-</html>
 
+</html>
