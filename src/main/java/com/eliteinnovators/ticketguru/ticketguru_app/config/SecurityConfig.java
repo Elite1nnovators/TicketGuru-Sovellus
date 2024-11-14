@@ -29,8 +29,8 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/tickets/event/**", "/resources").permitAll()
-            .requestMatchers("/tickets").hasAnyRole("SALESPERSON", "ADMIN")
+            .requestMatchers("/tickets/event/**", "/resources", "/login").permitAll()
+            .requestMatchers("/tickets", "/index", "/ticketdashboard").hasAnyRole("SALESPERSON", "ADMIN")
             .requestMatchers("/orders").hasAnyRole("SALESPERSON", "ADMIN") // TODO lisää esto että vain ADMIN voi suorittaa DELETE (Service-luokassa)
             .requestMatchers("/events").permitAll() // TODO lisää estot että vain ADMIN voi suorittaa POST/PUT/DELETE (Service-luokassa)
             .anyRequest().permitAll()
