@@ -59,6 +59,10 @@ public class EventTicketType {
     public TicketType getTicketType() {
         return ticketType;
     }
+    public List<Ticket> getTickets() {
+        return ticket;
+    }
+
     public void setTicketType(TicketType ticketType) {
         this.ticketType = ticketType;
     }
