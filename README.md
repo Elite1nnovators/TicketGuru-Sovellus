@@ -27,6 +27,16 @@
 
 8. **[Autentikaatio](#autentikaatio)**
 
+9. **[Testaus](#testaus)**
+   - [Database Access Layer](#database-access-layer)
+     - [Yhteyden toimivuus (DAL ↔ RDBMS)](#yhteyden-toimivuus-dal-rdbms)
+     - [SQL-kyselyjen oikeellisuus](#sql-kyselyjen-oikeellisuus)
+     - [SQL-kyselyjen suorituskyky](#sql-kyselyjen-suorituskyky)
+     - [Transaktioiden hallinta](#transaktioiden-hallinta)
+     - [Tietokannan konsistenssi ja eheys](#tietokannan-konsistenssi-ja-eheys)
+     - [Skalautuvuus](#skalautuvuus)
+
+
 # Johdanto
 Projektin tavoitteena on luoda lipunmyyntijärjestelmä (TicketGuru) lipputoimistolle, joka myy lippuja erilaisiin tapahtumiin omassa myyntipisteessään. Toistaiseksi myynti tapahtuu vain paikan päällä lipputoimistossa, mutta myöhemmin mahdollisesti myös verkkokaupan kautta. Järjestelmän tarkoituksena on, että lipputoimisto pystyy lipunmyynnin lisäksi hallinnoimaan ja tarkastelemaan myyntitapahtumia.
 
@@ -1412,3 +1422,21 @@ Sovelluksessa on otettu käyttöön virheenkäsittely autentikoinnin ja käyttö
 Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon tietoa ongelman syystä, jotta he voivat korjata virheet ja jatkaa sovelluksen käyttöä.
 
 </details>
+
+---
+
+# Testaus
+
+## Database Access Layer
+
+### Yhteyden toimivuus (DAL ↔ RDBMS)
+
+### SQL-kyselyjen oikeellisuus
+
+### SQL-kyselyjen suorituskyky
+
+### Transaktioiden hallinta
+
+### Tietokannan konsistenssi ja eheys
+
+### Skalautuvuus
