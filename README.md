@@ -1430,13 +1430,43 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
 ## Database Access Layer
 
 ### Yhteyden toimivuus (DAL ↔ RDBMS)
+- **Testattava:** Onko tietokantayhteys määritetty oikein? Toimiiko yhteys kaikissa käyttöolosuhteissa?
+- **Suoritetut testit:**
+  - **testDatabaseConnection**
+    - Testaa, että tietokantayhteys on voimassa ja toimii. Yhteys tarkistetaan kutsumalla `connection.isValid(2)`.
+    - **Tulos:** Testi varmistaa, että tietokantayhteys toimii odotetusti.
+  - **testDatabaseConnectionFailure**
+    - Testaa, että tietokantayhteys epäonnistuu virheellisiä asetuksia käyttäen (esim. virheellinen URL).
+    - **Tulos:** Testi varmistaa, että sovellus käsittelee epäonnistuneet yhteydet oikein heittämällä `SQLException`.
+
+---
 
 ### SQL-kyselyjen oikeellisuus
+- **Testattava:** Tuottavatko SQL-kyselyt oikeita ja odotettuja tuloksia?
+- **Suoritetut testit:**
+  - Testataan repositoriotesteissä.
+
+---
 
 ### SQL-kyselyjen suorituskyky
+- **Testattava:** Kuinka hyvin kyselyt suoriutuvat erilaisilla tietomäärillä? Mitä tapahtuu suurilla datamäärillä?
+- **Suoritetut testit:**
+  - **testQueryPerformance**
+    - Testaa, että `orderRepository.findAll()` suoritetaan alle sekunnissa.
+    - **Tulos:** Suorituskyky mitataan ja varmistetaan, että kysely ei ylitä hyväksyttävää kestoa.
+
+---
 
 ### Transaktioiden hallinta
+- **Testattava:** Toimivatko transaktiot oikein? Käsitelläänkö virhetilanteet oikein?
+- **Suoritetut testit:**
+  - Testataan repositoriotesteissä.
+
+---
 
 ### Tietokannan konsistenssi ja eheys
+- **Testattava:** Säilyvätkö tietokannan rajoitteet (esim. viite-eheys, uniikkius)?
+- **Suoritetut testit:**
+  - Testataan repositoriotesteissä.
 
-### Skalautuvuus
+---
