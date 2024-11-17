@@ -2,6 +2,31 @@
 
 [TicketGuru backlog -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=0#gid=0)
 
+# Sisällysluettelo
+
+1. **[Johdanto](#johdanto)**
+
+2. **[Järjestelmän määrittely](#järjestelmän-määrittely)**
+   - [Käyttäjäryhmät (roolit)](#käyttäjäryhmät-roolit)
+
+3. **[Käyttötapaukset ja käyttäjätarinat](#käyttötapaukset-ja-käyttäjätarinat)**
+   - [Käyttäjätarinat](#käyttäjätarinat)
+
+4. **[Yksityiskohtaiset vaatimukset](#yksityiskohtaiset-vaatimukset)**
+
+5. **[Käyttöliittymä](#käyttöliittymä)**
+   - [Käyttöliittymäkaavio](#käyttöliittymäkaavio)
+
+6. **[Tietokanta](#tietokanta)**
+   - [Tietokantakaavio](#tietokantakaavio)
+   - [Tietohakemisto](#tietohakemisto)
+
+7. **[REST API dokumentaatio](#rest-api-dokumentaatio)**
+   - [Myyntitapahtumien API-dokumentaatio](#myyntitapahtumien-api-dokumentaatio)
+   - [Lippujen (Ticket) API-pyynnöt](#lippujen-ticket-api-pyynnöt)
+
+8. **[Autentikaatio](#autentikaatio)**
+
 # Johdanto
 Projektin tavoitteena on luoda lipunmyyntijärjestelmä (TicketGuru) lipputoimistolle, joka myy lippuja erilaisiin tapahtumiin omassa myyntipisteessään. Toistaiseksi myynti tapahtuu vain paikan päällä lipputoimistossa, mutta myöhemmin mahdollisesti myös verkkokaupan kautta. Järjestelmän tarkoituksena on, että lipputoimisto pystyy lipunmyynnin lisäksi hallinnoimaan ja tarkastelemaan myyntitapahtumia.
 
