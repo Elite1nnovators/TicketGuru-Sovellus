@@ -1,29 +1,26 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
+
 import com.eliteinnovators.ticketguru.ticketguru_app.exception.InsufficientTicketsException;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
+
 import com.eliteinnovators.ticketguru.ticketguru_app.service.EventService;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.OrderService;
-import com.eliteinnovators.ticketguru.ticketguru_app.service.TicketService;
+
 
 @Controller
 public class ClientController {
@@ -34,8 +31,7 @@ public class ClientController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private TicketRepository ticketRepository;
+  
 
     @GetMapping("/bugivelhot")
     public String showLoginPage() {
