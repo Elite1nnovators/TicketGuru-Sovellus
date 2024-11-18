@@ -29,11 +29,20 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/tickets/event/**").permitAll()
-            .requestMatchers("/tickets").hasAnyRole("SALESPERSON", "ADMIN")
+            .requestMatchers("/tickets/event/**", "/resources", "/login").permitAll()
+            .requestMatchers("/tickets", "/index", "/ticketdashboard").hasAnyRole("SALESPERSON", "ADMIN")
             .requestMatchers("/orders").hasAnyRole("SALESPERSON", "ADMIN") // TODO lisää esto että vain ADMIN voi suorittaa DELETE (Service-luokassa)
             .requestMatchers("/events").permitAll() // TODO lisää estot että vain ADMIN voi suorittaa POST/PUT/DELETE (Service-luokassa)
             .anyRequest().permitAll()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/index", true)
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/index")
+                .permitAll()
             )
         .httpBasic(Customizer.withDefaults());
 
