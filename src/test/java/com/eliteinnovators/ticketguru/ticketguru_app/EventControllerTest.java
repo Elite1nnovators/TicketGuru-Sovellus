@@ -147,79 +147,78 @@ public class EventControllerTest {
 
         @Test
         public void testPutEvent() throws Exception {
-    
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date fixedDate = dateFormat.parse("2024-06-01");
-        
 
-            Event originalEvent = new Event("Concert", fixedDate, "Venue 1", "Helsinki", "Music Event");
-            originalEvent.setEventId(1L);
-        
-    
-            Event updatedEvent = new Event("Updated Concert", fixedDate, "New Venue", "Updated City", "Updated Music Event");
-            updatedEvent.setEventId(1L);
-        
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date fixedDate = dateFormat.parse("2024-06-01");
 
-            when(eventService.editEvent(Mockito.any(Event.class), Mockito.eq(1L))).thenReturn(updatedEvent);
-       
-            mockMvc.perform(put("/events/1")
-                            .contentType("application/json")
-                            .content("{ \"eventId\": 1, " +
-                                     "\"eventName\": \"Updated Concert\", " +
-                                     "\"eventDate\": \"2024-06-01\", " +
-                                     "\"eventAddress\": \"New Venue\", " +
-                                     "\"eventCity\": \"Updated City\", " +
-                                     "\"eventDescription\": \"Updated Music Event\" }"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.eventId").value(1))
-                    .andExpect(jsonPath("$.eventName").value("Updated Concert"))
-                    .andExpect(jsonPath("$.eventDate").value("2024-05-31T21:00:00.000+00:00"))  //Huomioitu aikaero
-                    .andExpect(jsonPath("$.eventAddress").value("New Venue"))
-                    .andExpect(jsonPath("$.eventCity").value("Updated City"))
-                    .andExpect(jsonPath("$.eventDescription").value("Updated Music Event"));
+                Event originalEvent = new Event("Concert", fixedDate, "Venue 1", "Helsinki", "Music Event");
+                originalEvent.setEventId(1L);
+
+                Event updatedEvent = new Event("Updated Concert", fixedDate, "New Venue", "Updated City",
+                                "Updated Music Event");
+                updatedEvent.setEventId(1L);
+
+                when(eventService.editEvent(Mockito.any(Event.class), Mockito.eq(1L))).thenReturn(updatedEvent);
+
+                mockMvc.perform(put("/events/1")
+                                .contentType("application/json")
+                                .content("{ \"eventId\": 1, " +
+                                                "\"eventName\": \"Updated Concert\", " +
+                                                "\"eventDate\": \"2024-06-01\", " +
+                                                "\"eventAddress\": \"New Venue\", " +
+                                                "\"eventCity\": \"Updated City\", " +
+                                                "\"eventDescription\": \"Updated Music Event\" }"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.eventId").value(1))
+                                .andExpect(jsonPath("$.eventName").value("Updated Concert"))
+                                .andExpect(jsonPath("$.eventDate").value("2024-05-31T21:00:00.000+00:00")) // Huomioitu
+                                                                                                           // aikaero
+                                .andExpect(jsonPath("$.eventAddress").value("New Venue"))
+                                .andExpect(jsonPath("$.eventCity").value("Updated City"))
+                                .andExpect(jsonPath("$.eventDescription").value("Updated Music Event"));
         }
 
-@Test
-public void testSearchEventsByCity() throws Exception {
-    // Mock events for Helsinki and Espoo
-    Event event1 = new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event");
-    Event event2 = new Event("Theatre", new Date(), "Venue 2", "Espoo", "Drama Play");
+        @Test
+        public void testSearchEventsByCity() throws Exception {
+                // Mock events for Helsinki and Espoo
+                Event event1 = new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event");
+       
 
-    // Mock the service layer to return events for Helsinki
-    when(eventService.searchEventsByCity("Helsinki")).thenReturn(Arrays.asList(event1));
+                // Mock the service layer to return events for Helsinki
+                when(eventService.searchEventsByCity("Helsinki")).thenReturn(Arrays.asList(event1));
 
-    // Perform the GET request to search for events in Helsinki
-    mockMvc.perform(get("/events/search?eventCity=Helsinki"))
-            .andExpect(status().isOk())  // Expecting HTTP status 200
-            .andExpect(jsonPath("$[0].eventCity").value("Helsinki"))
-            .andExpect(jsonPath("$[0].eventName").value("Concert"));
-}
+                // Perform the GET request to search for events in Helsinki
+                mockMvc.perform(get("/events/search?eventCity=Helsinki"))
+                                .andExpect(status().isOk()) // Expecting HTTP status 200
+                                .andExpect(jsonPath("$[0].eventCity").value("Helsinki"))
+                                .andExpect(jsonPath("$[0].eventName").value("Concert"));
+        }
 
-@Test
-public void testSearchEventsByCityNoResults() throws Exception {
-    // Mock the service layer to return an empty list for a city with no events
-    when(eventService.searchEventsByCity("NonExistentCity")).thenReturn(Arrays.asList());
+        @Test
+        public void testSearchEventsByCityNoResults() throws Exception {
+                // Mock the service layer to return an empty list for a city with no events
+                when(eventService.searchEventsByCity("NonExistentCity")).thenReturn(Arrays.asList());
 
-    // Perform the GET request to search for events in a non-existent city
-    mockMvc.perform(get("/events/search?eventCity=NonExistentCity"))
-            .andExpect(status().isNotFound())  // Expecting HTTP status 404 when no events are found
-            .andExpect(content().string("[]"));  // Expecting an empty list in the response
-}
+                // Perform the GET request to search for events in a non-existent city
+                mockMvc.perform(get("/events/search?eventCity=NonExistentCity"))
+                                .andExpect(status().isNotFound()) // Expecting HTTP status 404 when no events are found
+                                .andExpect(content().string("[]")); // Expecting an empty list in the response
+        }
 
-@Test
-public void testSearchAllEventsWhenNoCityProvided() throws Exception {
-    // Mock the service layer to return all events
-    Event event1 = new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event");
-    Event event2 = new Event("Theatre", new Date(), "Venue 2", "Espoo", "Drama Play");
-    when(eventService.getAllEvents()).thenReturn(Arrays.asList(event1, event2));
+        @Test
+        public void testSearchAllEventsWhenNoCityProvided() throws Exception {
+                // Mock the service layer to return all events
+                Event event1 = new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event");
+                Event event2 = new Event("Theatre", new Date(), "Venue 2", "Espoo", "Drama Play");
+                when(eventService.getAllEvents()).thenReturn(Arrays.asList(event1, event2));
 
-    // Perform the GET request to search for all events (no city parameter)
-    mockMvc.perform(get("/events/search"))
-            .andExpect(status().isOk())  // Expecting HTTP status 200
-            .andExpect(jsonPath("$[0].eventCity").value("Helsinki"))
-            .andExpect(jsonPath("$[0].eventName").value("Concert"))
-            .andExpect(jsonPath("$[1].eventCity").value("Espoo"))
-            .andExpect(jsonPath("$[1].eventName").value("Theatre"));
+                // Perform the GET request to search for all events (no city parameter)
+                mockMvc.perform(get("/events/search"))
+                                .andExpect(status().isOk()) // Expecting HTTP status 200
+                                .andExpect(jsonPath("$[0].eventCity").value("Helsinki"))
+                                .andExpect(jsonPath("$[0].eventName").value("Concert"))
+                                .andExpect(jsonPath("$[1].eventCity").value("Espoo"))
+                                .andExpect(jsonPath("$[1].eventName").value("Theatre"));
         }
 
 }
