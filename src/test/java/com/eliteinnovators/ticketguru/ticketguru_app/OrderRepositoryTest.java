@@ -20,7 +20,6 @@ import com.eliteinnovators.ticketguru.ticketguru_app.repository.SalespersonRepos
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketTypeRepository;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import java.util.Collections;
@@ -51,18 +50,15 @@ public class OrderRepositoryTest {
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
 
-   @Autowired
-private EntityManager entityManager;  // Inject EntityManager
-
 @Test
 public void testFindByOrderId() {
-    // Create and save Event
+    // Luo eventin
     Event event = new Event();
     event.setEventName("Uusi tapahtuma");
     event.setEventCity("Helsinki");
     event = eventRepository.save(event);
   
-    // Create and save Salesperson
+    // Luo salespersonin
     Salesperson salesperson = new Salesperson();
     salesperson.setFirstName("John");
     salesperson.setUsername("johndoe");
@@ -70,31 +66,31 @@ public void testFindByOrderId() {
     salesperson.setPasswordHash("securepasswordhash");
     salesperson = salespersonRepository.save(salesperson);
   
-    // Create and save TicketType
+    // Luo TicketTypen
     TicketType ticketType = new TicketType();
     ticketType.setName("VIP");
     ticketType = ticketTypeRepository.save(ticketType);
   
-    // Create and save EventTicketType
+    // Luo EventTicketTypen
     EventTicketType eventTicketType = new EventTicketType();
     eventTicketType.setEvent(event);
     eventTicketType.setTicketType(ticketType);
     eventTicketType.setPrice(50);
     eventTicketType = eventTicketTypeRepository.save(eventTicketType);
   
-    // Create and save Ticket (ensure it’s managed by the current session)
+    // Luo uuden Ticketin 
     Ticket ticket = new Ticket();
     ticket.setEventTicketType(eventTicketType);
     ticket = ticketRepository.save(ticket); // Save Ticket
     ticketRepository.flush();
 
-    // Create and save OrderDetails
+    // Luo OrderDetailsin
     OrderDetails orderDetails = new OrderDetails();
     orderDetails.setEventTicketType(eventTicketType);
     orderDetails.setUnitPrice(50.0);
     orderDetails.setQuantity(2);
 
-    // Create and save Order with OrderDetails first
+    // Luo ja tallentaa ensin Orderin OrderDetailsillä
     Order order = new Order();
     order.setOrderDate(new Date());
     order.setSalesperson(salesperson);
@@ -102,11 +98,11 @@ public void testFindByOrderId() {
     order.setOrderDetails(Collections.singletonList(orderDetails)); // Associate OrderDetails with the Order
     order = orderRepository.save(order); // Save Order
 
-    // Save OrderDetails with correct relationship
+    // Tallentaa Orderdetailsin oikealla yhteydellä orderiin
     orderDetails.setOrder(order);
     orderDetails = orderDetailsRepository.save(orderDetails); // Save OrderDetails
 
-    // Retrieve and assert
+    // Hakee Orderin
     Order found = orderRepository.findByOrderId(order.getOrderId());
     assertNotNull(found);
     assertEquals(order.getOrderId(), found.getOrderId());
