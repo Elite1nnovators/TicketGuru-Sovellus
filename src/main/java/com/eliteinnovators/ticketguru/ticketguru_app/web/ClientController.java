@@ -1,6 +1,7 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
+import com.eliteinnovators.ticketguru.ticketguru_app.exception.InsufficientTicketsException;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.EventService;
+import com.eliteinnovators.ticketguru.ticketguru_app.service.OrderService;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.TicketService;
 
 @Controller
@@ -28,7 +32,7 @@ public class ClientController {
     private EventService eventService;
 
     @Autowired
-    private TicketService ticketService;
+    private OrderService orderService;
 
     @Autowired
     private TicketRepository ticketRepository;
@@ -45,8 +49,6 @@ public class ClientController {
 
     // TicketDashboard
 
-
-
     @GetMapping("/ticketdashboard") // Mahdollistetaan lippujen vieminen sivulle
     public String getEvents(Model model) {
         List<Event> allEvents = eventService.getAllEvents();
@@ -55,57 +57,59 @@ public class ClientController {
         return "ticketdashboard";
     }
 
-    @PostMapping("/sell") // Ostolomakkeen (ticketdashboard.html) metodi
-    public String purchaseTickets(@RequestParam Long selectedEventId, @RequestParam int quantity, @RequestParam String ticketType,
-             RedirectAttributes redirectAttributes) {
-        Event selectedEvent = eventService.getEventById(selectedEventId);
-        
+    @PostMapping("/sell")
+    public String sellTickets(
+        @RequestParam Long selectedEventId,
+        @RequestParam int quantity,
+        @RequestParam String ticketType,
+        RedirectAttributes redirectAttributes) {
 
-        // Tarkistetaan täyttyvätkö vähimmäisehdot lipun myymiselle
-        if (selectedEvent == null || quantity <= 0) { 
-            redirectAttributes.addFlashAttribute("error", "Invalid event or quantity.");
-            return "ticketdashboard";
-        }
+    Event selectedEvent = eventService.getEventById(selectedEventId);
 
-        
+    if (selectedEvent == null || quantity <= 0) {
+        redirectAttributes.addFlashAttribute("error", "Invalid event or quantity.");
+        return "redirect:/ticketdashboard";
+    }
 
-        // Valitun lipun/lippujen muutos (quantity/valid)
-        int ticketTypeIndex = "VIP".equalsIgnoreCase(ticketType) ? 0 : 1;
+    int ticketTypeIndex = "VIP".equalsIgnoreCase(ticketType) ? 0 : 1;
 
-        if (selectedEvent.getEventTicketTypes().size() <= ticketTypeIndex) {
-            redirectAttributes.addFlashAttribute("error", "Invalid ticket type selection.");
-            return "redirect:/ticketdashboard";
-        }
+    if (selectedEvent.getEventTicketTypes().size() <= ticketTypeIndex) {
+        redirectAttributes.addFlashAttribute("error", "Invalid ticket type selection.");
+        return "redirect:/ticketdashboard";
+    }
 
-        // Loppuhinnan laskeminen
-        int price = (ticketTypeIndex == 0) ? 20 : 15;
-        int total = quantity * price;
+    EventTicketType selectedTicketType = selectedEvent.getEventTicketTypes().get(ticketTypeIndex);
 
-
-        // Lipputyyppien perusteella lippujen myyminen (TicketsInStock: -quantity, Valid: TRUE)
-        EventTicketType selectedTicketType = selectedEvent.getEventTicketTypes().get(ticketTypeIndex);
-    
-        int availableTickets = selectedTicketType.getTicketsInStock();
-        if (availableTickets >= quantity) {
-            selectedTicketType.setTicketsInStock(availableTickets - quantity);
-    
-            List<Ticket> tickets = selectedTicketType.getTickets().stream()
-                    .filter(Ticket::isValid)
-                    .limit(quantity)
-                    .collect(Collectors.toList());
-
-                tickets.forEach(ticket -> ticket.setValid(true));
-
-                ticketRepository.saveAll(tickets);
-                eventService.editEvent(selectedEvent, selectedEventId);
-                redirectAttributes.addFlashAttribute("success", "Tickets sold successfully! Total price: " + total + ".00 €"); 
-                return "redirect:/ticketdashboard";
-            }
-        
-
+    int availableTickets = selectedTicketType.getTicketsInStock();
+    if (availableTickets < quantity) {
         redirectAttributes.addFlashAttribute("error", "Not enough tickets available.");
         return "redirect:/ticketdashboard";
     }
+
+    selectedTicketType.setTicketsInStock(availableTickets - quantity);
+
+
+    OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
+    orderDetailsDTO.setEventTicketTypeId(selectedTicketType.getId());
+    orderDetailsDTO.setQuantity(quantity);
+
+    OrderDTO orderDTO = new OrderDTO();
+    orderDTO.setSalespersonId(1L); 
+    orderDTO.setOrderDetails(List.of(orderDetailsDTO)); 
+
+    try {
+        OrderDTO savedOrder = orderService.newOrder(orderDTO); 
+        redirectAttributes.addFlashAttribute("success", quantity + " " + ticketType + " tickets were sold successfully! Order ID: " + savedOrder.getOrderId());
+    } catch (InsufficientTicketsException e) {
+        redirectAttributes.addFlashAttribute("error", e.getMessage());
+        return "redirect:/ticketdashboard";
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("error", "An error occurred while creating the order.");
+        return "redirect:/ticketdashboard";
+    }
+
+    return "redirect:/ticketdashboard";
+}
 
     @GetMapping("/login")
     public String getLoginPage() {
