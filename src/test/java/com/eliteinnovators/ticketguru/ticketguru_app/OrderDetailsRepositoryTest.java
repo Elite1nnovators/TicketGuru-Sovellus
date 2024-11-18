@@ -3,15 +3,12 @@ package com.eliteinnovators.ticketguru.ticketguru_app;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Order;
-import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.OrderDetails;
-import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventTicketTypeRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderDetailsRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.OrderRepository;
