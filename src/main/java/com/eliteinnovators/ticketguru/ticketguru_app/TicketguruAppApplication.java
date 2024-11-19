@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.dao.DataIntegrityViolationException;
+//import org.springframework.dao.DataIntegrityViolationException;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.*;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.*;

@@ -2,6 +2,41 @@
 
 [TicketGuru backlog -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=0#gid=0)
 
+# Sisällysluettelo
+
+1. **[Johdanto](#johdanto)**
+
+2. **[Järjestelmän määrittely](#järjestelmän-määrittely)**
+   - [Käyttäjäryhmät (roolit)](#käyttäjäryhmät-roolit)
+
+3. **[Käyttötapaukset ja käyttäjätarinat](#käyttötapaukset-ja-käyttäjätarinat)**
+   - [Käyttäjätarinat](#käyttäjätarinat)
+
+4. **[Yksityiskohtaiset vaatimukset](#yksityiskohtaiset-vaatimukset)**
+
+5. **[Käyttöliittymä](#käyttöliittymä)**
+   - [Käyttöliittymäkaavio](#käyttöliittymäkaavio)
+
+6. **[Tietokanta](#tietokanta)**
+   - [Tietokantakaavio](#tietokantakaavio)
+   - [Tietohakemisto](#tietohakemisto)
+
+7. **[REST API dokumentaatio](#rest-api-dokumentaatio)**
+   - [Myyntitapahtumien API-dokumentaatio](#myyntitapahtumien-api-dokumentaatio)
+   - [Lippujen (Ticket) API-pyynnöt](#lippujen-ticket-api-pyynnöt)
+
+8. **[Autentikaatio](#autentikaatio)**
+
+9. **[Testaus](#testaus)**
+   - [Database Access Layer](#database-access-layer)
+     - [Yhteyden toimivuus (DAL ↔ RDBMS)](#yhteyden-toimivuus-dal-rdbms)
+     - [SQL-kyselyjen oikeellisuus](#sql-kyselyjen-oikeellisuus)
+     - [SQL-kyselyjen suorituskyky](#sql-kyselyjen-suorituskyky)
+     - [Transaktioiden hallinta](#transaktioiden-hallinta)
+     - [Tietokannan konsistenssi ja eheys](#tietokannan-konsistenssi-ja-eheys)
+     - [Skalautuvuus](#skalautuvuus)
+
+
 # Johdanto
 Projektin tavoitteena on luoda lipunmyyntijärjestelmä (TicketGuru) lipputoimistolle, joka myy lippuja erilaisiin tapahtumiin omassa myyntipisteessään. Toistaiseksi myynti tapahtuu vain paikan päällä lipputoimistossa, mutta myöhemmin mahdollisesti myös verkkokaupan kautta. Järjestelmän tarkoituksena on, että lipputoimisto pystyy lipunmyynnin lisäksi hallinnoimaan ja tarkastelemaan myyntitapahtumia.
 
@@ -1387,3 +1422,51 @@ Sovelluksessa on otettu käyttöön virheenkäsittely autentikoinnin ja käyttö
 Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon tietoa ongelman syystä, jotta he voivat korjata virheet ja jatkaa sovelluksen käyttöä.
 
 </details>
+
+---
+
+# Testaus
+
+## Database Access Layer
+
+### Yhteyden toimivuus (DAL ↔ RDBMS)
+- **Testattava:** Onko tietokantayhteys määritetty oikein? Toimiiko yhteys kaikissa käyttöolosuhteissa?
+- **Suoritetut testit:**
+  - **testDatabaseConnection**
+    - Testaa, että tietokantayhteys on voimassa ja toimii. Yhteys tarkistetaan kutsumalla `connection.isValid(2)`.
+    - **Tulos:** Testi varmistaa, että tietokantayhteys toimii odotetusti.
+  - **testDatabaseConnectionFailure**
+    - Testaa, että tietokantayhteys epäonnistuu virheellisiä asetuksia käyttäen (esim. virheellinen URL).
+    - **Tulos:** Testi varmistaa, että sovellus käsittelee epäonnistuneet yhteydet oikein heittämällä `SQLException`.
+
+---
+
+### SQL-kyselyjen oikeellisuus
+- **Testattava:** Tuottavatko SQL-kyselyt oikeita ja odotettuja tuloksia?
+- **Suoritetut testit:**
+  - Testataan repositoriotesteissä.
+
+---
+
+### SQL-kyselyjen suorituskyky
+- **Testattava:** Kuinka hyvin kyselyt suoriutuvat erilaisilla tietomäärillä? Mitä tapahtuu suurilla datamäärillä?
+- **Suoritetut testit:**
+  - **testQueryPerformance**
+    - Testaa, että `orderRepository.findAll()` suoritetaan alle sekunnissa.
+    - **Tulos:** Suorituskyky mitataan ja varmistetaan, että kysely ei ylitä hyväksyttävää kestoa.
+
+---
+
+### Transaktioiden hallinta
+- **Testattava:** Toimivatko transaktiot oikein? Käsitelläänkö virhetilanteet oikein?
+- **Suoritetut testit:**
+  - Testataan repositoriotesteissä.
+
+---
+
+### Tietokannan konsistenssi ja eheys
+- **Testattava:** Säilyvätkö tietokannan rajoitteet (esim. viite-eheys, uniikkius)?
+- **Suoritetut testit:**
+  - Testataan repositoriotesteissä.
+
+---
