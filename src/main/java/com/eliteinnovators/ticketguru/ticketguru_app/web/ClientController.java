@@ -5,6 +5,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Event;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
-
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
 import com.eliteinnovators.ticketguru.ticketguru_app.exception.InsufficientTicketsException;
-
+import com.eliteinnovators.ticketguru.ticketguru_app.exception.SalespersonNotFoundException;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.SalespersonRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.EventService;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.OrderService;
 
@@ -30,7 +32,8 @@ public class ClientController {
     @Autowired
     private OrderService orderService;
 
-  
+    @Autowired
+    private SalespersonRepository salespersonRepository;
 
     @GetMapping("/bugivelhot")
     public String showLoginPage() {
@@ -57,8 +60,10 @@ public class ClientController {
         @RequestParam Long selectedEventId,
         @RequestParam int quantity,
         @RequestParam String ticketType,
-        RedirectAttributes redirectAttributes) {
+        RedirectAttributes redirectAttributes,
+        Authentication authentication) {
 
+    String username = authentication.getName();
     Event selectedEvent = eventService.getEventById(selectedEventId);
 
     if (selectedEvent == null || quantity <= 0) {
@@ -89,7 +94,11 @@ public class ClientController {
     orderDetailsDTO.setQuantity(quantity);
 
     OrderDTO orderDTO = new OrderDTO();
-    orderDTO.setSalespersonId(1L); 
+
+    // Etsitään salesperson authenticationin avulla saadulla usernamella
+    Salesperson salesperson = salespersonRepository.findByUsername(username)
+        .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with name " + username + " not found"));
+    orderDTO.setSalespersonId(salesperson.getSalespersonId());
     orderDTO.setOrderDetails(List.of(orderDetailsDTO)); 
 
     try {
@@ -99,7 +108,8 @@ public class ClientController {
         redirectAttributes.addFlashAttribute("error", e.getMessage());
         return "redirect:/ticketdashboard";
     } catch (Exception e) {
-        redirectAttributes.addFlashAttribute("error", "An error occurred while creating the order.");
+        redirectAttributes.addFlashAttribute("error", e.getMessage()); // DEBUG
+        //redirectAttributes.addFlashAttribute("error", "An error occurred while creating the order.");
         return "redirect:/ticketdashboard";
     }
 
