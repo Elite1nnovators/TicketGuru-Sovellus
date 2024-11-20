@@ -51,10 +51,10 @@ public class TicketguruAppApplication {
                     .orElseGet(() -> eventTicketTypeRepository.save(new EventTicketType(concert1, lapsi, 15, 100)));
 
             // 4. Create and save salespersons if they don't exist
-            Salesperson peter = salespersonRepository.findByUsername("peter_smith")
-                    .orElseGet(() -> salespersonRepository.save(new Salesperson("peter_smith", "password", false, "Peter", "Smith", "0451234567", null)));
-            Salesperson anna = salespersonRepository.findByUsername("anna_brown")
-                    .orElseGet(() -> salespersonRepository.save(new Salesperson("anna_brown", "password2", false, "Anna", "Brown", "0409876543", null)));
+            Salesperson salesperson = salespersonRepository.findByUsername("salesperson")
+                    .orElseGet(() -> salespersonRepository.save(new Salesperson("salesperson", "salesperson", false, "Peter", "Smith", "0451234567", null)));
+            Salesperson admin = salespersonRepository.findByUsername("admin")
+                    .orElseGet(() -> salespersonRepository.save(new Salesperson("admin", "password", false, "Anna", "Brown", "0409876543", null)));
 
             // 5. Create order details
             OrderDetailsDTO orderDetailDTO1 = new OrderDetailsDTO(etc1.getId(), 2, etc1.getPrice());
@@ -62,7 +62,7 @@ public class TicketguruAppApplication {
 
             // 6. Create an OrderDTO
             OrderDTO orderDTO = new OrderDTO(
-                    peter.getSalespersonId(), 
+                    salesperson.getSalespersonId(), 
                     Arrays.asList(orderDetailDTO1, orderDetailDTO2),
                     null, // Order ID will be generated
                     null, null, // Salesperson's first and last name will be set by the service
