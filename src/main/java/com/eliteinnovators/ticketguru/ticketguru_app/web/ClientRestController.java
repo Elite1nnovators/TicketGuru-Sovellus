@@ -2,6 +2,7 @@ package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,13 @@ import com.eliteinnovators.ticketguru.ticketguru_app.exception.SalespersonNotFou
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.SalespersonRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.EventService;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.OrderService;
+import com.eliteinnovators.ticketguru.ticketguru_app.service.TicketService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api")
@@ -30,6 +36,9 @@ public class ClientRestController {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private TicketService ticketService;
     
     @Autowired
     private SalespersonRepository salespersonRepository;
@@ -98,4 +107,26 @@ public class ClientRestController {
                     .body("An error occurred while creating the order.");
         }
     }
+
+    @GetMapping("/print-tickets/{orderId}")
+    public ResponseEntity<?> getOrderTicketCodes(
+            @PathVariable Long orderId,
+            @RequestParam(required = false) String ticketType) {
+        try {
+            // Fetch tickets based on orderId and optional ticketType
+            List<String> ticketCodes = ticketService.getTicketCodesByOrderId(orderId);
+
+            if (ticketCodes.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "No tickets found for this order"));
+            }
+
+            return ResponseEntity.ok(Map.of("ticketCodes", ticketCodes));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "An error occurred while fetching ticket codes"));
+        }
+    }
+
+    
 }

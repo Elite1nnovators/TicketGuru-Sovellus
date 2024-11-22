@@ -3,7 +3,7 @@ package com.eliteinnovators.ticketguru.ticketguru_app.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,6 +100,11 @@ public class TicketService {
         });
         
         return ticketRepository.save(ticket);
+    }
+
+    public List<String> getTicketCodesByOrderId(Long orderId) {
+        List<Ticket> tickets = getTicketsByOrder(orderId);
+        return tickets.stream() .map(Ticket::getTicketCode).collect(Collectors.toList()); 
     }
         
 
