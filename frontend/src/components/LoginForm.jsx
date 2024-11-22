@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../assets/logo.png'; 
+import Logo from '../assets/Logo.png'; 
 import { Button, Form, Alert, Container, Row, Col } from 'react-bootstrap';
+import { useAuth } from './AuthContext';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const { setAuth } = useAuth()
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -22,9 +24,11 @@ const Login = () => {
             );
 
             if (response.status === 200) {
+                setAuth({ username, password })
                 navigate('/home');
             }
         } catch (err) {
+            console.log(err)
             setError('Invalid username or password');
         }
     };
