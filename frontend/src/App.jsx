@@ -5,6 +5,7 @@ import SellTicket from './components/SellTicket';
 import PrintTickets from './components/PrintTickets';
 import Navbar from './components/Navbar';
 import SalesReports from './components/SalesReports';
+import EventSearch from './components/EventSearch';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/sell-ticket" element={<SellTicket />} />
         <Route path="/print-tickets/:orderId" element={<PrintTickets />} />
         <Route path="/sales-reports" element={<SalesReports />} />
+        <Route path="/events" element={<EventSearch />} />
       </Routes>
     </Router>
   );
