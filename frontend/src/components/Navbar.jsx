@@ -29,7 +29,7 @@ function TicketGuruNavbar () {
                     <Nav.Link as={Link} to="/home">Home</Nav.Link>
                     <Nav.Link as={Link} to="/sell-ticket">Sales</Nav.Link>
                     <Nav.Link as={Link} to="/events">Events (KESKEN)</Nav.Link>
-                    <Nav.Link as={Link} to="/sales-reports">Reports (KESKEN)</Nav.Link>
+                    <Nav.Link as={Link} to="/sales-reports">Reports</Nav.Link>
                 </Nav>
             <Button onClick={handleLogout} variant="outline-danger" className="d-flex align-items-center">
                 Logout
