@@ -4,6 +4,7 @@ import LandingPage from './components/LandingPage';
 import SellTicket from './components/SellTicket';
 import PrintTickets from './components/PrintTickets';
 import Navbar from './components/Navbar';
+import SalesReports from './components/SalesReports';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/home" element={<LandingPage />} />
         <Route path="/sell-ticket" element={<SellTicket />} />
         <Route path="/print-tickets/:orderId" element={<PrintTickets />} />
+        <Route path="/sales-reports" element={<SalesReports />} />
       </Routes>
     </Router>
   );
