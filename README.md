@@ -1545,8 +1545,8 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
     - Varmistetaan, että vastauksen status on uudelleenohjaus (3xx Redirection).
     - Varmistetaan, että käyttäjä ohjataan `/ticketdashboard` -sivulle.
     - Varmistetaan, että myynti on onnistunut (sisältää `success` -attribuutin)
-  - **Tulos:** Testi varmistaa, että lippujen myynti toimii odotetusti ja käyttäjä saa onnistumisviestin.
-- **testNotEnoughTickets**
+    - **Tulos:** Testi varmistaa, että lippujen myynti toimii odotetusti ja käyttäjä saa onnistumisviestin.
+  - **testNotEnoughTickets**
     - Suoritetaan HTTP POST -pyyntö reitille `/sell` (otettu huomioon reitille vaadittava autentikointi). 
     - Annetaan seuraavat parametrit: Tapahtuman ID: 1, Lippujen määrä: 999, Lipputyyppi: VIP
     - Varmistetaan, että vastauksen status on uudelleenohjaus (3xx Redirection).
