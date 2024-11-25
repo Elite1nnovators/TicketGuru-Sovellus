@@ -78,6 +78,14 @@ public class EventTicketType {
     public void setTicketsInStock(int ticketsInStock) {
         this.ticketsInStock = ticketsInStock;
     }
+
+     @JsonProperty("ticketTypeName")
+    public String getTicketTypeName() {
+        if (ticketType != null) {
+            return ticketType.getName();  // Returns the name of the ticket type
+        }
+        return null;  // In case the ticketType is null
+    }
 }
 
 
