@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import LandingPage from './components/LandingPage';
 import SellTicket from './components/SellTicket';
@@ -10,11 +15,11 @@ import EventSearch from './components/EventSearch';
 function App() {
   return (
     <Router>
-    <ConditionalNavbar />
+      <ConditionalNavbar />
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="/home" element={<LandingPage />} />
-        <Route path="/sell-ticket" element={<SellTicket />} />
+        <Route path="/sell-ticket/:eventId" element={<SellTicket />} />
         <Route path="/print-tickets/:orderId" element={<PrintTickets />} />
         <Route path="/sales-reports" element={<SalesReports />} />
         <Route path="/events" element={<EventSearch />} />
@@ -26,7 +31,7 @@ function App() {
 function ConditionalNavbar() {
   const location = useLocation();
 
-  return location.pathname === "/" ? null : <Navbar />;
+  return location.pathname === '/' ? null : <Navbar />;
 }
 
 export default App;

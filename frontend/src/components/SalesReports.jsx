@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useAuth } from './AuthContext';
+import api from './api';
 
 const SalesReports = () => {
-  const { auth } = useAuth();  
-  const [orders, setOrders] = useState([]);  
-  const [events, setEvents] = useState([]);  
-  const [orderId, setOrderId] = useState('');  
-  const [selectedOrder, setSelectedOrder] = useState(null);  
-  const [responseMessage, setResponseMessage] = useState('');  
-  const [loading, setLoading] = useState(false);  
-  const [showAllOrders, setShowAllOrders] = useState(false);  
+  const [orders, setOrders] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [orderId, setOrderId] = useState('');
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [responseMessage, setResponseMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showAllOrders, setShowAllOrders] = useState(false);
 
   // Haetaan kaikki tilaukset
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi/orders', {
-        headers: {
-          Authorization: `Basic ${btoa(auth.username + ':' + auth.password)}`
-        }
-      });
+      const response = await api.get('/orders');
       setOrders(response.data);
       setResponseMessage('');
     } catch (error) {
@@ -34,11 +28,7 @@ const SalesReports = () => {
   // Haetaan kaikki tapahtumat
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi/events', {
-        headers: {
-          Authorization: `Basic ${btoa(auth.username + ':' + auth.password)}`
-        }
-      });
+      const response = await api.get('/events');
       setEvents(response.data);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -49,7 +39,9 @@ const SalesReports = () => {
   // Yhdistetään eventTicketTypeId tapahtumiin
   const getEventDetails = (eventTicketTypeId) => {
     for (const event of events) {
-      const matchingTicketType = event.eventTicketTypes.find(ticketType => ticketType.id === eventTicketTypeId);
+      const matchingTicketType = event.eventTicketTypes.find(
+        (ticketType) => ticketType.id === eventTicketTypeId
+      );
       if (matchingTicketType) {
         return {
           eventName: event.eventName,
@@ -57,8 +49,11 @@ const SalesReports = () => {
         };
       }
     }
-    return { eventName: 'Unknown Event', ticketTypeName: 'Unknown Ticket Type' };
-};
+    return {
+      eventName: 'Unknown Event',
+      ticketTypeName: 'Unknown Ticket Type',
+    };
+  };
 
   // Lasketaan kokonaishinta
   const calculateTotalPrice = (orderDetails) => {
@@ -70,7 +65,9 @@ const SalesReports = () => {
   // Haetaan käyttäjän syöttämän OrderId:n mukainen tilaus
   const handleOrderIdSubmit = (e) => {
     e.preventDefault();
-    const selected = orders.find(order => order.orderId.toString() === orderId);
+    const selected = orders.find(
+      (order) => order.orderId.toString() === orderId
+    );
     if (selected) {
       setSelectedOrder(selected);
       setResponseMessage('');
@@ -87,12 +84,29 @@ const SalesReports = () => {
   }, []);
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '1000px', margin: '0 auto' }}>
-      <h1 style={{ textAlign: 'left', color: '#333', marginBottom: '20px', marginTop: '20px' }}>Sales Report</h1>
+    <div
+      style={{
+        fontFamily: 'Arial, sans-serif',
+        maxWidth: '1000px',
+        margin: '0 auto',
+      }}>
+      <h1
+        style={{
+          textAlign: 'left',
+          color: '#333',
+          marginBottom: '20px',
+          marginTop: '20px',
+        }}>
+        Sales Report
+      </h1>
 
-      {loading && <p style={{ textAlign: 'center', color: '#666' }}>Loading data...</p>}
+      {loading && (
+        <p style={{ textAlign: 'center', color: '#666' }}>Loading data...</p>
+      )}
 
-      {responseMessage && <p style={{ textAlign: 'center', color: 'red' }}>{responseMessage}</p>}
+      {responseMessage && (
+        <p style={{ textAlign: 'center', color: 'red' }}>{responseMessage}</p>
+      )}
 
       {/* Show All Orders -painike */}
       <button
@@ -104,20 +118,28 @@ const SalesReports = () => {
           border: 'none',
           borderRadius: '4px',
           cursor: 'pointer',
-        }}
-      >
+        }}>
         {showAllOrders ? 'Hide All Orders' : 'Show All Orders'}
       </button>
 
       {/* Hakukenttä */}
-      <form onSubmit={handleOrderIdSubmit} style={{ marginBottom: '20px', marginTop: '20px',textAlign: 'left' }}>
-        <label htmlFor="orderId" style={{ marginRight: '10px' }}>Search by Order ID:</label>
+      <form
+        onSubmit={handleOrderIdSubmit}
+        style={{ marginBottom: '20px', marginTop: '20px', textAlign: 'left' }}>
+        <label htmlFor="orderId" style={{ marginRight: '10px' }}>
+          Search by Order ID:
+        </label>
         <input
           id="orderId"
           type="text"
           value={orderId}
           onChange={(e) => setOrderId(e.target.value)}
-          style={{ padding: '5px', border: '1px solid #ccc', borderRadius: '4px', width: '100px', }}
+          style={{
+            padding: '5px',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            width: '100px',
+          }}
         />
         <button
           type="submit"
@@ -129,21 +151,35 @@ const SalesReports = () => {
             border: 'none',
             borderRadius: '4px',
             cursor: 'pointer',
-          }}
-        >
+          }}>
           Search
         </button>
       </form>
 
       {/* Yksittäinen tilaus */}
-      <div style={{ backgroundColor: '#f8f8f8', padding: '20px', borderRadius: '8px' }}>
+      <div
+        style={{
+          backgroundColor: '#f8f8f8',
+          padding: '20px',
+          borderRadius: '8px',
+        }}>
         {selectedOrder && (
           <div>
-            <p style={{ marginBottom: '10px' }}><strong>Order ID:</strong> {selectedOrder.orderId}</p>
-            <p style={{ marginBottom: '10px' }}><strong>Order Date:</strong> {new Date(selectedOrder.orderDate).toLocaleString()}</p>
-            <p style={{ marginBottom: '20px' }}><strong>Salesperson:</strong> {`${selectedOrder.salespersonFirstName} ${selectedOrder.salespersonLastName}`}</p>
+            <p style={{ marginBottom: '10px' }}>
+              <strong>Order ID:</strong> {selectedOrder.orderId}
+            </p>
+            <p style={{ marginBottom: '10px' }}>
+              <strong>Order Date:</strong>{' '}
+              {new Date(selectedOrder.orderDate).toLocaleString()}
+            </p>
+            <p style={{ marginBottom: '20px' }}>
+              <strong>Salesperson:</strong>{' '}
+              {`${selectedOrder.salespersonFirstName} ${selectedOrder.salespersonLastName}`}
+            </p>
 
-            <h3 style={{ marginBottom: '10px', color: '#333' }}>Order Details</h3>
+            <h3 style={{ marginBottom: '10px', color: '#333' }}>
+              Order Details
+            </h3>
             <table
               border="1"
               style={{
@@ -153,36 +189,89 @@ const SalesReports = () => {
                 textAlign: 'left',
                 marginBottom: '20px',
                 backgroundColor: '#fff',
-              }}
-            >
+              }}>
               <thead>
                 <tr>
-                  <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Event</th>
-                  <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Ticket Type Name</th>
-                  <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Quantity</th>
-                  <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Unit Price</th>
-                  <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Total Price</th>
+                  <th
+                    style={{
+                      backgroundColor: '#d3d3d3',
+                      color: '#000',
+                      textAlign: 'left',
+                      padding: '10px',
+                    }}>
+                    Event
+                  </th>
+                  <th
+                    style={{
+                      backgroundColor: '#d3d3d3',
+                      color: '#000',
+                      textAlign: 'left',
+                      padding: '10px',
+                    }}>
+                    Ticket Type Name
+                  </th>
+                  <th
+                    style={{
+                      backgroundColor: '#d3d3d3',
+                      color: '#000',
+                      textAlign: 'left',
+                      padding: '10px',
+                    }}>
+                    Quantity
+                  </th>
+                  <th
+                    style={{
+                      backgroundColor: '#d3d3d3',
+                      color: '#000',
+                      textAlign: 'left',
+                      padding: '10px',
+                    }}>
+                    Unit Price
+                  </th>
+                  <th
+                    style={{
+                      backgroundColor: '#d3d3d3',
+                      color: '#000',
+                      textAlign: 'left',
+                      padding: '10px',
+                    }}>
+                    Total Price
+                  </th>
                 </tr>
               </thead>
               <tbody>
-  {selectedOrder.orderDetails.map((detail, index) => {
-    const { eventName, ticketTypeName } = getEventDetails(detail.eventTicketTypeId); // Get both event name and ticket type name
-    const totalPrice = detail.unitPrice * detail.quantity;
-    return (
-      <tr key={index}>
-        <td style={{ padding: '8px', lineHeight: '1.6' }}>{eventName}</td>
-        <td style={{ padding: '8px', lineHeight: '1.6' }}>{ticketTypeName}</td> {/* Now using ticketTypeName */}
-        <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.quantity}</td>
-        <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.unitPrice.toFixed(2)} €</td>
-        <td style={{ padding: '8px', lineHeight: '1.6' }}>{totalPrice.toFixed(2)} €</td>
-      </tr>
-    );
-  })}
-</tbody>
+                {selectedOrder.orderDetails.map((detail, index) => {
+                  const { eventName, ticketTypeName } = getEventDetails(
+                    detail.eventTicketTypeId
+                  ); // Get both event name and ticket type name
+                  const totalPrice = detail.unitPrice * detail.quantity;
+                  return (
+                    <tr key={index}>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {eventName}
+                      </td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {ticketTypeName}
+                      </td>{' '}
+                      {/* Now using ticketTypeName */}
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {detail.quantity}
+                      </td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {detail.unitPrice.toFixed(2)} €
+                      </td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {totalPrice.toFixed(2)} €
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
 
             <h4 style={{ color: '#333', textAlign: 'right' }}>
-              Total Price: {calculateTotalPrice(selectedOrder.orderDetails).toFixed(2)} €
+              Total Price:{' '}
+              {calculateTotalPrice(selectedOrder.orderDetails).toFixed(2)} €
             </h4>
           </div>
         )}
@@ -190,7 +279,12 @@ const SalesReports = () => {
 
       {/* Lista kaikista tilauksista */}
       {showAllOrders && (
-        <div style={{ backgroundColor: '#f8f8f8', padding: '20px', borderRadius: '8px' }}>
+        <div
+          style={{
+            backgroundColor: '#f8f8f8',
+            padding: '20px',
+            borderRadius: '8px',
+          }}>
           <h3>All Orders</h3>
           <table
             border="1"
@@ -201,18 +295,73 @@ const SalesReports = () => {
               textAlign: 'left',
               marginBottom: '20px',
               backgroundColor: '#fff',
-            }}
-          >
+            }}>
             <thead>
               <tr>
-                <th style={{ backgroundColor: '#d3d3d3', color: '#000', padding: '10px' }}>Order ID</th>
-                <th style={{ backgroundColor: '#d3d3d3', color: '#000', padding: '10px' }}>Order Date</th>
-                <th style={{ backgroundColor: '#d3d3d3', color: '#000', padding: '10px' }}>Salesperson</th>
-                <th style={{ backgroundColor: '#d3d3d3', color: '#000', padding: '10px' }}>Event</th>
-                <th style={{ backgroundColor: '#d3d3d3', color: '#000', padding: '10px' }}>Ticket Type ID</th>
-                <th style={{ backgroundColor: '#d3d3d3', color: '#000', padding: '10px' }}>Quantity</th>
-                <th style={{ backgroundColor: '#d3d3d3', color: '#000', padding: '10px' }}>Unit Price</th>
-                <th style={{ backgroundColor: '#d3d3d3', color: '#000', padding: '10px' }}>Total Price</th>
+                <th
+                  style={{
+                    backgroundColor: '#d3d3d3',
+                    color: '#000',
+                    padding: '10px',
+                  }}>
+                  Order ID
+                </th>
+                <th
+                  style={{
+                    backgroundColor: '#d3d3d3',
+                    color: '#000',
+                    padding: '10px',
+                  }}>
+                  Order Date
+                </th>
+                <th
+                  style={{
+                    backgroundColor: '#d3d3d3',
+                    color: '#000',
+                    padding: '10px',
+                  }}>
+                  Salesperson
+                </th>
+                <th
+                  style={{
+                    backgroundColor: '#d3d3d3',
+                    color: '#000',
+                    padding: '10px',
+                  }}>
+                  Event
+                </th>
+                <th
+                  style={{
+                    backgroundColor: '#d3d3d3',
+                    color: '#000',
+                    padding: '10px',
+                  }}>
+                  Ticket Type ID
+                </th>
+                <th
+                  style={{
+                    backgroundColor: '#d3d3d3',
+                    color: '#000',
+                    padding: '10px',
+                  }}>
+                  Quantity
+                </th>
+                <th
+                  style={{
+                    backgroundColor: '#d3d3d3',
+                    color: '#000',
+                    padding: '10px',
+                  }}>
+                  Unit Price
+                </th>
+                <th
+                  style={{
+                    backgroundColor: '#d3d3d3',
+                    color: '#000',
+                    padding: '10px',
+                  }}>
+                  Total Price
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -222,14 +371,32 @@ const SalesReports = () => {
                   const totalPrice = detail.unitPrice * detail.quantity;
                   return (
                     <tr key={`${order.orderId}-${index}`}>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{order.orderId}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{new Date(order.orderDate).toLocaleString()}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{`${order.salespersonFirstName} ${order.salespersonLastName}`}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{eventName}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.eventTicketTypeId}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.quantity}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.unitPrice.toFixed(2)} €</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{totalPrice.toFixed(2)} €</td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {order.orderId}
+                      </td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {new Date(order.orderDate).toLocaleString()}
+                      </td>
+                      <td
+                        style={{
+                          padding: '8px',
+                          lineHeight: '1.6',
+                        }}>{`${order.salespersonFirstName} ${order.salespersonLastName}`}</td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {eventName}
+                      </td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {detail.eventTicketTypeId}
+                      </td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {detail.quantity}
+                      </td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {detail.unitPrice.toFixed(2)} €
+                      </td>
+                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
+                        {totalPrice.toFixed(2)} €
+                      </td>
                     </tr>
                   );
                 })
@@ -243,7 +410,3 @@ const SalesReports = () => {
 };
 
 export default SalesReports;
-
-
-
-
