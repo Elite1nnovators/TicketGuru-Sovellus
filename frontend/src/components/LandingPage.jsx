@@ -25,7 +25,7 @@ const LandingPage = () => {
                     <span>Sales</span>
                 </div>
                 <div className="button" onClick={handleManageEvents}>
-                    <span>Events (KESKEN)</span>
+                    <span>Events</span>
                 </div>
                 <div className="button" onClick={handleShowReports}>
                     <span>Reports </span>
