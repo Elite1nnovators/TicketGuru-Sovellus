@@ -47,15 +47,18 @@ const SalesReports = () => {
   };
 
   // Yhdistetään eventTicketTypeId tapahtumiin
-  const getEventName = (eventTicketTypeId) => {
+  const getEventDetails = (eventTicketTypeId) => {
     for (const event of events) {
       const matchingTicketType = event.eventTicketTypes.find(ticketType => ticketType.id === eventTicketTypeId);
       if (matchingTicketType) {
-        return event.eventName;
+        return {
+          eventName: event.eventName,
+          ticketTypeName: matchingTicketType.ticketTypeName, // this will now return the ticket type name
+        };
       }
     }
-    return 'Unknown Event';
-  };
+    return { eventName: 'Unknown Event', ticketTypeName: 'Unknown Ticket Type' };
+};
 
   // Lasketaan kokonaishinta
   const calculateTotalPrice = (orderDetails) => {
@@ -155,27 +158,27 @@ const SalesReports = () => {
               <thead>
                 <tr>
                   <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Event</th>
-                  <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Ticket Type ID</th>
+                  <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Ticket Type Name</th>
                   <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Quantity</th>
                   <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Unit Price</th>
                   <th style={{ backgroundColor: '#d3d3d3', color: '#000', textAlign: 'left', padding: '10px' }}>Total Price</th>
                 </tr>
               </thead>
               <tbody>
-                {selectedOrder.orderDetails.map((detail, index) => {
-                  const eventName = getEventName(detail.eventTicketTypeId);
-                  const totalPrice = detail.unitPrice * detail.quantity;
-                  return (
-                    <tr key={index}>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{eventName}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.eventTicketTypeId}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.quantity}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.unitPrice.toFixed(2)} €</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>{totalPrice.toFixed(2)} €</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
+  {selectedOrder.orderDetails.map((detail, index) => {
+    const { eventName, ticketTypeName } = getEventDetails(detail.eventTicketTypeId); // Get both event name and ticket type name
+    const totalPrice = detail.unitPrice * detail.quantity;
+    return (
+      <tr key={index}>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{eventName}</td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{ticketTypeName}</td> {/* Now using ticketTypeName */}
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.quantity}</td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.unitPrice.toFixed(2)} €</td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{totalPrice.toFixed(2)} €</td>
+      </tr>
+    );
+  })}
+</tbody>
             </table>
 
             <h4 style={{ color: '#333', textAlign: 'right' }}>
