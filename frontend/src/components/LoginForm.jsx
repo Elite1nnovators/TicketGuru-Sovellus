@@ -18,7 +18,7 @@ const Login = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:8080/api/auth/login',
+                'https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi/api/auth/login',
                 { username, password },
                 { withCredentials: true } 
             );

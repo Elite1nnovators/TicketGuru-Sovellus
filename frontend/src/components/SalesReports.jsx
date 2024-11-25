@@ -16,7 +16,7 @@ const SalesReports = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8080/orders', {
+      const response = await axios.get('https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi/orders', {
         headers: {
           Authorization: `Basic ${btoa(auth.username + ':' + auth.password)}`
         }
@@ -34,7 +34,7 @@ const SalesReports = () => {
   // Haetaan kaikki tapahtumat
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/events', {
+      const response = await axios.get('https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi/events', {
         headers: {
           Authorization: `Basic ${btoa(auth.username + ':' + auth.password)}`
         }

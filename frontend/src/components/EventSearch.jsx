@@ -14,7 +14,7 @@ const EventSearch = () => {
     const fetchEvents = async () => {
       const authHeader = `Basic ${btoa(`${auth.username}:${auth.password}`)}`;
       try {
-        const response = await fetch("http://localhost:8080/events", {
+        const response = await fetch("https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fievents", {
           method: 'GET',
           headers: {
             'Authorization': authHeader,

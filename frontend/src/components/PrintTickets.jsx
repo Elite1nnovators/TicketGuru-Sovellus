@@ -14,7 +14,7 @@ const PrintTickets = () => {
         const fetchTicketCodes = async () => {
             const authHeader = `Basic ${btoa(`${auth.username}:${auth.password}`)}`;
             try {
-                const response = await fetch(`http://localhost:8080/api/print-tickets/${orderId}`, {
+                const response = await fetch(`https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi/api/print-tickets/${orderId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': authHeader,

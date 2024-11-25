@@ -24,7 +24,7 @@ const SellTicket = () => {
     const authHeader = `Basic ${btoa(`${auth.username}:${auth.password}`)}`;
 
     try {
-      const response = await fetch('http://localhost:8080/api/sell', {
+      const response = await fetch('https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi/api/sell', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
