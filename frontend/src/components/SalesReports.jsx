@@ -365,42 +365,28 @@ const SalesReports = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) =>
-                order.orderDetails.map((detail, index) => {
-                  const eventName = getEventName(detail.eventTicketTypeId);
-                  const totalPrice = detail.unitPrice * detail.quantity;
-                  return (
-                    <tr key={`${order.orderId}-${index}`}>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
-                        {order.orderId}
-                      </td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
-                        {new Date(order.orderDate).toLocaleString()}
-                      </td>
-                      <td
-                        style={{
-                          padding: '8px',
-                          lineHeight: '1.6',
-                        }}>{`${order.salespersonFirstName} ${order.salespersonLastName}`}</td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
-                        {eventName}
-                      </td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
-                        {detail.eventTicketTypeId}
-                      </td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
-                        {detail.quantity}
-                      </td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
-                        {detail.unitPrice.toFixed(2)} €
-                      </td>
-                      <td style={{ padding: '8px', lineHeight: '1.6' }}>
-                        {totalPrice.toFixed(2)} €
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
+            {orders.map((order) =>
+  order.orderDetails.map((detail, index) => {
+    const { eventName, ticketTypeName } = getEventDetails(detail.eventTicketTypeId);
+    const totalPrice = detail.unitPrice * detail.quantity;
+    return (
+      <tr key={`${order.orderId}-${index}`}>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{order.orderId}</td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>
+          {new Date(order.orderDate).toLocaleString()}
+        </td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>
+          {`${order.salespersonFirstName} ${order.salespersonLastName}`}
+        </td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{eventName}</td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.eventTicketTypeId}</td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.quantity}</td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{detail.unitPrice.toFixed(2)} €</td>
+        <td style={{ padding: '8px', lineHeight: '1.6' }}>{totalPrice.toFixed(2)} €</td>
+      </tr>
+    );
+  })
+)}
             </tbody>
           </table>
         </div>
