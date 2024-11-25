@@ -1470,3 +1470,92 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
   - Testataan repositoriotesteissä.
 
 ---
+
+## REST API -testaus
+
+### Reitityksen testaus (RestApiTests)
+- **Testattava:** Testataan eri reittien osalta, ohjautuuko reititys oikein ja onko palautunut vastaus odotetunlainen. Lisäksi testataan tilannetta, että reittiä ei ole olemassa.
+- **Suoritetut testit:** 
+  - **testGetEventByIdRoute**
+    - Suoritetaan MockMvc:tä käyttäen GET -pyyntö reitille `/events/1` 
+    - Tarkistetaan, että status on `200 OK`
+    - Tarkistetaan, että pyyntö ohjautuu metodiin `getEventById`
+    - Varmistetaan, että JSON-vastauksessa `eventId` on 1.
+    - **Tulos:** Testi varmistaa, että yksittäisen tapahtuman haku toimii odotetulla tavalla.
+  - **testGetOrdersRoute**
+    - Suoritetaan MockMvc:tä käyttäen GET -pyyntö reitille `/orders` (otettu huomioon reitille vaadittava autentikointi)
+    - Tarkistetaan, että status on `200 OK`
+    - Tarkistetaan, että pyyntö ohjautuu metodiin `getAllOrders`
+    - Tarkistetaan, että JSON-vastauksena on lista tapahtumista.
+    - **Tulos:** Testi varmistaa, että yksittäisen tapahtuman haku toimii odotetulla tavalla.
+  - **testInvalidRoute**
+    - Suoritetaan GET -pyyntö reitille `/invalid-route`
+    - Varmistetaan, että vastauksen status on 404 Not Found
+    - **Tulos:** Testi varmistaa, että virheellinen pyyntö käsitellään oikein.
+  - **testGetTicketsEventStatus**
+    - Luodaan ensin mockattuja lippuja tapahtumaan, jonka id on 1
+    - Suoritetaan MockMvc:tä käyttäen GET -pyyntö reitille `/tickets/event/1` 
+    - Tarkistetaan, että vastauksen status on `200 OK`
+    - Tarkistetaan, että vastauksena on JSON-muotoinen lista, jossa jokaisella lipulla on `ticketCode` ja `valid` -kentät
+    - **Tulos:** Testi varmistaa, että tapahtumakohtaiset liput palautetaan oikein.
+  - **testCreateOrderRoute**
+    - Suoritetaan MockMvc:tä käyttäen POST -pyyntö reitille `/orders` sisältäen tilauksen tiedot JSON-muodossa.
+    - Tarkistetaan, että vastauksen status on `201 Created`
+    - Tarkistetaan, että pyyntö ohjautuu metodiin `newOrder`
+    - **Tulos:** Testi varmistaa, että uuden tilauksen luominen toimii odotetusti.
+
+  ---
+
+## CLIENT-sivujen testaus
+
+### Index-sivu (ClientIndexTest)
+- **Testattava:** Clientin index-sivu.
+- **Suoritetut testit:** 
+  - **testIndexPageContainsWelcomeText**
+    - Suoritetaan MockMvc:tä käyttäen GET -pyyntö reitille `/index`. 
+    - Tarkistetaan, että status on `200 OK`
+    - Tarkistetaan, että palautettu HTML-sivu sisältää tekstin "Welcome to TicketGuru!".
+    - **Tulos:** Testi varmistaa, että clientin index-sivu näyttää oikean tervetulotekstin.
+  - **testIndexPageIsNotEmpty**
+    - Suoritetaan MockMvc:tä käyttäen GET -pyyntö reitille `/index`. 
+    - Tarkistetaan, että status on `200 OK`
+    - Tarkistetaan, että pyyntö ohjautuu metodiin `getAllOrders`
+    - Tarkistetaan, että vastauksen sisältö ei ole tyhjä merkkijono.
+    - **Tulos:** Testi varmistaa, että clientin index-sivu palauttaa sisältöä
+
+  ---
+
+### Ticketdashboard -sivu (ClientTicketdashboardTest)
+- **Testattava:** Clientin Ticketdashboard-sivu.
+- **Suoritetut testit:** 
+  - **testTicketdashboardLoads**
+    - Suoritetaan MockMvc:tä käyttäen GET -pyyntö reitille `/ticketdashboard` (otettu huomioon reitille vaadittava autentikointi). 
+    - Tarkistetaan, että status on `200 OK`
+    - Varmistetaan, että sisältö html-muotoista.
+    - Tarkistetaan, että palautettu sisältö sisältää seuraavat tekstit: "Sell tickets", "Event Name", Ticket Quantity" ja "Select the ticket Type".
+    - **Tulos:** Testi varmistaa, että clientin Ticketdashboard-sivu latautuu oikein ja näyttää oikeat elementit.
+  - **testTicketDashboardPageContainsSellButton**
+    - Suoritetaan MockMvc:tä käyttäen GET -pyyntö reitille `/ticketdashboard` (otettu huomioon reitille vaadittava autentikointi). 
+    - Tarkistetaan, että status on `200 OK`
+    - Tarkistetaan, että palautettu sisältö sisältää tekstin "SELL".
+    - **Tulos:** Testi varmistaa, että Ticketdashboard-sivulla on tarvittava painike lippujen myyntiin.
+  - **testTicketsSoldSuccessfully**
+    - Suoritetaan HTTP POST -pyyntö reitille `/sell` (otettu huomioon reitille vaadittava autentikointi). 
+    - Annetaan seuraavat parametrit: Tapahtuman ID: 1, Lippujen määrä: 5, Lipputyyppi: VIP
+    - Varmistetaan, että vastauksen status on uudelleenohjaus (3xx Redirection).
+    - Varmistetaan, että käyttäjä ohjataan `/ticketdashboard` -sivulle.
+    - Varmistetaan, että myynti on onnistunut (sisältää `success` -attribuutin)
+    - **Tulos:** Testi varmistaa, että lippujen myynti toimii odotetusti ja käyttäjä saa onnistumisviestin.
+  - **testNotEnoughTickets**
+    - Suoritetaan HTTP POST -pyyntö reitille `/sell` (otettu huomioon reitille vaadittava autentikointi). 
+    - Annetaan seuraavat parametrit: Tapahtuman ID: 1, Lippujen määrä: 999, Lipputyyppi: VIP
+    - Varmistetaan, että vastauksen status on uudelleenohjaus (3xx Redirection).
+    - Varmistetaan, että käyttäjä ohjataan `/ticketdashboard` -sivulle.
+    - Tarkistetaan, että `error` -attribuutti lisätään flash-viestiin ja sen sisältö on "Not enough tickets available.".
+    - **Tulos:** Testi varmistaa, että sovellus palauttaa virheviestin, jos lippuja ei ole riittävästi.
+
+  ---
+
+  
+
+
