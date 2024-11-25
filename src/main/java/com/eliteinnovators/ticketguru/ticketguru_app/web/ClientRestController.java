@@ -46,7 +46,7 @@ public class ClientRestController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping("/sell")
+   @PostMapping("/sell")
     public ResponseEntity<?> sellTickets(
         @Valid @RequestBody SellTicketsDto request,
         Authentication authentication)
@@ -54,7 +54,7 @@ public class ClientRestController {
 
         Long selectedEventId = request.getSelectedEventId();
         int quantity = request.getQuantity();
-        String ticketType = request.getTicketType();
+        String ticketTypeString = request.getTicketType();
 
         String username = authentication.getName();
         Event selectedEvent = eventService.getEventById(selectedEventId);
@@ -68,23 +68,20 @@ public class ClientRestController {
             return ResponseEntity.badRequest().body("Quantity must be greater than zero.");
         }
 
-        int ticketTypeIndex = "VIP".equalsIgnoreCase(ticketType) ? 0 : 1;
-        if (selectedEvent.getEventTicketTypes().size() <= ticketTypeIndex) {
+        EventTicketType selectedEventTicketType = null;
+        List<EventTicketType> eventTicketTypes = selectedEvent.getEventTicketTypes();
+        for(EventTicketType e : eventTicketTypes) {
+            if(e.getTicketTypeName().equals(ticketTypeString)) {
+                selectedEventTicketType = e;
+                break;
+            }
+        }
+        if (selectedEventTicketType == null) {
             return ResponseEntity.badRequest().body("Invalid ticket type selection.");
         }
 
-        EventTicketType selectedTicketType = selectedEvent.getEventTicketTypes().get(ticketTypeIndex);
-
-        int availableTickets = selectedTicketType.getTicketsInStock();
-        if (availableTickets < quantity) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Not enough tickets available. Available: " + availableTickets);
-        }
-
-        selectedTicketType.setTicketsInStock(availableTickets - quantity);
-
         OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
-        orderDetailsDTO.setEventTicketTypeId(selectedTicketType.getId());
+        orderDetailsDTO.setEventTicketTypeId(selectedEventTicketType.getId());
         orderDetailsDTO.setQuantity(quantity);
 
         OrderDTO orderDTO = new OrderDTO();
@@ -106,7 +103,7 @@ public class ClientRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while creating the order.");
         }
-    }
+    } 
 
     @GetMapping("/print-tickets/{orderId}")
     public ResponseEntity<?> getOrderTicketCodes(
