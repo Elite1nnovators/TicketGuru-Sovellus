@@ -21,7 +21,7 @@ function App() {
         <Route path="/home" element={<LandingPage />} />
         <Route path="/sell-ticket/:eventId" element={<SellTicket />} />
         <Route path="/print-tickets/:orderId" element={<PrintTickets />} />
-        <Route path="/sales-reports" element={<SalesReports />} />
+        {/*<Route path="/sales-reports" element={<SalesReports />} />*/}
         <Route path="/events" element={<EventSearch />} />
       </Routes>
     </Router>
