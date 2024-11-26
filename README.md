@@ -1556,6 +1556,100 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
 
   ---
 
-  
+  ### Entiteettien testaus (OrderValidationTest ja OrderEntityTest)
+  - **Testattava**: Order entiteetti.
+  - **Suoritetut testit**:
+    - **whenSalespersonIsNull_thenValidationFailure**
+      - Testataan tilauksen `salesperson`-kentän validointia, kun arvo on `null`.
+      - Suoritetaan validointi ja tarkastetaan, että:
+        - Validointivirheitä on 1.
+        - Virheviesti on: *"Order: Salesperson is required for the order".*
+      - **Tulos**: Testi varmistaa, että tilauksen luominen ilman myyjää ei onnistu.
+    - **whenOrderDetailsIsEmpty_thenValidationFailure**
+      - Testataan tilauksen `orderDetails`-kenttää, kun lista on tyhjä.
+      - Suoritetaan validointi ja tarkastetaan, että:
+        - Validointivirheitä on 1.
+        - Virheviesti on: *"Order: Order must have at least one order detail"*.
+      - **Tulos**: Testi varmistaa, että tilausta ei voi luoda ilman vähintään yhtä `orderDetail`-tietoa.
+    - **whenTicketsIsEmpty_thenValidationFailure**
+      - Testataan tilauksen `tickets`-kenttää, kun lista on tyhjä.
+      - Suoritetaan validointi ja tarkastetaan, että:
+        - Validointivirheitä on 1.
+        - Virheviesti on: *"Order: Tickets must contain at least one ticket"*.
+      - **Tulos**: Testi varmistaa, että tilausta ei voi luoda ilman lippuja.
+    - **whenOrderDateIsInFuture_thenValidationFailure**
+      - Testataan tilauksen `orderDate`-kenttää, kun päivämäärä on tulevaisuudessa.
+      - Suoritetaan validointi ja tarkastetaan, että:
+        - Validointivirheitä on 1.
+        - Virheviesti on: *"Order date cannot be in the future"*.
+      - **Tulos**: Testi varmistaa, että tilauksen päivämäärä ei voi olla tulevaisuudessa.
+    - **whenAllFieldsAreInvalid_thenValidationFailure**
+      - Testataan tilannetta, jossa kaikki `Order`-objektin kentät ovat virheellisiä:
+        - `salesperson` on null.
+        - `orderDate` on tulevaisuudessa.
+        - `tickets` on tyhjä.
+        - `orderDetails` on tyhjä.
+      - Suoritetaan validointi ja tarkastetaan, että:
+        - Validointivirheitä on yhteensä 4.
+      - **Tulos**: Testi varmistaa, että virheellisesti täytetty tilaus ei läpäise validointia.
+    - **testOrderFieldInitalization**
+      - Testataan `Order`-objektin kenttien alustusta:
+        - Luodaan uusi `Order`-instanssi ja asetetaan sille kentät.
+        - Tarkistetaan:
+          - `orderId` on aluksi `null`.
+          - `orderDetails`, `tickets`, `salesperson` ja  `orderDate` eivät ole `null`.
+          - `orderDetails` ja `tickets` ovat tyhjiä listoja.
+        - **Tulos**: Testi varmistaa, että `Order`-objektin kentät alustetaan oikein.
+    - **testOrderEntityRelationships**
+      - Testataan `Order`-entiteetin relaatioita muihin entiteetteihin:
+        - Luodaan `Order`-, `OrderDetails`-, `Salesperson`- ja `Ticket`-objektit.
+        - Asetetaan kuuluviksi kyseiseen tilaukseen.
+        - Tarkistetaan:
+          - `orderDetails`-listassa on yksi elementti.
+          - `tickets`-listassa on yksi elementti.
+          - `OrderDetails` ja `Ticket` on linkitetty oikein Order-entiteettiin.
+        - **Tulos**: Testi varmistaa, että `Order`-entiteetin suhteet muihin entiteetteihin toimivat odotetusti.
+    - **testOrderLinking**
+      - Testataan entiteetin käyttäytymistä mockatussa persistenssikontekstissa:
+        - Luodaan mockattu `EntityManager` ja määritellään sen palauttavan `Order`.
+        - Tarkistetaan:
+          - `Order` löytyy mockatusta `EntityManager`ista.
+          - `Salesperson` on linkitetty oikein palautettuun `Order`-instanssiin.
+        - **Tulos**: Testi varmistaa, että `Order`-entiteetti käyttäytyy odotetusti persistenssikontekstissa.
+
+    ---
+
+### ORM testaus (ORMIntegrationTest ja ORMPerformanceTest)
+  - **Testattava**: Entiteettien ja tietokannan välinen ORM-yhdistäminen, sovelluksen tietokantakyselyiden suorituskyky ja Hibernate-statistiikka.
+  - **Suoritetut testit**:
+    - **testTicketTypeEntityMapping**
+      - Testataan `TicketType`-entiteetin ja tietokannan välistä mappingia.
+        - Luodaan uusi `TicketType`-instanssi nimellä "VIP".
+        - Tallennetaan entiteetti tietokantaan.
+        - Haetaan tallennettu entiteetti `TicketTypeRepository`n avulla.
+        - Tarkistetaan:
+          - Tallennettu entiteetti löytyy tietokannasta.
+          - Haetun entiteetin nimi vastaa tallennettua nimeä.
+          - Entiteetin ID ei ole `null`.
+      - **Tulos**: Testi varmistaa, että `TicketType`-entiteetti on yhdistetty tietokantaan oikein ja että tallennus- ja hakuprosessi toimivat odotetusti.
+    - **testEventTicketTypePerformance**
+      - Suoritetaan `EventTicketTypeRepository.findAll()` ja mitataan suoritusaika.
+      - Tarkistetaan, että kyselyn kesto on alle 0,1 sekuntia.
+      - **Tulos**: Testi varmistaa, että `EventTicketType`-kyselyt toimivat nopeasti.
+    - **testEventPerformance**
+      - Suoritetaan `EventRepository.findAll()` ja mitataan suoritusaika.
+      - Tarkistetaan, että kyselyn kesto on alle 0,1 sekuntia.
+      - **Tulos**: Testi varmistaa, että `Event`-kyselyt toimivat nopeasti.
+    - **testOrderWithHibernateStatistics**
+      - Otetaan Hibernate-statistiikka käyttöön `SessionFactory`ssa.
+      - Suoritetaan `OrderRepository.findAll()` ja tarkistetaan suoritettujen kyselyiden määrä.
+      - Varmistetaan, että kyselyiden määrä on alle 2.
+      - **Tulos**: Testi varmistaa, että `Order`-entiteetin nouto suoritetaan tehokkaasti ilman ylimääräisiä kyselyitä.
+    - **testTicketPerformanceWithHibernateStatistics**
+      - Otetaan Hibernate-statistiikka käyttöön `SessionFactory`ssa.
+      - Suoritetaan `TicketRepository.findAll()` ja tarkistetaan suoritettujen kyselyiden määrä.
+      - Varmistetaan, että kyselyiden määrä on alle 2.
+      - **Tulos**: Testi varmistaa, että `Ticket`-entiteetin nouto suoritetaan tehokkaasti ilman ylimääräisiä kyselyitä.
+
 
 
