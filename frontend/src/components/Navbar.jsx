@@ -2,12 +2,18 @@ import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import Logo from '../assets/Logo.png'; 
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+
 
 function TicketGuruNavbar () {
     const navigate = useNavigate();
 
     const handleLogout = () => {
         navigate('/');
+    };
+
+    const handleShoppingCart = () => {
+        navigate('/shopping-cart');
     };
 
     return (
@@ -31,6 +37,10 @@ function TicketGuruNavbar () {
                     <Nav.Link as={Link} to="/events">Events and Sales </Nav.Link>
                     <Nav.Link as={Link} to="/sales-reports">Reports</Nav.Link>
                 </Nav>
+                <Button onClick={handleShoppingCart} variant="outline-danger" className="d-flex align-items-center">
+                Shopping Cart
+                <ShoppingCartIcon width={20} height={20} className="ms-2" />
+            </Button>
             <Button onClick={handleLogout} variant="outline-danger" className="d-flex align-items-center">
                 Logout
                 <ArrowLeftStartOnRectangleIcon width={20} height={20} className="ms-2" />
