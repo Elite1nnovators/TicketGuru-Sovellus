@@ -108,9 +108,10 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     reactClientTest.setAllowCredentials(true); // Allows cookies or Authorization headers
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", reactClientTest);
     source.registerCorsConfiguration("/tickets/event/**", generalConfiguration); 
     source.registerCorsConfiguration("/events", eventsConfiguration); 
-    source.registerCorsConfiguration("/**", reactClientTest);
+    
 
     return source;
 
