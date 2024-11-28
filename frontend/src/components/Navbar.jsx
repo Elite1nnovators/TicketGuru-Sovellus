@@ -12,7 +12,7 @@ function TicketGuruNavbar () {
 
     return (
         <Navbar className="bg-body-tertiary ms-0" data-bs-theme="dark">
-        <Container className="ms-0">
+        <Container fluid>
             <Navbar.Brand href="#home">
             <img
               alt=""
@@ -31,7 +31,7 @@ function TicketGuruNavbar () {
                     <Nav.Link as={Link} to="/events">Events and Sales </Nav.Link>
                     <Nav.Link as={Link} to="/sales-reports">Reports</Nav.Link>
                 </Nav>
-            <Button onClick={handleLogout} variant="outline-danger" className="d-flex align-items-center">
+            <Button onClick={handleLogout} variant="outline-danger" className="ms-auto d-flex align-items-center">
                 Logout
                 <ArrowLeftStartOnRectangleIcon width={20} height={20} className="ms-2" />
             </Button>

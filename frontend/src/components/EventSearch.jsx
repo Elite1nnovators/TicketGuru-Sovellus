@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // For navigation
 import api from './api';
+import { Button } from 'react-bootstrap';
+import AddEvent from './AddEvent';
+import addEvent from './AddEvent';
+import { CreditCardIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 const EventSearch = () => {
   const [events, setEvents] = useState([]);
@@ -13,22 +17,25 @@ const EventSearch = () => {
   const navigate = useNavigate(); 
 
   // hakee tapahtumat API:sta
+  const fetchEvents = async () => {
+    try {
+      const response = await api.get('/events');
+      console.log(response.data);
+      const upcomingEvents = response.data.filter(
+        (event) => new Date(event.eventDate) > new Date()
+      );
+      setEvents(upcomingEvents);
+      setFilteredEvents(upcomingEvents);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // useEffect vain ensimmäiselle lataukselle
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await api.get('/events');
-        const upcomingEvents = response.data.filter(
-          (event) => new Date(event.eventDate) > new Date()
-        );
-        setEvents(upcomingEvents);
-        setFilteredEvents(upcomingEvents);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchEvents();
+    fetchEvents(); 
   }, []);
 
   // Käsittelee haun
@@ -61,12 +68,45 @@ const EventSearch = () => {
     }
   };
 
+  // Luo uusi tapahtuma
+  const addEvent = async (event) => {
+    console.log(event);
+    try {
+        const response = await api.post('/events', event);
+        console.log("Event added:", response);
+        await fetchEvents();
+    } catch (error) {
+        console.error("Error adding event:", error.response ? error.response.data : error);
+    }
+  };
+
+  //Käsittele poisto
+  const handleDeleteEvent = async () => {
+    if (selectedEvent) {
+      const confirmed = window.confirm(`Are you sure you want to delete event ${selectedEvent.eventName}?`);
+      if (confirmed) {
+        try {
+          await api.delete(`/events/${selectedEvent.eventId}`);
+          setSelectedEvent(null); // Tyhjennä valittu tapahtuma
+          await fetchEvents();
+          alert('Event deleted successfully');
+        } catch (error) {
+          console.error('Error deleting event:', error);
+          alert('Error deleting event');
+        }
+      }
+    }
+  };
+
   if (loading) return <p>Loading events...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>Event Search</h1>
+
+      <AddEvent addEvent={addEvent} />
+
       {/* Haku */}
       <input
         type="text"
@@ -95,9 +135,16 @@ const EventSearch = () => {
       {selectedEvent ? (
         <div style={styles.eventDetails}>
           <EventItem event={selectedEvent} />
-          <button style={styles.sellTicketButton} onClick={handleSellTicket}>
-            Sell Ticket
-          </button>
+          <div className="d-flex justify-content-center gap-4">
+          <Button style={styles.sellTicketButton} onClick={handleSellTicket} className="d-flex align-items-center">
+          <CreditCardIcon width={20} height={20} className='me-2' />
+            Sell Tickets
+          </Button>
+          <Button variant='danger' onClick={handleDeleteEvent} className="d-flex align-items-center">
+          <TrashIcon width={20} height={20} className='me-2' />
+            Delete
+          </Button>
+          </div>
         </div>
       ) : (
         <p style={styles.placeholderText}>No event selected.</p>
@@ -143,7 +190,7 @@ const TicketList = ({ ticketTypes }) => (
             <strong>Ticket Type Name:</strong> {ticketType.ticketTypeName}
           </p>
           <p>
-            <strong>Price:</strong> ${ticketType.price.toFixed(2)}
+            <strong>Price:</strong> {ticketType.price.toFixed(2)} €
           </p>
           <p>
             <strong>Tickets in Stock:</strong> {ticketType.ticketsInStock}
