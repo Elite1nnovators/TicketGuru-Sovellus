@@ -19,7 +19,7 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestBody LoginRequestDTO loginRequest, HttpServletResponse response) {
         try {
-            // Authenticate the username and password
+            
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                     loginRequest.getUsername(),
@@ -27,12 +27,12 @@ public class AuthController {
                 )
             );
 
-            // Set the authenticated user in the SecurityContext
+           
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             return "Login successful for user: " + authentication.getName();
         } catch (Exception ex) {
-            // If authentication fails
+            
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return "Invalid username or password";
         }

@@ -25,17 +25,6 @@ public class Salesperson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long salespersonId;
 
-    @NotBlank(message = "Username must not be blank")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
-
-    @NotBlank(message = "Password must not be blank")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
-    @Column(name = "password", nullable = false)
-    private String passwordHash;
-
-    private boolean isAdmin;
 
     @NotBlank(message = "First name must not be blank")
     @Size(min = 1, max = 50, message = "First name must be between 1 and 50 characters")
@@ -55,11 +44,8 @@ public class Salesperson {
 
     public Salesperson() {}
     
-    public Salesperson(String username, String passwordHash, boolean isAdmin, String firstName,
+    public Salesperson(String firstName,
             String lastName, String phone, List<Order> orders) {
-        this.username = username;
-        this.passwordHash = passwordHash;
-        this.isAdmin = isAdmin;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -76,31 +62,7 @@ public class Salesperson {
         this.salespersonId = salespersonId;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
+   
     public String getFirstName() {
         return firstName;
     }
@@ -134,9 +96,4 @@ public class Salesperson {
     }
 
 
-    @Override
-    public String toString() {
-        return "Salesperson [salespersonId=" + salespersonId + ", username=" + username + ", isAdmin=" + isAdmin
-                + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + "]";
-    }
 }

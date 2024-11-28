@@ -20,9 +20,12 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.SellTicketsDto;
 import com.eliteinnovators.ticketguru.ticketguru_app.exception.InsufficientTicketsException;
 import com.eliteinnovators.ticketguru.ticketguru_app.exception.SalespersonNotFoundException;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.SalespersonRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.UserRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.EventService;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.OrderService;
+import com.eliteinnovators.ticketguru.ticketguru_app.service.SalespersonService;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.TicketService;
+import com.eliteinnovators.ticketguru.ticketguru_app.service.UserService;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +48,16 @@ public class ClientRestController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SalespersonService salespersonService;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
    @PostMapping("/sell")
     public ResponseEntity<?> sellTickets(
@@ -85,9 +98,9 @@ public class ClientRestController {
         orderDetailsDTO.setQuantity(quantity);
 
         OrderDTO orderDTO = new OrderDTO();
-        Salesperson salesperson = salespersonRepository.findByUsername(username)
-                .orElseThrow(() -> new SalespersonNotFoundException("Salesperson with username " + username + " not found"));
-        orderDTO.setSalespersonId(salesperson.getSalespersonId());
+        SalespersonDTO salespersonDTO = salespersonService.getSalespersonByUsername(username);
+                
+        orderDTO.setSalespersonId(salespersonDTO.getSalespersonId());
         orderDTO.setOrderDetails(List.of(orderDetailsDTO));
 
         try {
@@ -125,5 +138,56 @@ public class ClientRestController {
         }
     }
 
+
+    @PostMapping("/users")
+public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+    // Ensure salesperson is provided
+    if (userDTO.getSalesperson() != null && userDTO.getSalesperson().getSalespersonId() != null) {
+        SalespersonDTO salespersonDTO = salespersonService.getSalespersonById(userDTO.getSalesperson().getSalespersonId());
+
+        if (salespersonDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Salesperson with ID " + userDTO.getSalesperson().getSalespersonId() + " not found.");
+        }
+
+        // Set username if null
+        if (userDTO.getUsername() == null) {
+            String firstNamePart = salespersonDTO.getFirstName().length() >= 3 ? 
+                salespersonDTO.getFirstName().substring(0, 3) : salespersonDTO.getFirstName();
+            String lastNamePart = salespersonDTO.getLastName().length() >= 3 ? 
+                salespersonDTO.getLastName().substring(0, 3) : salespersonDTO.getLastName();
+
+            String username = firstNamePart + lastNamePart;
+            userDTO.setUsername(username);
+        }
+
+        // Assign salesperson to user
+        userDTO.setSalesperson(salespersonDTO);
+    }
+
+    // Create the user
+    UserDTO createdUser = userService.createUser(userDTO, userDTO.getPassword());
+    return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+}
+
+    @PostMapping("/salespersons")
+    public ResponseEntity<?> createSalesperson(@RequestBody SalespersonDTO salespersonDTO) {
+        SalespersonDTO createdSalesperson = salespersonService.createSalesperson(salespersonDTO);
+        return new ResponseEntity<>(createdSalesperson, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users/{Id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long Id) {
+        UserDTO user = userService.getUserById(Id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
     
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 }

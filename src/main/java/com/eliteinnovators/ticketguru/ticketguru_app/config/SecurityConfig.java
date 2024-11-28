@@ -32,7 +32,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/api/auth/login", "/api/auth/logout").permitAll() // Allow REST login/logout
+            .requestMatchers("/api/auth/login", "/api/auth/logout", "/api/users").permitAll() // Allow REST login/logout
             .requestMatchers("/tickets", "/index", "/ticketdashboard").hasAnyRole("SALESPERSON", "ADMIN")
             .anyRequest().authenticated()
         )
@@ -52,28 +52,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
 
 //--> "Admin & Salesperson" käyttäjätiedot (UserDetailsService)?
-    @Bean
-    public UserDetailsService userDetailsService() {
-        var userDetailsManager = new InMemoryUserDetailsManager();
-
-        userDetailsManager.createUser(
-            User.withUsername("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build()
-        );
-
-        userDetailsManager.createUser(
-            User.withUsername("salesperson")
-                .password(passwordEncoder().encode("salesperson"))
-                .roles("SALESPERSON")
-                .build()
-        );
-
-        return userDetailsManager;
-    }
-
-    @Bean
+       @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
