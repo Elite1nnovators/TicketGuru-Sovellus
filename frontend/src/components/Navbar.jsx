@@ -18,7 +18,7 @@ function TicketGuruNavbar () {
 
     return (
         <Navbar className="bg-body-tertiary ms-0" data-bs-theme="dark">
-        <Container className="ms-0">
+        <Container fluid>
             <Navbar.Brand href="#home">
             <img
               alt=""
