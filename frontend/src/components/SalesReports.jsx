@@ -278,7 +278,7 @@ const SalesReports = () => {
                 <tr>
                   <th style={{ ...styles.tableHeader, padding: '5px' }}>Ticket Type</th>
                   <th style={{ ...styles.tableHeader, padding: '5px' }}>Sales (€)</th>
-                  <th style={{ ...styles.tableHeader, padding: '5px' }}>Tickets Sold</th>
+                  <th style={{ ...styles.tableHeader, padding: '5px', textAlign: 'center' }}>Tickets Sold</th>
                 </tr>
               </thead>
               <tbody>
@@ -288,7 +288,7 @@ const SalesReports = () => {
                     <td style={{ ...styles.tableCell, padding: '5px' }}>
                       {summary.ticketTypeTotals[ticketType].revenue.toFixed(2)} €
                     </td>
-                    <td style={{ ...styles.tableCell, padding: '5px' }}>
+                    <td style={{ ...styles.tableCell, padding: '5px', textAlign: 'center' }}>
                       {summary.ticketTypeTotals[ticketType].quantity}
                     </td>
                   </tr>
@@ -298,7 +298,7 @@ const SalesReports = () => {
                   <td style={{ ...styles.tableCell, padding: '8px' }}>
                     <strong>{summary.totalRevenue.toFixed(2)} €</strong>
                   </td>
-                  <td style={{ ...styles.tableCell, padding: '8px' }}>
+                  <td style={{ ...styles.tableCell, padding: '8px', textAlign: 'center' }}>
                     <strong>{summary.totalTicketsSold}</strong>
                   </td>
                 </tr>
@@ -323,6 +323,7 @@ const SalesReports = () => {
                       <th style={styles.tableHeader}>Order ID</th>
                       <th style={styles.tableHeader}>Order Date</th>
                       <th style={styles.tableHeader}>Salesperson</th>
+                      <th style={styles.tableHeader}>Event</th>
                       <th style={styles.tableHeader}>Ticket Type</th>
                       <th style={styles.tableHeader}>Quantity</th>
                       <th style={styles.tableHeader}>Unit Price</th>
@@ -332,7 +333,7 @@ const SalesReports = () => {
                   <tbody>
                     {summary.eventOrders.map((order) =>
                       order.orderDetails.map((detail, index) => {
-                        const { ticketTypeName } = getEventDetails(detail.eventTicketTypeId);
+                        const { ticketTypeName, eventName } = getEventDetails(detail.eventTicketTypeId);
                         return (
                           <tr key={`${order.orderId}-${index}`}>
                             <td style={styles.tableCell}>{order.orderId}</td>
@@ -342,6 +343,7 @@ const SalesReports = () => {
                             <td style={styles.tableCell}>
                               {order.salespersonFirstName} {order.salespersonLastName}
                             </td>
+                            <td style={styles.tableCell}>{eventName}</td>
                             <td style={styles.tableCell}>{ticketTypeName}</td>
                             <td style={styles.tableCell}>{detail.quantity}</td>
                             <td style={styles.tableCell}>
@@ -370,6 +372,7 @@ const SalesReports = () => {
                 <th style={styles.tableHeader}>Order ID</th>
                 <th style={styles.tableHeader}>Order Date</th>
                 <th style={styles.tableHeader}>Salesperson</th>
+                <th style={styles.tableHeader}>Event</th>
                 <th style={styles.tableHeader}>Ticket Type</th>
                 <th style={styles.tableHeader}>Quantity</th>
                 <th style={styles.tableHeader}>Unit Price</th>
@@ -388,6 +391,7 @@ const SalesReports = () => {
                     <td style={styles.tableCell}>
                       {selectedOrder.salespersonFirstName} {selectedOrder.salespersonLastName}
                     </td>
+                    <td style={styles.tableCell}>{eventName}</td>
                     <td style={styles.tableCell}>{ticketTypeName}</td>
                     <td style={styles.tableCell}>{detail.quantity}</td>
                     <td style={styles.tableCell}>
