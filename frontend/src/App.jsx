@@ -12,6 +12,7 @@ import Navbar from './components/Navbar';
 import SalesReports from './components/SalesReports';
 import EventSearch from './components/EventSearch';
 import ShoppingCart from './components/ShoppingCart';
+import UserDashboard from './components/UserDashvoard';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/sales-reports" element={<SalesReports />} />
         <Route path="/events" element={<EventSearch />} />
         <Route path="/shopping-cart" element={<ShoppingCart />} />
+        <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>
     </Router>
   );

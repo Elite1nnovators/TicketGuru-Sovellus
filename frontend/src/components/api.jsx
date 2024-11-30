@@ -18,6 +18,8 @@ api.interceptors.request.use(
       config.headers['Authorization'] = `Basic ${btoa(
         `${auth.username}:${auth.password}`
       )}`;
+      
+      
     }
     return config;
   },

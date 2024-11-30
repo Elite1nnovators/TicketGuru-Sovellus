@@ -2,12 +2,12 @@ package com.eliteinnovators.ticketguru.ticketguru_app.repository;
 
 import java.util.Optional;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Salesperson;
 
-public interface SalespersonRepository extends CrudRepository<Salesperson,Long>{
+public interface SalespersonRepository extends JpaRepository<Salesperson,Long>{
 
-    Optional<Salesperson> findByUsername(String username);
+    Optional<Salesperson> findBySalespersonId(Long salespersonId);
 
 }

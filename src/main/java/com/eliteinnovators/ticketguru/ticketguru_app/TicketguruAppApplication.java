@@ -1,17 +1,29 @@
 package com.eliteinnovators.ticketguru.ticketguru_app;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-//import org.springframework.dao.DataIntegrityViolationException;
+
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventTicketTypeRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.SalespersonRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketTypeRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.service.OrderService;
+import com.eliteinnovators.ticketguru.ticketguru_app.web.OrderDTO;
+import com.eliteinnovators.ticketguru.ticketguru_app.web.OrderDetailsDTO;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.*;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.*;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.*;
 import com.eliteinnovators.ticketguru.ticketguru_app.web.*;
+
+
 
 @SpringBootApplication
 public class TicketguruAppApplication {
@@ -20,7 +32,7 @@ public class TicketguruAppApplication {
         SpringApplication.run(TicketguruAppApplication.class, args);
     }
 
-    @SuppressWarnings("unused")
+       @SuppressWarnings("unused")
     @Bean
     public CommandLineRunner demo(
             EventRepository eventRepository, 
@@ -51,10 +63,10 @@ public class TicketguruAppApplication {
                     .orElseGet(() -> eventTicketTypeRepository.save(new EventTicketType(concert1, lapsi, 15, 100)));
 
             // 4. Create and save salespersons if they don't exist
-            Salesperson salesperson = salespersonRepository.findByUsername("salesperson")
-                    .orElseGet(() -> salespersonRepository.save(new Salesperson("salesperson", "salesperson", false, "Peter", "Smith", "0451234567", null)));
-            Salesperson admin = salespersonRepository.findByUsername("admin")
-                    .orElseGet(() -> salespersonRepository.save(new Salesperson("admin", "password", false, "Anna", "Brown", "0409876543", null)));
+            Salesperson salesperson = salespersonRepository.findBySalespersonId(1L)
+                    .orElseGet(() -> salespersonRepository.save(new Salesperson("Peter",  "Smith", "0451234567", null)));
+            Salesperson admin = salespersonRepository.findBySalespersonId(2L)
+                    .orElseGet(() -> salespersonRepository.save(new Salesperson("Anna", "Brown", "0409876543", null)));
 
             // 5. Create order details
             OrderDetailsDTO orderDetailDTO1 = new OrderDetailsDTO(etc1.getId(), 2, etc1.getPrice());
@@ -80,5 +92,6 @@ public class TicketguruAppApplication {
         */};
 
     }
+
 
 }
