@@ -4,6 +4,9 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
+
 public interface TicketTypeRepository extends JpaRepository<TicketType, Long> {
     Optional<TicketType> findByName(String name);
+    Optional<TicketType> findById(Long id);
 }
