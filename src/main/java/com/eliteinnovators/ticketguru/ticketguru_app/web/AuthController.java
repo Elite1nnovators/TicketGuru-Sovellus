@@ -29,12 +29,13 @@ public class AuthController {
 
            
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            return "Login successful for user: " + authentication.getName();
+            System.out.print("_____AUTHENTICATED USER " + authentication.getName());
+            return authentication.getName();
         } catch (Exception ex) {
             
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return "Invalid username or password";
         }
     }
+
 }

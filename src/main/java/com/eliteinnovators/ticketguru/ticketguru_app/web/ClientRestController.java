@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/api")
 public class ClientRestController {
@@ -42,12 +42,9 @@ public class ClientRestController {
 
     @Autowired
     private TicketService ticketService;
-    
-    @Autowired
-    private SalespersonRepository salespersonRepository;
 
     @Autowired
-    private OrderService orderService;
+    private SalespersonRepository salespersonRepository;
 
     @Autowired
     private UserService userService;
@@ -58,12 +55,13 @@ public class ClientRestController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private OrderService orderService;
 
-   @PostMapping("/sell")
+    @PostMapping("/sell")
     public ResponseEntity<?> sellTickets(
-        @Valid @RequestBody SellTicketsDto request,
-        Authentication authentication)
-    {
+            @Valid @RequestBody SellTicketsDto request,
+            Authentication authentication) {
 
         Long selectedEventId = request.getSelectedEventId();
         int quantity = request.getQuantity();
@@ -83,8 +81,8 @@ public class ClientRestController {
 
         EventTicketType selectedEventTicketType = null;
         List<EventTicketType> eventTicketTypes = selectedEvent.getEventTicketTypes();
-        for(EventTicketType e : eventTicketTypes) {
-            if(e.getTicketTypeName().equals(ticketTypeString)) {
+        for (EventTicketType e : eventTicketTypes) {
+            if (e.getTicketTypeName().equals(ticketTypeString)) {
                 selectedEventTicketType = e;
                 break;
             }
@@ -99,7 +97,7 @@ public class ClientRestController {
 
         OrderDTO orderDTO = new OrderDTO();
         SalespersonDTO salespersonDTO = salespersonService.getSalespersonByUsername(username);
-                
+
         orderDTO.setSalespersonId(salespersonDTO.getSalespersonId());
         orderDTO.setOrderDetails(List.of(orderDetailsDTO));
 
@@ -116,7 +114,7 @@ public class ClientRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while creating the order.");
         }
-    } 
+    }
 
     @GetMapping("/print-tickets/{orderId}")
     public ResponseEntity<?> getOrderTicketCodes(
@@ -138,42 +136,25 @@ public class ClientRestController {
         }
     }
 
+    @PostMapping("/add/user")
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+        
+        if (userDTO.getSalesperson() != null && userDTO.getSalesperson().getSalespersonId() != null) {
+            SalespersonDTO salespersonDTO = salespersonService
+                    .getSalespersonById(userDTO.getSalesperson().getSalespersonId());
 
-    @PostMapping("/users")
-public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
-    // Ensure salesperson is provided
-    if (userDTO.getSalesperson() != null && userDTO.getSalesperson().getSalespersonId() != null) {
-        SalespersonDTO salespersonDTO = salespersonService.getSalespersonById(userDTO.getSalesperson().getSalespersonId());
+            if (salespersonDTO == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Salesperson with ID " + userDTO.getSalesperson().getSalespersonId() + " not found.");
+            }
 
-        if (salespersonDTO == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Salesperson with ID " + userDTO.getSalesperson().getSalespersonId() + " not found.");
+            
+            userDTO.setSalesperson(salespersonDTO);
         }
 
-        // Set username if null
-        if (userDTO.getUsername() == null) {
-            String firstNamePart = salespersonDTO.getFirstName().length() >= 3 ? 
-                salespersonDTO.getFirstName().substring(0, 3) : salespersonDTO.getFirstName();
-            String lastNamePart = salespersonDTO.getLastName().length() >= 3 ? 
-                salespersonDTO.getLastName().substring(0, 3) : salespersonDTO.getLastName();
-
-            String username = firstNamePart + lastNamePart;
-            userDTO.setUsername(username);
-        }
-
-        // Assign salesperson to user
-        userDTO.setSalesperson(salespersonDTO);
-    }
-
-    // Create the user
-    UserDTO createdUser = userService.createUser(userDTO, userDTO.getPassword());
-    return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-}
-
-    @PostMapping("/salespersons")
-    public ResponseEntity<?> createSalesperson(@RequestBody SalespersonDTO salespersonDTO) {
-        SalespersonDTO createdSalesperson = salespersonService.createSalesperson(salespersonDTO);
-        return new ResponseEntity<>(createdSalesperson, HttpStatus.CREATED);
+        
+        UserDTO createdUser = userService.createUser(userDTO, userDTO.getPassword());
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/users/{Id}")
@@ -184,10 +165,42 @@ public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-    
+
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    @GetMapping("/salespersons")
+    public ResponseEntity<List<SalespersonDTO>> getAllSalespersons() {
+        List<SalespersonDTO> salespersons = salespersonService.getAllSalespersons();
+        return new ResponseEntity<>(salespersons, HttpStatus.OK);
+    }
+
+    @PostMapping("/add/salesperson")
+    public ResponseEntity<?> createSalesperson(@RequestBody SalespersonDTO salespersonDTO) {
+        SalespersonDTO createdSalesperson = salespersonService.createSalesperson(salespersonDTO);
+        return new ResponseEntity<>(createdSalesperson, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated.");
+        }
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("-------AUTHENTICATED USER: " + username);
+        UserDTO user = userService.getUserByUsername(username);
+        
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+        
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
 }

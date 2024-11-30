@@ -36,6 +36,7 @@ function TicketGuruNavbar () {
                   {/*  <Nav.Link as={Link} to="/sell-ticket">Sales</Nav.Link>*/}
                     <Nav.Link as={Link} to="/events">Events and Sales </Nav.Link>
                     <Nav.Link as={Link} to="/sales-reports">Reports</Nav.Link>
+                    <Nav.Link as={Link} to="/user-dashboard">UserDasboard</Nav.Link>
                 </Nav>
                 <Button onClick={handleShoppingCart} variant="outline-danger" className="d-flex align-items-center">
                 Shopping Cart

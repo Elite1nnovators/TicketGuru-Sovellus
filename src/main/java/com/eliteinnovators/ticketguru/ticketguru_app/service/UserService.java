@@ -40,6 +40,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User curruser = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        
         UserDetails user = new org.springframework.security.core.userdetails.User(username,
         curruser.getPasswordHash(),
         AuthorityUtils.createAuthorityList(curruser.getRole()));
@@ -47,13 +48,15 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public UserDTO getUserByUsername(String username, UserDTO userDTO) {
+    public UserDTO getUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         UserDTO foundUser = UserMapper.INSTANCE.userToUserDTO(user);
         return foundUser;
     }
+
+    
 
     public UserDTO createUser(UserDTO userDTO, String password) {
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);

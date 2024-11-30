@@ -1,6 +1,8 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,6 +36,13 @@ public class SalespersonService {
         Salesperson savedSalesperson = salespersonRepository.save(salesperson);
 
         return salespersonMapper.salespersonToSalespersonDTO(savedSalesperson);
+    }
+
+    public List<SalespersonDTO> getAllSalespersons() {
+        List<Salesperson> salespersons = salespersonRepository.findAll();
+        return salespersons.stream()
+                .map(SalespersonMapper.INSTANCE::salespersonToSalespersonDTO)
+                .collect(Collectors.toList());
     }
     
     public SalespersonDTO getSalespersonById(Long salespersonId) {
