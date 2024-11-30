@@ -8,6 +8,7 @@ const SellTicket = () => {
   const [quantity, setQuantity] = useState('');
   const [ticketType, setTicketType] = useState('');
   const [ticketTypes, setTicketTypes] = useState([]);
+  const [eventName, setEventName] = useState(''); // State for event name
   const [responseMessage, setResponseMessage] = useState('');
   const [orderId, setOrderId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,10 +16,14 @@ const SellTicket = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEventTicketTypes = async () => {
+    const fetchEventDetails = async () => {
       try {
         const response = await api.get(`/events/${eventId}`);
-        const fetchedTicketTypes = response.data.eventTicketTypes.map(
+        const event = response.data;
+        
+        // Set event name and ticket types
+        setEventName(event.eventName);
+        const fetchedTicketTypes = event.eventTicketTypes.map(
           (ett) => ett.ticketTypeName
         );
         setTicketTypes(fetchedTicketTypes);
@@ -31,7 +36,7 @@ const SellTicket = () => {
       }
     };
 
-    fetchEventTicketTypes();
+    fetchEventDetails();
   }, [eventId]);
 
   const handleSubmit = async (e) => {
@@ -70,7 +75,7 @@ const SellTicket = () => {
         <Spinner animation="border" role="status" className="mt-5">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
-        <p>Loading ticket types...</p>
+        <p>Loading event details...</p>
       </div>
     );
   }
@@ -85,7 +90,9 @@ const SellTicket = () => {
 
   return (
     <div className="container">
-      <h1>Sell Ticket for Event ID: {eventId}</h1>
+      <h1>
+        Sell Ticket for Event: {eventName} (ID: {eventId})
+      </h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formQuantity" className="mt-3">
           <Form.Label>Quantity</Form.Label>
