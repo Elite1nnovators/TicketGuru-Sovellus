@@ -76,10 +76,8 @@ public class OrderEntityTest {
         EntityManager entityManager = mock(EntityManager.class);
 
         Salesperson salesperson = new Salesperson();
-        salesperson.setUsername("user");
         salesperson.setFirstName("John");
         salesperson.setLastName("Doe");
-        salesperson.setPasswordHash("password");
 
         Order order = new Order();
         order.setSalesperson(salesperson);

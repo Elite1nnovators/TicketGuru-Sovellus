@@ -70,9 +70,7 @@ public class TicketRepositoryTest {
         // Luo salespersonin
         Salesperson salesperson = new Salesperson();
         salesperson.setFirstName("John");
-        salesperson.setUsername("johndoe");
         salesperson.setLastName("Doe");
-        salesperson.setPasswordHash("securepasswordhash");
         salesperson = salespersonRepository.save(salesperson);
 
         // Luo TicketTypen

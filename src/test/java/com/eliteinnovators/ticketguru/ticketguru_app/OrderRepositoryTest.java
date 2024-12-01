@@ -61,9 +61,7 @@ public void testFindByOrderId() {
     // Luo salespersonin
     Salesperson salesperson = new Salesperson();
     salesperson.setFirstName("John");
-    salesperson.setUsername("johndoe");
     salesperson.setLastName("Doe");
-    salesperson.setPasswordHash("securepasswordhash");
     salesperson = salespersonRepository.save(salesperson);
   
     // Luo TicketTypen
@@ -106,7 +104,6 @@ public void testFindByOrderId() {
     Order found = orderRepository.findByOrderId(order.getOrderId());
     assertNotNull(found);
     assertEquals(order.getOrderId(), found.getOrderId());
-    assertEquals(salesperson.getUsername(), found.getSalesperson().getUsername());
     assertEquals(1, found.getTickets().size());
 }
 
