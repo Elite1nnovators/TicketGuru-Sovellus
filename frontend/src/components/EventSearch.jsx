@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'; // For navigation
 import api from './api';
 import { Button } from 'react-bootstrap';
 import AddEvent from './AddEvent';
-import addEvent from './AddEvent';
 import { CreditCardIcon, TrashIcon } from '@heroicons/react/24/outline';
+import EditEvent from './EditEvent';
 
 const EventSearch = () => {
   const [events, setEvents] = useState([]);
@@ -70,6 +70,7 @@ const EventSearch = () => {
 
   // Luo uusi tapahtuma
   const addEvent = async (event) => {
+    console.log("Event structure:", JSON.stringify(event, null, 2));
     console.log(event);
     try {
         const response = await api.post('/events', event);
@@ -77,6 +78,7 @@ const EventSearch = () => {
         await fetchEvents();
     } catch (error) {
         console.error("Error adding event:", error.response ? error.response.data : error);
+        alert("Error adding event: " + (error.response ? error.response.data.message : error.message));
     }
   };
 
@@ -97,6 +99,17 @@ const EventSearch = () => {
       }
     }
   };
+
+  // Käsittele muokkaus
+  const editEvent = async (eventId, updatedEvent) => {
+    try {
+      const response = await api.put(`/events/${eventId}`, updatedEvent);
+      console.log("Event updated:", response);
+      await fetchEvents();
+    } catch {
+      console.error("Error updating event:", error.response ? error.response.data : error);
+    }
+  }
 
   if (loading) return <p>Loading events...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -140,10 +153,14 @@ const EventSearch = () => {
           <CreditCardIcon width={20} height={20} className='me-2' />
             Sell Tickets
           </Button>
-          <Button variant='danger' onClick={handleDeleteEvent} className="d-flex align-items-center">
+          <Button style={styles.deleteEventButton} onClick={handleDeleteEvent} className="d-flex align-items-center">
           <TrashIcon width={20} height={20} className='me-2' />
             Delete
           </Button>
+          <EditEvent 
+              editEvent={editEvent}
+              selectedEvent={selectedEvent} 
+              />
           </div>
         </div>
       ) : (
@@ -247,6 +264,17 @@ const styles = {
     marginTop: '20px',
     padding: '10px 20px',
     backgroundColor: '#007BFF',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    textAlign: 'center',
+  },
+  deleteEventButton: {
+    display: 'block',
+    marginTop: '20px',
+    padding: '10px 20px',
+    backgroundColor: '#FF0000',
     color: '#fff',
     border: 'none',
     borderRadius: '5px',
