@@ -15,6 +15,17 @@ public class SellTicketsDto {
     @NotBlank(message = "ticketType is required")
     private String ticketType;
 
+    @NotNull(message = "isSoldAtDoor is required")
+    private boolean isSoldAtDoor;
+
+    public boolean isSoldAtDoor() {
+        return isSoldAtDoor;
+    }
+
+    public void setSoldAtDoor(boolean isSoldAtDoor) {
+        this.isSoldAtDoor = isSoldAtDoor;
+    }
+
     public Long getSelectedEventId() {
         return selectedEventId;
     }

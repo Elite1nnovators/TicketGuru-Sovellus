@@ -66,6 +66,7 @@ public class ClientRestController {
         Long selectedEventId = request.getSelectedEventId();
         int quantity = request.getQuantity();
         String ticketTypeString = request.getTicketType();
+        boolean soldAtDoor = request.isSoldAtDoor();
 
         String username = authentication.getName();
         Event selectedEvent = eventService.getEventById(selectedEventId);
@@ -77,6 +78,15 @@ public class ClientRestController {
 
         if (quantity <= 0) {
             return ResponseEntity.badRequest().body("Quantity must be greater than zero.");
+        }
+
+        boolean advanceSaleActive = selectedEvent.isAdvanceSaleActive();
+        if (advanceSaleActive && soldAtDoor) {
+            return ResponseEntity.badRequest().body("Tickets cannot be marked as 'sold at the door' during the advance sales period.");
+        }
+
+        if (!advanceSaleActive && !soldAtDoor) {
+            return ResponseEntity.badRequest().body("Advance sales are over. Tickets must be sold at the door.");
         }
 
         EventTicketType selectedEventTicketType = null;

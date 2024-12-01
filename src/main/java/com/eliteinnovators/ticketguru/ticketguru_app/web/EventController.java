@@ -81,4 +81,11 @@ public class EventController {
         Event patchedEvent = eventService.patchEvent(eventId, updates);
         return ResponseEntity.status(HttpStatus.OK).body(patchedEvent);
     }
+
+    @GetMapping("/{eventId}/availability")
+    public ResponseEntity<Boolean> checkAdvanceSaleAvailability(@PathVariable Long eventId) {
+        Event event = eventService.getEventById(eventId);
+        boolean isAvailable = event.isAdvanceSaleActive();
+        return ResponseEntity.ok(isAvailable);
+    }
 }

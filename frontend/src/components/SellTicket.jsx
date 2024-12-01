@@ -11,6 +11,7 @@ const SellTicket = () => {
   const [eventName, setEventName] = useState(''); // State for event name
   const [responseMessage, setResponseMessage] = useState('');
   const [orderId, setOrderId] = useState(null);
+  const [soldAtDoor, setSoldAtDoor] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const SellTicket = () => {
       try {
         const response = await api.get(`/events/${eventId}`);
         const event = response.data;
-        
+
         // Set event name and ticket types
         setEventName(event.eventName);
         const fetchedTicketTypes = event.eventTicketTypes.map(
@@ -46,6 +47,7 @@ const SellTicket = () => {
       selectedEventId: parseInt(eventId, 10),
       quantity: parseInt(quantity, 10),
       ticketType,
+      soldAtDoor,
     };
 
     try {
@@ -124,6 +126,17 @@ const SellTicket = () => {
                 No ticket types available
               </option>
             )}
+          </Form.Control>
+        </Form.Group>
+        <Form.Group controlId="formSoldAtDoor" className="mt-3">
+          <Form.Label>Sold at Door?</Form.Label>
+          <Form.Control
+            as="select"
+            value={soldAtDoor ? 'Y' : 'N'}
+            onChange={(e) => setSoldAtDoor(e.target.value === 'Y')}
+            required>
+            <option value="N">No</option>
+            <option value="Y">Yes</option>
           </Form.Control>
         </Form.Group>
 
