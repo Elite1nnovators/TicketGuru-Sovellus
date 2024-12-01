@@ -12,7 +12,7 @@ import Navbar from './components/Navbar';
 import SalesReports from './components/SalesReports';
 import EventSearch from './components/EventSearch';
 import ShoppingCart from './components/ShoppingCart';
-import UserDashboard from './components/UserDashvoard';
+import UserDashboard from './components/UserDashboard';
 
 function App() {
   return (

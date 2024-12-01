@@ -15,7 +15,7 @@ import {
 
 const UserDashboard = () => {
   const [userDetails, setUserDetails] = useState({});
-
+  const [usernameList, setUsernameList] = useState([]);
   const [salespersonList, setSalespersonList] = useState([]);
   const [newSalesperson, setNewSalesperson] = useState({
     firstName: "",
@@ -31,7 +31,7 @@ const UserDashboard = () => {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await api.get("/api/users/me"); // Use api instead of axios
+      const response = await api.get("/api/users/me");
       setUserDetails(response.data);
     } catch (error) {
       console.error("Error fetching user details:", error);
@@ -40,7 +40,7 @@ const UserDashboard = () => {
 
   const fetchSalespersons = async () => {
     try {
-      const response = await api.get("/api/salespersons"); // Use api instead of axios
+      const response = await api.get("/api/salespersons");
       setSalespersonList(response.data);
     } catch (error) {
       console.error("Error fetching salespersons:", error);
@@ -50,7 +50,7 @@ const UserDashboard = () => {
   const handleSalespersonCreate = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/api/add/salesperson", newSalesperson); // Use api instead of axios
+      await api.post("/api/add/salesperson", newSalesperson);
       alert("Salesperson added successfully!");
       setNewSalesperson({ firstName: "", lastName: "", phone: "" });
       fetchSalespersons();
@@ -59,25 +59,58 @@ const UserDashboard = () => {
     }
   };
 
+  const fetchUserUsernames = async () => {
+    try {
+      const response = await api.get("/api/users");
+      setUsernameList(response.data.map((user) => user.username));
+
+    } catch (error) {
+      console.error("Error fetching user usernames:", error);
+    }
+    
+  };
+
   const handleUserCreate = async (e) => {
+    console.log(usernameList);
     e.preventDefault();
     try {
       const selectedSalesperson = salespersonList.find(
         (sp) => sp.salespersonId === Number(newUser.salesperson.salespersonId)
       );
-      const username =
+      let username =
         selectedSalesperson.firstName.slice(0, 3) +
         selectedSalesperson.lastName.slice(0, 3);
-      const requestData = { ...newUser, username };
-      await api.post("/api/add/user", requestData); // Use api instead of axios
-      console.log(requestData);
-      alert("User created successfully!");
-      setNewUser({
-        username: "",
-        password: "",
-        role: "USER",
-        salesperson: "",
-      });
+
+      if (usernameList.includes(username)) {
+        username = username + "1";
+        const requestData = { ...newUser, username };
+        await api.post("/api/add/user", requestData);
+        console.log(requestData);
+        alert(
+          "User created successfully! Generated username taken, new user created with the username: " +
+          username
+        );
+        setNewUser({
+          username: "",
+          password: "",
+          role: "USER",
+          salesperson: "",
+        });
+      } else {
+        const requestData = { ...newUser, username };
+        await api.post("/api/add/user", requestData);
+        console.log(requestData);
+        alert(
+          "User created successfully! New user created with the username: " +
+            username
+        );
+        setNewUser({
+          username: "",
+          password: "",
+          role: "USER",
+          salesperson: "",
+        });
+      }
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -85,6 +118,7 @@ const UserDashboard = () => {
 
   useEffect(() => {
     fetchUserDetails();
+    fetchUserUsernames();
     fetchSalespersons();
   }, []);
 
@@ -120,8 +154,8 @@ const UserDashboard = () => {
                         <strong>Assigned Salesperson:</strong>
                       </td>
                       <td>
-                        {userDetails.firstName || "N/A"}{" "}
-                        {userDetails.lastName || ""}
+                        {userDetails.salesperson.firstName || "N/A"}{" "}
+                        {userDetails.salesperson.lastName || ""}
                       </td>
                     </tr>
                   </tbody>
