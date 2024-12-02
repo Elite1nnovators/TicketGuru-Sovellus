@@ -1,5 +1,7 @@
 package com.eliteinnovators.ticketguru.ticketguru_app;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -52,7 +54,10 @@ public class TicketguruAppApplication {
             // 2. Create and save events if they don't exist
             Event concert1 = eventRepository.findByEventName("Concert 1")
                     .orElseGet(() -> {
-                        Event event = new Event("Concert 1", new Date(), "Event Address 1", "Helsinki", "A great concert event");
+			LocalDate localDatePlusOneYear = LocalDate.now().plusYears(1); // Add 1 year
+			Date datePlusOneYear = Date.from(localDatePlusOneYear.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                        Event event = new Event("Concert 1", datePlusOneYear, "Event Address 1", "Helsinki", "A great concert event");
                         return eventRepository.save(event);
                     });
 

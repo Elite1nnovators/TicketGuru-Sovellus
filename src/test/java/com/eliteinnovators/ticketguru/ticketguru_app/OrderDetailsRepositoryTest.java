@@ -51,9 +51,7 @@ public class OrderDetailsRepositoryTest {
         // luo uuden salespersonin
         Salesperson salesperson = new Salesperson();
         salesperson.setFirstName("John");
-        salesperson.setUsername("johndoe"); // Set a valid username
         salesperson.setLastName("Doe"); // Set a valid last name
-        salesperson.setPasswordHash("securepasswordhash"); // Set a valid password hash
         salesperson = salespersonRepository.save(salesperson);
 
         // eventticket typen luominen

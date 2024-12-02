@@ -1,6 +1,8 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 
@@ -26,6 +28,8 @@ public class Event {
    /* @FutureOrPresent  --- Tämä ei toimi ainakaan demodatalla */
     private Date eventDate;
 
+    private int advanceSaleHours = 12; // Ennakkomyynti (oletus 12h ennen eventDatea)
+
     private String eventAddress;
 
     @NotBlank(message = "Event city is mandatory")
@@ -45,6 +49,14 @@ public class Event {
         this.eventAddress = eventAddress;
         this.eventCity = eventCity;
         this.eventDescription = eventDescription;
+    }
+
+    public boolean isAdvanceSaleActive() {
+        LocalDateTime cutoffTime = eventDate.toInstant()
+                                            .atZone(ZoneId.systemDefault())
+                                            .toLocalDateTime()
+                                            .minusHours(advanceSaleHours);
+        return LocalDateTime.now().isBefore(cutoffTime);
     }
 
     public List<EventTicketType> getEventTicketTypes() {
@@ -105,5 +117,13 @@ public class Event {
 
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
+    }
+
+    public int getAdvanceSaleHours() {
+        return advanceSaleHours;
+    }
+
+    public void setAdvanceSaleHours(int advanceSaleHours) {
+        this.advanceSaleHours = advanceSaleHours;
     }
 }
