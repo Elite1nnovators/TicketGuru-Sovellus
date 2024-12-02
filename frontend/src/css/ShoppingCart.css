@@ -1,0 +1,104 @@
+/* The overlay background covering the entire page */
+.shopping-cart-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent background */
+    display: flex;
+    justify-content: flex-end;  /* Aligns the cart to the right */
+    align-items: flex-start;
+    z-index: 1000;  /* Ensures the cart is on top of other content */
+  }
+  
+  /* The shopping cart container positioned on the right */
+  .shopping-cart-container {
+    background-color: #fff;
+    width: 350px;  /* Adjust the width to your liking */
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);  /* Optional: add shadow to make it stand out */
+    position: relative;
+  }
+  
+  /* Close button styling */
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  /* Header for cart */
+  .cart-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Cart items container */
+  .cart-items {
+    margin-bottom: 20px;
+  }
+  
+  /* Individual cart item */
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .item-details {
+    max-width: 200px;
+  }
+  
+  .item-controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .control-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 2px 0;
+    cursor: pointer;
+  }
+  
+  .control-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Footer with total and clear button */
+  .cart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .clear-cart-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+  }
+  
+  .clear-cart-button:hover {
+    background-color: #c82333;
+  }
+  
+  .cart-total {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
