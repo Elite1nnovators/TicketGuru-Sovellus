@@ -29,7 +29,10 @@ import com.eliteinnovators.ticketguru.ticketguru_app.service.TicketService;
 import com.eliteinnovators.ticketguru.ticketguru_app.service.UserService;
 
 import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -201,6 +204,30 @@ public class ClientRestController {
         
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PatchMapping("/users/edit/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody Map<String, Object> userDTO) {
+        UserDTO updatedUser = userService.patchUser(userId, userDTO);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/users/delete/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/salespersons/edit/{salespersonId}")
+    public ResponseEntity<?> updateSalesperson(@PathVariable Long salespersonId, @RequestBody Map<String, Object> salespersonDTO) {
+        SalespersonDTO updatedSalesperson = salespersonService.patchSalesperson(salespersonId, salespersonDTO);
+        return new ResponseEntity<>(updatedSalesperson, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/salespersons/delete/{salespersonId}")
+    public ResponseEntity<?> deleteSalesperson(@PathVariable Long salespersonId) {
+        salespersonService.deleteSalesperson(salespersonId);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "./api"; // Import the custom API instance
+import UserHandler from "./UserHandler";
+import SalespersonHandler from "./SalespersonHandler";
 
 import {
   Container,
@@ -63,11 +65,9 @@ const UserDashboard = () => {
     try {
       const response = await api.get("/api/users");
       setUsernameList(response.data.map((user) => user.username));
-
     } catch (error) {
       console.error("Error fetching user usernames:", error);
     }
-    
   };
 
   const handleUserCreate = async (e) => {
@@ -88,7 +88,7 @@ const UserDashboard = () => {
         console.log(requestData);
         alert(
           "User created successfully! Generated username taken, new user created with the username: " +
-          username
+            username
         );
         setNewUser({
           username: "",
@@ -309,6 +309,12 @@ const UserDashboard = () => {
               </Form>
             </Card.Body>
           </Card>
+        </Tab>
+        <Tab eventKey="editUser" title="Edit Users">
+          <UserHandler />
+        </Tab>
+        <Tab eventKey="editsalesperson" title="Edit Salespersons">
+          <SalespersonHandler/>
         </Tab>
       </Tabs>
     </Container>

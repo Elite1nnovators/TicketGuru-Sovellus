@@ -82,7 +82,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
     CorsConfiguration reactClientTest = new CorsConfiguration();
     reactClientTest.setAllowedOrigins(List.of("http://localhost:5173"));
-    reactClientTest.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    reactClientTest.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
     reactClientTest.setAllowedHeaders(List.of("Authorization", "Content-Type"));
     reactClientTest.setAllowCredentials(true); // Allows cookies or Authorization headers
 

@@ -1,6 +1,7 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,33 @@ public class SalespersonService {
     
         }
         return null;
+    }
+
+    public SalespersonDTO patchSalesperson(Long salespersonId, Map<String, Object> updates) {
+        
+            Salesperson salesperson = salespersonRepository.findById(salespersonId)
+                   .orElseThrow(() -> new RuntimeException("Salesperson not found"));
+            
+            updates.forEach((key, value) -> {
+                switch (key) {
+                    case "firstName":
+                        salesperson.setFirstName((String) value);
+                        break;
+                    case "lastName":
+                        salesperson.setLastName((String) value);
+                        break;
+                    case "phone":
+                        salesperson.setPhone((String) value);
+                        break;
+                    default:
+                        throw new RuntimeException("Invalid field: " + key);
+                }
+
+
+            });
+
+            Salesperson updatedSalesperson = salespersonRepository.save(salesperson);
+            return salespersonMapper.salespersonToSalespersonDTO(updatedSalesperson);
     }
 
     public boolean deleteSalesperson(Long salespersonId) {

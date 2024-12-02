@@ -88,9 +88,13 @@ public class UserService implements UserDetailsService {
                 case "username":
                     existingUser.setUsername((String) value);
                     break;
-                case "roles":
+                case "role":
                     String role = existingUser.getRole();
                     existingUser.setRole(role);
+                    break;
+                case "password":
+                    String hashedPassword = passwordEncoder.encode((String) value);
+                    existingUser.setPasswordHash(hashedPassword);
                     break;
                 case "salesperson":
                     @SuppressWarnings("unchecked") Map<String, Object> salespersonData = (Map<String, Object>) value;
@@ -117,6 +121,12 @@ public class UserService implements UserDetailsService {
                 .map(UserMapper.INSTANCE::userToUserDTO)
                 .collect(Collectors.toList());
     }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    
     
 
 }
