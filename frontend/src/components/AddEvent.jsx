@@ -80,7 +80,7 @@ export default function AddEvent( {addEvent} ) {
     // Muodostetaan tapahtuma, joka viittaa tallennettuihin lipputyyppeihin
     const formattedEvent = {
                 eventName: event.eventName,
-                eventDate: new Date(event.eventDate).toISOString(),
+                eventDate: event.eventDate,
                 eventAddress: event.eventAddress,
                 eventCity: event.eventCity,
                 eventDescription: event.eventDescription,

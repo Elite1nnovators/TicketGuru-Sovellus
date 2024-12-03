@@ -1,17 +1,16 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.domain;
 
 import java.util.List;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
-import java.util.Date;
 
 
 
@@ -26,7 +25,8 @@ public class Event {
     private String eventName;
 
    /* @FutureOrPresent  --- Tämä ei toimi ainakaan demodatalla */
-    private Date eventDate;
+   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm") 
+   private LocalDateTime eventDate;
 
     private int advanceSaleHours = 12; // Ennakkomyynti (oletus 12h ennen eventDatea)
 
@@ -43,7 +43,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(String eventName, Date eventDate, String eventAddress, String eventCity, String eventDescription) {
+    public Event(String eventName, LocalDateTime eventDate, String eventAddress, String eventCity, String eventDescription) {
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventAddress = eventAddress;
@@ -52,7 +52,7 @@ public class Event {
     }
 
     public boolean isAdvanceSaleActive() {
-        LocalDateTime cutoffTime = eventDate.toInstant()
+        LocalDateTime cutoffTime = eventDate.toInstant(ZoneOffset.UTC)
                                             .atZone(ZoneId.systemDefault())
                                             .toLocalDateTime()
                                             .minusHours(advanceSaleHours);
@@ -87,11 +87,11 @@ public class Event {
         this.eventName = eventName;
     }
 
-    public Date getEventDate() {
+    public LocalDateTime getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(Date eventDate) {
+    public void setEventDate(LocalDateTime eventDate) {
         this.eventDate = eventDate;
     }
 

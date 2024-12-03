@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 @Service
@@ -56,14 +57,14 @@ public class EventService {
                 if (value instanceof String) {
                     try {
                         String dateString = (String) value;
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"); // Täsmällinen ISO 8601 -muoto
-                        Date parsedDate = dateFormat.parse(dateString);
+                        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"); // Täsmällinen ISO 8601 -muoto
+                        LocalDateTime parsedDate = LocalDateTime.parse(dateString, dateFormat);
                         event.setEventDate(parsedDate);
-                    } catch (ParseException e) {
+                    } catch (DateTimeParseException e) {
                         throw new RuntimeException("Invalid date format for eventDate: " + value);
                     }
                 } else if (value instanceof Date) {
-                    event.setEventDate((Date) value); // Jos value on jo Date-tyyppinen
+                    event.setEventDate((LocalDateTime) value); // Jos value on jo Date-tyyppinen
                 } else {
                     throw new RuntimeException("Invalid type for eventDate: " + value.getClass());
                 }

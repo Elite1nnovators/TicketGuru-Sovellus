@@ -12,6 +12,10 @@ const LandingPage = () => {
     navigate('/sales-reports');
   };
 
+  const handleShowUserDashboars = () => {
+    navigate('/user-dashboard');
+  };
+
   return (
     <div className="landing-page">
       <h1>Welcome to TicketGuru!</h1>
@@ -23,7 +27,10 @@ const LandingPage = () => {
         </div>
         <div className="button" onClick={handleShowReports}>
           <span>Reports </span>
-        </div>
+          </div>
+        <div className="button" onClick={handleShowUserDashboars}>
+          <span>Users</span>
+          </div>
       </div>
     </div>
   );

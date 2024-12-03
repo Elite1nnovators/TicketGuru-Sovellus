@@ -4,6 +4,8 @@ import api from './api';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/cart';
 import AddEvent from './AddEvent';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import EditEvent from './EditEvent';
 
 
 const EventSearch = () => {
@@ -11,6 +13,7 @@ const EventSearch = () => {
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const { addToCart } = useContext(CartContext);
+  const [editedEvent, setEditedEvent] = useState(null);
 
   
 const navigate = useNavigate(); 
@@ -59,21 +62,35 @@ const navigate = useNavigate();
   };
 
   //Käsittele poisto
-  const handleDeleteEvent = async () => {
-    if (selectedEvent) {
-      const confirmed = window.confirm(`Are you sure you want to delete event ${selectedEvent.eventName}?`);
-      if (confirmed) {
-        try {
-          await api.delete(`/events/${selectedEvent.eventId}`);
-          setSelectedEvent(null); // Tyhjennä valittu tapahtuma
-          await fetchEvents();
-          alert('Event deleted successfully');
-        } catch (error) {
-          console.error('Error deleting event:', error);
-          alert('Error deleting event');
-        }
+  const handleDeleteEvent = async (event) => {
+    const confirmed = window.confirm(`Are you sure you want to delete event ${event.eventName}?`);
+    if (confirmed) {
+      try {
+        await api.delete(`/events/${event.eventId}`);
+        setEvents(events.filter(e => e.eventId !== event.eventId));
+        setFilteredEvents(filteredEvents.filter(e => e.eventId !== event.eventId));
+        alert('Event deleted successfully');
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        alert('Error deleting event');
       }
     }
+  };
+
+  // Tapahtuman muokkaus
+  const editEvent = async (event) => {
+    try {
+      console.log("Saving event:", JSON.stringify(event, null, 2));
+      await api.put(`/events/${event.eventId}`, event);
+      const updatedEvents = await api.get('/events');
+      setEvents(updatedEvents.data);
+      setFilteredEvents(updatedEvents.data);
+      alert('Event updated successfully');
+    } catch (error) {
+      console.error('Error editing event:', error);
+      alert('Error editing event');
+    }
+
   };
 
 
@@ -111,7 +128,15 @@ const navigate = useNavigate();
           <Col key={event.eventId} sm={12} md={6} lg={4}>
             <Card>
               <Card.Body>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Card.Title>{event.eventName}</Card.Title>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <EditEvent event={event} editEvent={editEvent} />
+                <Button variant='danger' size='sm' className="d-flex align-items-center ms-2" onClick={() => handleDeleteEvent(event)}>Delete
+                  <TrashIcon width={15} height={15} className="ms-2" />
+                </Button>
+                </div>
+                </div>
                 <Card.Subtitle className="mb-2 text-muted">
                   {new Date(event.eventDate).toLocaleDateString()} | {event.eventCity}
                 </Card.Subtitle>

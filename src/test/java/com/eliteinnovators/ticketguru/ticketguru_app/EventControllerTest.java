@@ -16,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -34,9 +36,10 @@ public class EventControllerTest {
 
         @Test
         public void testGetAllEvents() throws Exception {
+                LocalDateTime now = LocalDateTime.now();
                 when(eventService.getAllEvents()).thenReturn(Arrays.asList(
-                                new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event"),
-                                new Event("Theatre", new Date(), "Venue 2", "Espoo", "Drama Play")));
+                                new Event("Concert", now, "Venue 1", "Helsinki", "Music Event"),
+                                new Event("Theatre", now, "Venue 2", "Espoo", "Drama Play")));
 
                 mockMvc.perform(get("/events"))
                                 .andExpect(status().isOk())
@@ -48,7 +51,8 @@ public class EventControllerTest {
 
         @Test
         public void testGetEventById() throws Exception {
-                Event event = new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event");
+                LocalDateTime now = LocalDateTime.now();
+                Event event = new Event("Concert", now, "Venue 1", "Helsinki", "Music Event");
                 when(eventService.getEventById(1L)).thenReturn(event);
 
                 mockMvc.perform(get("/events/1"))
@@ -60,9 +64,11 @@ public class EventControllerTest {
 
         @Test
         public void testCreateEvent() throws Exception {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                LocalDateTime eventDate = LocalDateTime.parse("2025-06-01T00:00", formatter);
                 Event newEvent = new Event(
                                 "New Event",
-                                dateFormat.parse("2024-06-01"),
+                                eventDate,
                                 "456 Avenue",
                                 "New City",
                                 "A new event description");
@@ -73,14 +79,14 @@ public class EventControllerTest {
                 mockMvc.perform(post("/events")
                                 .contentType("application/json")
                                 .content("{ \"eventName\": \"New Event\", " +
-                                                "\"eventDate\": \"2024-06-01\", " +
+                                                "\"eventDate\": \"2025-06-01T00:00\", " +
                                                 "\"eventAddress\": \"456 Avenue\", " +
                                                 "\"eventCity\": \"New City\", " +
                                                 "\"eventDescription\": \"A new event description\" }"))
                                 .andExpect(status().isCreated())
                                 .andExpect(jsonPath("$.eventId").value(2))
                                 .andExpect(jsonPath("$.eventName").value("New Event"))
-                                .andExpect(jsonPath("$.eventDate").value("2024-05-31T21:00:00.000+00:00"))
+                                .andExpect(jsonPath("$.eventDate").value("2025-06-01T00:00"))
                                 .andExpect(jsonPath("$.eventAddress").value("456 Avenue"))
                                 .andExpect(jsonPath("$.eventCity").value("New City"))
                                 .andExpect(jsonPath("$.eventDescription").value("A new event description"));
@@ -91,7 +97,7 @@ public class EventControllerTest {
                 mockMvc.perform(post("/events")
                                 .contentType("application/json")
                                 .content("{\n" +
-                                                "    \"eventDate\": \"2024-10-01T05:08:30.651+00:00\",\n" +
+                                                "    \"eventDate\": \"2025-06-01T00:00\",\n" +
                                                 "    \"eventAddress\": \"Event Address 1\",\n" +
                                                 "    \"eventCity\": \"Helsinki\",\n" +
                                                 "    \"eventDescription\": \"A great concert event\",\n" +
@@ -121,8 +127,9 @@ public class EventControllerTest {
 
         @Test
         public void testPatchEvent() throws Exception {
+                LocalDateTime now = LocalDateTime.now();
                 // Existing event to be patched
-                Event originalEvent = new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event");
+                Event originalEvent = new Event("Concert", now, "Venue 1", "Helsinki", "Music Event");
                 originalEvent.setEventId(1L);
 
                 // Partial update: change the event name and city
@@ -150,11 +157,12 @@ public class EventControllerTest {
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date fixedDate = dateFormat.parse("2024-06-01");
+                LocalDateTime now = LocalDateTime.now();
 
-                Event originalEvent = new Event("Concert", fixedDate, "Venue 1", "Helsinki", "Music Event");
+                Event originalEvent = new Event("Concert", now, "Venue 1", "Helsinki", "Music Event");
                 originalEvent.setEventId(1L);
 
-                Event updatedEvent = new Event("Updated Concert", fixedDate, "New Venue", "Updated City",
+                Event updatedEvent = new Event("Updated Concert", now, "New Venue", "Updated City",
                                 "Updated Music Event");
                 updatedEvent.setEventId(1L);
 
@@ -181,7 +189,8 @@ public class EventControllerTest {
         @Test
         public void testSearchEventsByCity() throws Exception {
                 // Mock events for Helsinki and Espoo
-                Event event1 = new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event");
+                LocalDateTime now = LocalDateTime.now();
+                Event event1 = new Event("Concert", now, "Venue 1", "Helsinki", "Music Event");
        
 
                 // Mock the service layer to return events for Helsinki
@@ -207,9 +216,10 @@ public class EventControllerTest {
 
         @Test
         public void testSearchAllEventsWhenNoCityProvided() throws Exception {
+                LocalDateTime now = LocalDateTime.now();
                 // Mock the service layer to return all events
-                Event event1 = new Event("Concert", new Date(), "Venue 1", "Helsinki", "Music Event");
-                Event event2 = new Event("Theatre", new Date(), "Venue 2", "Espoo", "Drama Play");
+                Event event1 = new Event("Concert", now, "Venue 1", "Helsinki", "Music Event");
+                Event event2 = new Event("Theatre", now, "Venue 2", "Espoo", "Drama Play");
                 when(eventService.getAllEvents()).thenReturn(Arrays.asList(event1, event2));
 
                 // Perform the GET request to search for all events (no city parameter)

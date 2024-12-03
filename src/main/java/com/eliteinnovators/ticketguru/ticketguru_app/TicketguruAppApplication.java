@@ -1,7 +1,9 @@
 package com.eliteinnovators.ticketguru.ticketguru_app;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -55,9 +57,10 @@ public class TicketguruAppApplication {
             Event concert1 = eventRepository.findByEventName("Concert 1")
                     .orElseGet(() -> {
 			LocalDate localDatePlusOneYear = LocalDate.now().plusYears(1); // Add 1 year
-			Date datePlusOneYear = Date.from(localDatePlusOneYear.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                        ZonedDateTime datePlusOneYear = localDatePlusOneYear.atStartOfDay(ZoneId.systemDefault());
+                        LocalDateTime localDateTimePlusOneYear = datePlusOneYear.toLocalDateTime();
 
-                        Event event = new Event("Concert 1", datePlusOneYear, "Event Address 1", "Helsinki", "A great concert event");
+                        Event event = new Event("Concert 1", localDateTimePlusOneYear, "Event Address 1", "Helsinki", "A great concert event");
                         return eventRepository.save(event);
                     });
 
