@@ -81,7 +81,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     eventsConfiguration.setAllowedHeaders(List.of("*"));
 
     CorsConfiguration reactClientTest = new CorsConfiguration();
-    reactClientTest.setAllowedOrigins(List.of("http://localhost:5173"));
+    //reactClientTest.setAllowedOrigins(List.of("http://localhost:5173"));
+    reactClientTest.setAllowedOrigins(List.of("https://ticketguru-sovellus-elite-innovators-ticketguru2.2.rahtiapp.fi"));
     reactClientTest.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
     reactClientTest.setAllowedHeaders(List.of("Authorization", "Content-Type"));
     reactClientTest.setAllowCredentials(true); // Allows cookies or Authorization headers
