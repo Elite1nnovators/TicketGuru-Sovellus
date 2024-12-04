@@ -70,31 +70,19 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration generalConfiguration = new CorsConfiguration();
-    generalConfiguration.setAllowedOrigins(List.of("*")); //CLIENT SOVELLUKSEN OSOITE
-    generalConfiguration.setAllowedMethods(List.of("GET", "PATCH")); 
-    generalConfiguration.setAllowedHeaders(List.of("*"));
-
-    CorsConfiguration eventsConfiguration = new CorsConfiguration();
-    eventsConfiguration.setAllowedOrigins(List.of("*")); 
-    eventsConfiguration.setAllowedMethods(List.of("GET")); 
-    eventsConfiguration.setAllowedHeaders(List.of("*"));
-
-    CorsConfiguration reactClientTest = new CorsConfiguration();
-    //reactClientTest.setAllowedOrigins(List.of("http://localhost:5173"));
-    reactClientTest.setAllowedOrigins(List.of("https://ticketguru-sovellus-elite-innovators-ticketguru2.2.rahtiapp.fi"));
-    reactClientTest.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-    reactClientTest.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-    reactClientTest.setAllowCredentials(true); // Allows cookies or Authorization headers
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(List.of("http://ticketguru-sovellus-elite-innovators-ticketguru2.2.rahtiapp.fi", "http://localhost:5173"));
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+    configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+    configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", reactClientTest);
-    source.registerCorsConfiguration("/tickets/event/**", generalConfiguration); 
-    source.registerCorsConfiguration("/events", eventsConfiguration); 
-    
+    source.registerCorsConfiguration("/**", configuration);
 
     return source;
+}
 
-    }
 
 }
+  
+   
