@@ -71,7 +71,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of("http://ticketguru-sovellus-elite-innovators-ticketguru2.2.rahtiapp.fi", "http://localhost:5173"));
+    configuration.setAllowedOrigins(List.of("https://ticketguru-sovellus-elite-innovators-ticketguru2.2.rahtiapp.fi", "http://localhost:5173"));
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
     configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
     configuration.setAllowCredentials(true);
