@@ -24,6 +24,7 @@
 7. **[REST API dokumentaatio](#rest-api-dokumentaatio)**
    - [Myyntitapahtumien API-dokumentaatio](#myyntitapahtumien-api-dokumentaatio)
    - [Lippujen (Ticket) API-pyynnöt](#lippujen-ticket-api-pyynnöt)
+   - [Lipputyyppien (TicketType) API-pyynnöt](#lipputyyppien-tickettype-api-pyynnöt)
 
 8. **[Autentikaatio](#autentikaatio)**
 
@@ -73,25 +74,9 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 </details>
 
 <details>
-<summary> Tapahtumajärjestäjä</summary>
-
-### Tapahtumajärjestäjä
-- Pystyy tarkastelemaan omien tapahtumiensa lipputietoja.
-- Voi luoda ja tulostaa myyntiraportteja omista tapahtumista.
-</details>
-
-<details>
-<summary> Asiakas</summary>
-
-### Asiakas
-- Voi ostaa lippuja Lipputoimiston myyntipisteestä.
-- Näkee ostamansa lipun tiedot (tapahtuma, lipputyyppi, hinta, tarkistuskoodi). Lipussa näkyy myös ostopäivämäärä ja aika.
-</details>
 
 
 ## Käyttötapaukset ja käyttäjätarinat
-<details>
-<summary> Lipputoimiston myyjä </summary>
 
 ### Lipputoimiston myyjä
 
@@ -115,7 +100,6 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Tulos:** Myyjä saa näkyviin raportin myymistään lipuista.
 </details>
 
-</details>
 
 ### Järjestelmän pääkäyttäjä
 
@@ -140,41 +124,6 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 </details>
 
-### Tapahtumajärjestäjä
-
-<details>
-<summary> Tapahtumajärjestäjä- käyttötapaukset </summary>
-</br>
-
-- **Käyttötapaus 1: Myyntiraportin luominen**
-    - **Tavoite:** Tapahtumajärjestäjä haluaa tarkastella myyntiraporttia omasta tapahtumastaan.
-    - **Toimet:** Tapahtumajärjestäjä valitsee tapahtuman ja aikajakson, luo raportin ja tulostaa sen.
-    - **Tulos:** Tapahtumajärjestäjä saa raportin tapahtuman myynnistä.
-
-- **Käyttötapaus 2: Myyntiraporttien tarkastelu**
-    - **Tavoite:** Tapahtumajärjestäjä haluaa tarkastella myymiään lippuja.
-    - **Toimet:** Tapahtumajärjestäjä kirjautuu järjestelmään, valitsee ajanjakson ja tarkastelee raporttia omista myynneistään.
-    - **Tulos:** Tapahtumajärjestäjä saa näkyviin raportin myymistään lipuista.
-</details>
-
-</details>
-
-### Asiakas
-
-<details>
-<summary> Asiakas- käyttötapaukset</summary>
-</br>
-
-- **Käyttötapaus 1: Lipun ostaminen**
-    - **Tavoite:** Asiakas haluaa ostaa lipun tapahtumaan.
-    - **Toimet:** Asiakas valitsee tapahtuman, valitsee lipputyypin, maksaa lipun ja saa tulostetun lipun.
-    - **Tulos:** Asiakas saa lipun ja voi tarkistaa sen tiedot.
-
-- **Käyttötapaus 2: Lippujen tarkastelu**
-    - **Tavoite:** Asiakas haluaa tarkastella ostamansa lipun tietoja.
-    - **Toimet:** Asiakas kirjautuu järjestelmään, valitsee lipun ja tarkastelee sen tietoja, kuten tapahtuman, lipputyypin, hinnan ja tarkistuskoodin.
-    - **Tulos:** Asiakas näkee lipun tiedot ja voi varmistaa lipun oikeellisuuden.
-</details>
 
 ## Käyttäjätarinat
 <details> 
@@ -1076,7 +1025,7 @@ Tähän sovellukseen on määritetty CORS-säännöt seuraavasti:
 
 Vastaus:
 
-```
+```json
 [
     {
         "id": 4,
@@ -1111,7 +1060,7 @@ Vastaus:
 
 #### **Vastaus**
 
-```
+```json
 {
         "id": 6,
         "ticketCode": "6c51d8f2-59c3-4780-9b22-2d6cd974d9d9",
@@ -1134,7 +1083,7 @@ Vastaus:
 
 #### Vastaus:
 
-```
+```json
 [
     {
         "id": 4,
@@ -1176,7 +1125,7 @@ Vastaus:
 
 #### Pyynnön runko:
 
-```
+```json
 {}
 ```
 
@@ -1187,7 +1136,7 @@ Vastaus:
 
 #### Vastaus:
 
-```
+```json
 {
         "id": 4,
         "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
@@ -1210,7 +1159,7 @@ Vastaus:
 
 #### Vastaus:
 
-```
+```json
 [
     {
         "id": 4,
@@ -1228,6 +1177,116 @@ Vastaus:
         "valid": true
     }
 ]
+```
+</details>
+
+## Lipputyyppien (TicketType) API-pyynnöt
+
+<details><summary>Hae kaikki lipputyypit (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickettypes`
+* **Käyttöoikeudet**: ADMIN
+* **Paluukoodit**:
+  - 200 OK - Kutsu onnistui, lipputyypit löytyivät.
+  - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+  - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia
+
+#### Vastaus
+```json
+  [
+    {
+        "id": 1,
+        "name": "VIP"
+    },
+    {
+        "id": 2,
+        "name": "Standard"
+    }
+]
+```
+</details>
+
+<details><summary>Hae lipputyyppi ID:n perusteella (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickettypes/{id}`
+* **Käyttöoikeudet**: ADMIN
+* **Paluukoodit**:
+  - 200 OK - Kutsu onnistui, lipputyypit löytyivät.
+  - 400 Bad Request - ID ei ole kevlollinen.
+  - 404 Not Found - Lipputyyppiä ei löydy annetulla ID:llä.
+  - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+  - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia
+
+#### Vastaus:
+```json
+    {
+        "id": 1,
+        "name": "VIP"
+    }
+```
+</details>
+
+<details><summary>Luo uusi lipputyyppi (POST)</summary>
+
+* **Metodi**: POST
+* **Polku**: `/tickettypes`
+* **Käyttöoikeudet**: ADMIN
+* **Pyyntöparametrit**:
+  - **name** (pakollinen): Lipputyypin nimi
+
+* **Pyynnön runko**:
+```json
+{
+  "name": "Aikuinen"
+}
+```
+
+* **Paluukoodit**:
+  - 201 Created - Kutsu onnistui, uusi lipputyyppi luotiin.
+  - 404 Bad Request - Pyyntö on puutteellinen tai lipputyyppi on jo olemassa samalla nimellä.
+  - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+  - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+
+**Vastaus**:
+```json
+    {
+        "id": 3,
+        "name": "Aikuinen"
+    }
+```
+</details>
+
+<details><summary>Päivitä lipputyyppi (PUT)</summary>
+
+* **Metodi**: PUT
+* **Polku**: `/tickettypes/{id}`
+* **Käyttöoikeudet**: ADMIN
+* **Pyyntöparametrit**:
+  - **id** (pakollinen): Lipputyypin ID, jota halutaan päivittää.
+  - **name** (pakollinen): Lipputyypin uusi nimi.
+
+* **Pyynnön runko**:
+```json
+{
+  "name": "Aikuinen K-18"
+}
+```
+
+* **Paluukoodit**:
+  - 200 OK - Kutsu onnistui, lipputyyppi päivitettiin.
+  - 404 Bad Request - Pyyntö on puutteellinen tai lipputyyppi on jo olemassa samalla nimellä.
+  - 404 Not Found - Lipputyyppiä ei löydy annetulla ID:llä.
+  - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+  - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+
+**Vastaus**:
+```json
+    {
+        "id": 3,
+        "name": "Aikuinen K-18"
+    }
 ```
 </details>
 
@@ -1254,7 +1313,7 @@ Sovelluksen turvallisuuskonfiguraatio on määritelty `SecurityConfig`-luokassa,
 
 2. **Käyttöoikeudet**: Luokassa määritellään myös, mitkä käyttäjäroolit voivat käyttää mitäkin sovelluksen toimintoja. Esimerkiksi:
    - Admin-käyttäjät voivat käyttää kaikkia päätepisteitä.
-   - Salesperson-käyttäjät saavat vain rajoitetun pääsyn myyntitoimintoihin.
+   - User-käyttäjät saavat vain rajoitetun pääsyn myyntitoimintoihin.
 
 3. **CSRF-suojaus**: CSRF-suojauksen tarkastukset on toistaiseksi poistettu käytöstä testauksen helpottamiseksi.
 
@@ -1316,32 +1375,51 @@ Sovelluksessa on useita API-päätepisteitä, jotka tarjoavat erilaisia toiminto
 | `DELETE /events/{eventId}`       | Poistaa tapahtuman.                            | **ADMIN**              |
 | `GET /events/search`             | Hakee tapahtumat kaupungin perusteella.       | **SALESPERSON**, **ADMIN**  |
 
+### TicketTypeController
+
+| Päätepiste                            | Kuvaus                                         | Vaadittu rooli         |
+|---------------------------------------|------------------------------------------------|------------------------|
+| `GET /tickettypes`                    | Hakee kaikki lipputyypit.                      | **ADMIN**              |
+| `GET /tickettypes/id}`                | Hakee lipputyypin ID:n perusteella.            | **ADMIN**              |
+| `POST /tickettypes`                   | Luo uuden lipputyypin.                         | **ADMIN**              |
+| `PUT /tickettypes/{id}`               | Muokkaa olemassa olevaa lipputyyppiä.          | **ADMIN**              |
+
 ## Määritellyt käyttäjätunnukset ja salasanat
 
 Käyttäjätiedot on tallennettu muistiin käyttämällä `InMemoryUserDetailsManager`-komponenttia. Sovelluksessa on määritelty seuraavat käyttäjätunnukset ja salasanat:
 
 ## Käyttäjätiedot
 
-Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `Salesperson` -entiteetteinä. Käyttäjätunnukset ja salasanat tallennetaan tietokantaan seuraavasti:
+Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `User` ja `Salesperson` -entiteetteinä. Käyttäjätunnukset ja salasanat tallennetaan tietokantaan seuraavasti:
 
+### User (Käyttäjä)
+- **userId**: Käyttäjän yksilöllinen ID.
+- **username**: Käyttäjän yksilöllinen käyttäjätunnus.
+- **passwordHash**: Salasanan hajautusarvo.
+- **role**: Käyttäjän rooli (ADMIN tai USER)
 
 ### Salesperson (Myyjä)
 - **salespersonId**: Myyjän yksilöllinen ID.
-- **username**: Myyjän käyttäjätunnus.
-- **passwordHash**: Salasanan hajautusarvo.
-- **isAdmin**: Boolean-arvo, joka määrittää onko myyjä järjestelmän pääkäyttäjä (admin). Tämä ominaisuus mahdollistaa erilaisten pääsyoikeuksien hallinnan eri käyttäjien välillä.
+- **firstName**: Myyjän etunimi.
+- **lastName**: Myyjän sukunimi
+- **phone**: Myyjän puhelinnumero.
+- **orders**: Lista myyjän tekemistä tilauksista.
 
 ### Käyttäjät
-
-- **Admin** (isAdmin = true)
+* Kehitysvaiheessa luodut valmiit käyttäjät:
+- **Admin** (role = ADMIN)
   - **Käyttäjätunnus**: `admin`
   - **Salasana**: `admin` (hajautettuna)
   - **Rooli**: `ADMIN`
 
-- **Salesperson** (isAdmin = false)
-  - **Käyttäjätunnus**: `salesperson`
-  - **Salasana**: `salesperson` (hajautettuna)
-  - **Rooli**: `SALESPERSON`
+- **User** (role = USER)
+  - **Käyttäjätunnus**: `user`
+  - **Salasana**: `user` (hajautettuna)
+  - **Rooli**: `USER`
+
+  #### Käyttäjien luominen ja roolien määrittäminen
+
+  Admin-tason käyttäjät voivat luoda uusia käyttäjiä ja myyjiä sovellukseen sekä määrittää heille roolit. Tämä tarkoittaa, että jokaisella käyttäjällä on omat käyttäjätunnuksensa ja salasanansa, jotka tallennetaan turvallisesti tietokantaan.
 
 ### Salasanan tallennus
 
@@ -1357,13 +1435,13 @@ String hashedSalespersonPassword = encoder.encode("salesperson");
 
 Sovelluksessa on kaksi pääasiallista käyttäjäroolia, jotka määrittävät käyttäjien pääsyoikeudet:
 
-- **Admin**: Käyttäjät, joilla on `isAdmin`-arvo `true`. Salesperson tasoisilla käyttäjillä on täysi pääsy kaikkiin sovelluksen toimintoihin ja API-pyyntöihin, mukaan lukien:
+- **Admin**: Käyttäjät, joilla on `role`-arvo `ADMIN`. Admin tasoisilla käyttäjillä on täysi pääsy kaikkiin sovelluksen toimintoihin ja API-pyyntöihin, mukaan lukien:
   - Käyttäjien hallinta (luonti, muokkaus, poisto).
   - Tapahtumien luominen ja hallinta.
   - Kaikkien varausten tarkastelu ja hallinta.
   - Sovelluksen asetusten muokkaaminen.
 
-- **Salesperson**: Käyttäjät, joilla on `isAdmin`-arvo `false`. Salesperson tasoisilla käyttäjillä on rajoitetut oikeudet, joilla voivat:
+- **Salesperson**: Käyttäjät, joilla on `role`-arvo `USER`. User tasoisilla käyttäjillä on rajoitetut oikeudet, joilla voivat:
   - Myydä lippuja olemassa oleviin tapahtumiin.
   - Tarkastella omia myyntitietojaan.
 
@@ -1427,7 +1505,7 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
 
 # Testaus
 
-## Database Access Layer
+<details><summary>Database Access Layer</summary>
 
 ### Yhteyden toimivuus (DAL ↔ RDBMS)
 - **Testattava:** Onko tietokantayhteys määritetty oikein? Toimiiko yhteys kaikissa käyttöolosuhteissa?
@@ -1470,8 +1548,9 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
   - Testataan repositoriotesteissä.
 
 ---
+</details>
 
-## REST API -testaus
+<details><summary> REST API -testaus </summary>
 
 ### Reitityksen testaus (RestApiTests)
 - **Testattava:** Testataan eri reittien osalta, ohjautuuko reititys oikein ja onko palautunut vastaus odotetunlainen. Lisäksi testataan tilannetta, että reittiä ei ole olemassa.
@@ -1506,7 +1585,9 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
 
   ---
 
-## CLIENT-sivujen testaus
+  </details>
+
+<details><summary>CLIENT-sivujen testaus</summary>
 
 ### Index-sivu (ClientIndexTest)
 - **Testattava:** Clientin index-sivu.
@@ -1555,8 +1636,10 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
     - **Tulos:** Testi varmistaa, että sovellus palauttaa virheviestin, jos lippuja ei ole riittävästi.
 
   ---
+  </details>
 
-  ### Entiteettien testaus (OrderValidationTest ja OrderEntityTest)
+ <details><summary> Entiteettien testaus (OrderValidationTest ja OrderEntityTest)</summary>
+
   - **Testattava**: Order entiteetti.
   - **Suoritetut testit**:
     - **whenSalespersonIsNull_thenValidationFailure**
@@ -1618,8 +1701,10 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
         - **Tulos**: Testi varmistaa, että `Order`-entiteetti käyttäytyy odotetusti persistenssikontekstissa.
 
     ---
+    </details>
 
-### ORM testaus (ORMIntegrationTest ja ORMPerformanceTest)
+<details><summary>ORM testaus (ORMIntegrationTest ja ORMPerformanceTest)</summary>
+
   - **Testattava**: Entiteettien ja tietokannan välinen ORM-yhdistäminen, sovelluksen tietokantakyselyiden suorituskyky ja Hibernate-statistiikka.
   - **Suoritetut testit**:
     - **testTicketTypeEntityMapping**
@@ -1650,6 +1735,8 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
       - Suoritetaan `TicketRepository.findAll()` ja tarkistetaan suoritettujen kyselyiden määrä.
       - Varmistetaan, että kyselyiden määrä on alle 2.
       - **Tulos**: Testi varmistaa, että `Ticket`-entiteetin nouto suoritetaan tehokkaasti ilman ylimääräisiä kyselyitä.
+
+      </details>
 
 
 
