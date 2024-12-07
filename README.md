@@ -27,6 +27,7 @@
    - [Lipputyyppien (TicketType) API-pyynnöt](#lipputyyppien-tickettype-api-pyynnöt)
 
 8. **[Autentikaatio](#autentikaatio)**
+   - [Perustason autentikointi](#perustason-autentikointi-basic-authentication)
 
 9. **[Testaus](#testaus)**
    - [Database Access Layer](#database-access-layer)
@@ -368,8 +369,6 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
 | salesPersonId     | int (AN) PK      | Myyjän yksilöllinen tunniste.                           |
-| username          | varchar(30)      | Myyjän käyttäjätunnus.                                  |
-| passwordHash      | varchar(30)      | Myyjän salasana.                                        |
 | lastName          | varchar(30)      | Myyjän sukunimi.                                        |
 | firstName         | varchar(30)      | Myyjän etunimi.                                         |
 | phone             | varchar(30)      | Myyjän puhelinnumero.                                   |
@@ -1293,6 +1292,7 @@ Vastaus:
 
 # Autentikaatio
 
+## Autentikointiprosessi
 <details>
 <summary> Autentikointiprosessi </summary>
 <br/>
@@ -1302,14 +1302,23 @@ TicketGuru-sovelluksessa käytetään perinteistä käyttäjätunnus-salasana -a
 ## Perustason autentikointi (Basic Authentication)
 
 Perustason autentikointi on määritetty Spring Boot -sovelluksessa käyttäen SecurityFilterChain-luokkaa. Autentikointi tapahtuu HTTP-pyyntöjen yhteydessä, joissa käyttäjätunnus ja salasana lähetetään base64-koodattuna Authorization-otsikossa. Tämä mahdollistaa käyttäjän todennuksen, ennen kuin he saavat pääsyn sovelluksen API-pyyntöihin.
+</details>
 
-## Turvallisuuskonfiguraation selitys
+<details><summary>Turvallisuuskonfiguraation selitys</summary>
 
 Sovelluksen turvallisuuskonfiguraatio on määritelty `SecurityConfig`-luokassa, joka hallitsee autentikoinnin ja valtuutuksen sääntöjä. Tämä luokka käyttää Spring Security -kirjastoa, joka tarjoaa joustavan ja tehokkaan tavan hallita käyttäjien pääsyä sovellukseen.
+</details>
 
-### Turvallisuuskonfiguraation Ominaisuudet
+<details><summary>Turvallisuuskonfiguraation Ominaisuudet</summary>
 
-1. **Autentikointi**: `SecurityConfig` määrittelee, että kaikki API-pyynnöt vaativat käyttäjän tunnistamista. Tämä tapahtuu perustason autentikoinnin (Basic Authentication) avulla, jossa käyttäjätunnus ja salasana lähetetään base64-koodattuna HTTP-otsikossa.
+1. **Autentikointi**: `SecurityConfig` määrittelee, että kaikki API-pyynnöt vaativat käyttäjän tunnistamista. Tämä tapahtuu perustason autentikoinnin (Basic Authentication) avulla, jossa käyttäjätunnus ja salasana lähetetään base64-koodattuna HTTP-otsikossa. Autentikointi käsitellään `AuthenticationManager` -beanin avulla, joka vastaa käyttäjien autentikaatiosta. Tämä bean on määritelty seuraavasti:
+```java
+  @Bean
+public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+}
+```
+`AuthenticationManager` -bean käyttää `AuthenticationConfiguration` -luokkaa, joka määrittelee autentikaatiomekanismin. Se varmistaa, että vain oikeutetut käyttäjät pääsevät käyttämään sovelluksen toimintoja.
 
 2. **Käyttöoikeudet**: Luokassa määritellään myös, mitkä käyttäjäroolit voivat käyttää mitäkin sovelluksen toimintoja. Esimerkiksi:
    - Admin-käyttäjät voivat käyttää kaikkia päätepisteitä.
@@ -1318,8 +1327,9 @@ Sovelluksen turvallisuuskonfiguraatio on määritelty `SecurityConfig`-luokassa,
 3. **CSRF-suojaus**: CSRF-suojauksen tarkastukset on toistaiseksi poistettu käytöstä testauksen helpottamiseksi.
 
 4. **Virheiden käsittely**: Turvallisuuskonfiguraatio sisältää myös säännöt siitä, miten autentikointi- ja valtuutusvirheitä käsitellään. Jos käyttäjä ei pysty tunnistautumaan oikein tai ei omaa tarvittavia käyttöoikeuksia, sovellus palauttaa asianmukaiset virhekoodit.
+</details>
 
-### Esimerkki SecurityConfig-luokasta
+<details><summary>Esimerkki SecurityConfig-luokasta</summary>
 
 ```java
 @Bean
@@ -1337,8 +1347,9 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 ```
 
 Tämä rakenne varmistaa, että vain oikeutetut käyttäjät voivat käyttää sovelluksen eri toimintoja, ja se parantaa tietoturvaa koko sovelluksessa.
+</details>
 
-## Endpoint-yhteenveto
+<details><summary>Endpoint-yhteenveto</summary>
 
 Sovelluksessa on useita API-päätepisteitä, jotka tarjoavat erilaisia toimintoja. Jokaiselle päätepisteelle on määritelty käyttöoikeudet, jotka perustuvat käyttäjärooleihin. Alla on luettelo keskeisistä päätepisteistä ja niiden vaatimista käyttöoikeuksista:
 
@@ -1384,11 +1395,9 @@ Sovelluksessa on useita API-päätepisteitä, jotka tarjoavat erilaisia toiminto
 | `POST /tickettypes`                   | Luo uuden lipputyypin.                         | **ADMIN**              |
 | `PUT /tickettypes/{id}`               | Muokkaa olemassa olevaa lipputyyppiä.          | **ADMIN**              |
 
-## Määritellyt käyttäjätunnukset ja salasanat
+</details>
 
-Käyttäjätiedot on tallennettu muistiin käyttämällä `InMemoryUserDetailsManager`-komponenttia. Sovelluksessa on määritelty seuraavat käyttäjätunnukset ja salasanat:
-
-## Käyttäjätiedot
+<details></summary>Käyttäjätiedot</summary>
 
 Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `User` ja `Salesperson` -entiteetteinä. Käyttäjätunnukset ja salasanat tallennetaan tietokantaan seuraavasti:
 
@@ -1421,7 +1430,9 @@ Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `User` ja `Salesperso
 
   Admin-tason käyttäjät voivat luoda uusia käyttäjiä ja myyjiä sovellukseen sekä määrittää heille roolit. Tämä tarkoittaa, että jokaisella käyttäjällä on omat käyttäjätunnuksensa ja salasanansa, jotka tallennetaan turvallisesti tietokantaan.
 
-### Salasanan tallennus
+</details>
+
+<details><summary>Salasanan tallennus</summary>
 
 Salasana tallennetaan tietokantaan hajautettuna, eli se ei ole selkokielinen. Tämä toteutetaan hyödyntäen Java Spring Security -komponentteja, jotka varmistavat salasanan turvallisen tallennuksen ja tarkastamisen.
 
@@ -1431,7 +1442,9 @@ String hashedAdminPassword = encoder.encode("admin");
 String hashedSalespersonPassword = encoder.encode("salesperson");
 ```
 
-## Käyttäjäroolit ja pääsy (Authorization Policies)
+</details>
+
+<details><summary>Käyttäjäroolit ja pääsy (Authorization Policies)</summary>
 
 Sovelluksessa on kaksi pääasiallista käyttäjäroolia, jotka määrittävät käyttäjien pääsyoikeudet:
 
@@ -1454,6 +1467,10 @@ Käyttöoikeudet on määritelty seuraavasti:
 - CSRF-suojauksen (Cross-Site Request Forgery) tarkastukset on poistettu käytöstä testauksen helpottamiseksi, mutta tuotantoympäristössä suositellaan sen käyttämistä.
 
 Tämä rakenne varmistaa, että vain oikeutetut käyttäjät voivat käyttää sovelluksen eri toimintoja, mikä parantaa tietoturvaa ja käyttäjäkokemusta.
+
+</details>
+
+<details><summary>Virheenkäsittely ja autentikointivirheet</summary>
 
 ## Virheenkäsittely
 
