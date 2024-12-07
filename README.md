@@ -237,14 +237,6 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - **Siirtymiset:** Raporttien tarkastelusta voi palata etusivulle.
 </details>
 
-<details>
-<summary> Asiakasnäkymä </summary>
-</br>
-
-- **Miksi:** Asiakkaat voivat tarkastella ostamiaan lippuja ja tapahtumatietoja.
-- **Mitä:** Näkymässä näkyvät ostetut liput, tapahtumatiedot ja tarkistuskoodi.
-- **Siirtymiset:** Asiakas voi siirtyä asiakasnäkymään etusivulta ja palata takaisin etusivulle.
-</details>
 
 
 ### Käyttöliittymäkaavio
