@@ -45,6 +45,8 @@ Järjestelmä toteutetaan Spring Boot -menetelmän avulla Java-ohjelmointikielt�
 
 Käyttöliittymä on suunniteltu ensisijaisesti käytettäväksi pöytätietokoneilla ja läppäreillä, joita lipputoimistossa on käytössä. Kuitenkin lippujen tarkastuksen yhteydessä järjestelmää tulisi voida käyttää myös puhelimen avulla, jotta lippujen tarkastaminen on sujuvampaa.
 
+</br>
+
 # Järjestelmän määrittely
 
 Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän näkökulmasta. Tämä osio keskittyy kuvaamaan, millaisia käyttäjäryhmiä (rooleja) sovelluksessa on ja millaisia toimintoja kullakin roolilla on käytettävissään. Lisäksi tässä osiossa kuvataan käyttäjätarinat, joiden avulla selvitetään käyttäjien tarpeet ja odotukset. Tavoitteena on varmistaa, että sovellus täyttää käyttäjien ja organisaation vaatimukset, ja tarjoaa sujuvan, tehokkaan ja turvallisen käyttökokemuksen kaikille osapuolille.
@@ -232,6 +234,8 @@ Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, j
 - **Mitä:** Login -sivulle ohjaudutaan käyttöliittymän URL-osoitteella.
 - **Siirtymiset:** Onnistuneen kirjautumisen jälkeen ohjaudutaan etusivulle.
 
+![Login-sivu](images/login_nakyma.png)
+
 </details>
 
 <details>
@@ -244,6 +248,9 @@ Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, j
     - **Events**: siirtytään tapahtumien listaukseen ja lipunmyyntiin. 
     - **Reports**: siirtytään tarkastelmaan myyntiraportteja.
     - **Users**: siirtytään käyttäjähallintaan. 
+
+![Etusivu](images/etusivu_nakyma.png)
+
 </details>
 
 <details>
@@ -270,9 +277,9 @@ Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, j
           - **Sell Ticket**: Käyttäjä siirtyy sivulle, jossa näkyy myydyt liput, niiden lippukoodit ja QR-koodit. Sivulta liput voi tulostaa asiakkaalle.
       </details>
 
+![Events](images/events_nakyma.png)
 
 </details>
-
 
 
 <details>
@@ -284,6 +291,9 @@ Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, j
 - **Siirtymiset:** 
     - **Show Sales by Events**: Painiketta painamalla saadaan näkyviin lipunmyyntitiedot tapahtumittain listattuna.
     - **Search by order ID**: Hakutoiminnon avulla sivulla näytetään haetun myyntitapahtuman tiedot.
+
+![Reports](images/reports_nakyma.png)
+
 </details>
 
 
@@ -299,6 +309,9 @@ Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, j
     - **Add User**: Välilehdellä voidaan luoda myyjälle käyttäjätili järjestelmään.
     - **Edit Users**: Välilehdellä voidaan muokata käyttäjien tietoja.
     - **Edit Salesperson**: Välilehdellä voidaan muokata myyjien tietoja.
+
+![Users](images/users_nakyma.png)
+
 </details>
 
 
