@@ -260,15 +260,15 @@ Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, j
     - **Delete**: voidaan poistaa tapahtuma, jos siihen ei ole myyty lippuja.  
 
 
-<details>
-<summary> Sell Ticket </summary>
-</br>
+      <details>
+      <summary> Sell Ticket </summary>
+      </br>
 
-- **Miksi:** Täällä käyttäjä voi myydä lippuja tiettyyn tapahtumaan.
-- **Mitä:** Näkymässä käyttäjä voi valita lipputyypin ja lippumäärän. "Sell Ticket" painikkeesta muodostetaan myyntitapahtuma ja edetään näkymään, jossa nähdään liput ja niiden QR-koodit. 
-- **Siirtymiset:** 
-    - **Sell Ticket**: Käyttäjä siirtyy sivulle, jossa näkyy myydyt liput, niiden lippukoodit ja QR-koodit. Sivulta liput voi tulostaa asiakkaalle.
-</details>
+      - **Miksi:** Täällä käyttäjä voi myydä lippuja tiettyyn tapahtumaan.
+      - **Mitä:** Näkymässä käyttäjä voi valita lipputyypin ja lippumäärän. "Sell Ticket" painikkeesta muodostetaan myyntitapahtuma ja edetään näkymään, jossa nähdään liput ja niiden QR-koodit. 
+      - **Siirtymiset:** 
+          - **Sell Ticket**: Käyttäjä siirtyy sivulle, jossa näkyy myydyt liput, niiden lippukoodit ja QR-koodit. Sivulta liput voi tulostaa asiakkaalle.
+      </details>
 
 
 </details>
