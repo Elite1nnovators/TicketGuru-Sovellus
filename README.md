@@ -222,6 +222,8 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, joihin pääsee siirtymään pääsivulta. Lisäksi sivun yläreunan navigointipalkista pääsee samoihin toimintoihin kuin pääsivun painikkeista. Tässä osiossa kuvataan eri sivujen näkymät ja miten niissä liikutaan.</summary>
 
+### Käyttöliittymän näkymät
+
 <details>
 <summary> Login -sivu</summary>
 </br>
@@ -256,7 +258,7 @@ Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, j
     - **Add Event**: siirtytään lomakkeelle, jossa voidaan luoda uusi tapahtuma.
     - **Edit**: siirrytään lomakkeelle, jossa pääsee muokkaamaan tapahtuman tietoja.
     - **Delete**: voidaan poistaa tapahtuma, jos siihen ei ole myyty lippuja.  
-</details>
+
 
 <details>
 <summary> Sell Ticket </summary>
@@ -267,6 +269,11 @@ Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, j
 - **Siirtymiset:** 
     - **Sell Ticket**: Käyttäjä siirtyy sivulle, jossa näkyy myydyt liput, niiden lippukoodit ja QR-koodit. Sivulta liput voi tulostaa asiakkaalle.
 </details>
+
+
+</details>
+
+
 
 <details>
 <summary> Reports </summary>
