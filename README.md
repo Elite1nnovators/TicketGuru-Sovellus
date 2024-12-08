@@ -51,24 +51,25 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 ## Käyttäjäryhmät (roolit)
 <details>
-<summary> Lipputoimiston myyjä</summary>
+<summary> Lipputoimiston myyjä (salesperson)</summary>
 
 
-### Lipputoimiston myyjä
-- Pystyy tarkastelemaan eri tapahtumien lippuja, niiden tyyppejä ja hintoja.
+### Lipputoimiston myyjä (salesperson)
+- Pystyy tarkastelemaan eri tapahtumien lippuja, niiden niiden lipputyyppejä ja hintoja.
 - Voi myydä asiakkaalle lipun ja tulostaa sen.
-- Voi tarkastella myymiensä lippujen myyntiraportteja.
-- Ei pysty muokkaamaan tapahtumiin kirjattuja lipputietoja tai hintoja.
+- Voi tarkastella lippujen myyntiraportteja.
+- Pääsee näkemään omat kirjaumistietonsa User Dashboard -sivulta sekä muokkaamaan siellä omia tietojaan.
+- RAJOITUKSET: Ei pysty muokkaamaan tapahtumien tietoja eikä poistamaan tapahtumia. Ei pysty muokkaamaan tai poistamaan muita käyttäjiä tai myyjiä järjestelmässä.
 </details>
 
 <details>
-<summary> Järjestelmän pääkäyttäjä</summary>
+<summary> Järjestelmän pääkäyttäjä (admin)</summary>
 
-### Järjestelmän pääkäyttäjä
-- Lipputoimiston henkilökuntaa.
-- Pystyy käyttämään kaikkia järjestelmän ominaisuuksia (lisäys, muokkaus, poisto).
-- Voi tarkastella kaikkien tapahtumien myyntiraportteja.
-- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään.
+### Järjestelmän pääkäyttäjä (admin)
+- Lipputoimiston henkilökuntaa
+- Pystyy käyttämään samoja toimintoja kuten myyjätkin.
+- Lisäksi pystyy lisäämään uusia tapahtumia, muokkaamaan tapahtumia ja poistamaan niitä.
+- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään User Dashboad -sivulla.
 </details>
 
 
@@ -81,19 +82,26 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 </br>
 
 - **Käyttötapaus 1: Tapahtumien tarkastelu**
-  - **Tavoite:** Myyjä haluaa tarkastella tapahtumien lippuja, niiden tyyppejä ja hintoja.
-  - **Toimet:** Myyjä navigoi järjestelmään, valitsee tarkasteltavan tapahtuman ja katsoo sen tiedot, kuten lipputyypit ja lippujen hinnat.
-  - **Tulos:** Myyjä saa näkyviin valitun tapahtuman tiedot ja voi tarkastella sen ominaisuuksia.
+  - **Tavoite:** Myyjä haluaa tarkastella tapahtumien lippuja, niiden lipputyyppejä ja hintoja.
+  - **Toimet:** Myyjä kirjatutuu järjestelmään ja siirtyy pääsivulta Events -painikkeen kautta tapahtumasivulle. Myyjä näkee sivulla eri tapahtumat ja niiden tiedot. Hän voi myös hakea tiettyä tapahtumaa hakutoiminnon avulla.
+  - **Tulos:** Myyjä saa näkyviin tiedot tapahtumista ja voi tarkastella niiden tietoja.
 
 - **Käyttötapaus 2: Lipun myynti**
     - **Tavoite:** Myyjä haluaa myydä lipun asiakkaalle.
-    - **Toimet:** Myyjä valitsee tapahtuman, valitsee lipputyypin, syöttää asiakkaan tiedot, hyväksyy maksun ja tulostaa lipun.
-    - **Tulos:** Asiakas saa lipun ja järjestelmä tallentaa myyntitapahtuman tiedot.
+    - **Toimet:** Myyjä on Events -sivulla, josta hän halutun tapahtuman kohdalta painaa "Sell Ticket" -painiketta. Myyjä valitsee halutun lippumäärän sekä lipputyypin. Kun kaikki valinnat on tehty, painamalla "Sell Ticket" -painiketta saadaan liput ja niiden QR-koodit näkyviin. Myyjä tulostaa liput asiakkaalle paperisena.
+    - **Tulos:** Asiakas saa lipun ja järjestelmä tallentaa myyntitapahtuman (OrderId) tiedot. Lippujen määrä vähenee järjestelmässä myytyjen lippujen määrän mukaisesti.
 
 - **Käyttötapaus 3: Myyntiraporttien tarkastelu**
-    - **Tavoite:** Myyjä haluaa tarkastella myymiään lippuja.
-    - **Toimet:** Myyjä kirjautuu järjestelmään, valitsee ajanjakson ja tarkastelee raporttia omista myynneistään.
-    - **Tulos:** Myyjä saa näkyviin raportin myymistään lipuista.
+    - **Tavoite:** Myyjä haluaa tarkastella lippujen myyntimääriä tai myyntitapahtumia tapahtumakohtaisesti tai hakea tiettyä myyntitapahtumaa OrderId:n mukaan.
+    - **Toimet:** Myyjä kirjautuu järjestelmään ja siirtyy pääsivulta "Reports" -painikkeen kautta raporttisivulle. Valitsemalla "Show Sales by Events" hän näkee tapahtumakohtaisesti lippujen myyntimäärät ja myyntisummat. Halutun tapahtuman kohdalta painamalla "Show Details" -painiketta hän pääsee näkemään tarkemmat myyntitapahtumien mukaiset tiedot myynneistä. Myyjä voi myös hakea OrderId:n mukaisesti vain tietyn myyntitapahtuman tiedot "Search by OrderId" -hakutoiminnon avulla.
+    - **Tulos:** Myyjä saa näkyviin myyntitiedot tapahtumittain tai tietyn OrderId:n mukaan haetut myyntitapahtuman tiedot.
+
+- **Käyttötapaus 4: Käyttäjätietojen tarkastelu ja muokkaus**
+    - **Tavoite:** Myyjä haluaa tarkastella tai muokata omia käyttäjätietojaan.
+    - **Toimet:** Myyjä kirjautuu järjestelmään, valitsee etusivulta "Users" -painikkeen. Sivulla olevasta "Profile" -välilehdeltä hän näkee omat käyttäjätietonsa. "Edit Users" -välilehdeltä hän pystyy muokkaamaan omia käyttäjätietojaan, kuten vaihtamaan salasanan.
+    - **Tulos:** Myyjä saa näkyviin omat käyttäjätietonsa ja tarvittaessa vaihtamaan salasanansa.
+
+
 </details>
 
 
@@ -122,10 +130,7 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 
 ## Käyttäjätarinat
-<details> 
-    <summary> Käyttäjätarinat </summary>
 
-<details>
 <summary>  Lista käyttäjätarinoista   </summary>
 </br>
 
@@ -162,27 +167,14 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 </br>
 
-## Yksityiskohtaiset vaatimukset
-
-- **Lippujen tulostaminen:** Liput tulostetaan standardikokoiselle paperille, ja lipussa on mukana QR-koodi tai viivakoodi tarkistamista varten.
-- **Tietoturva:** Käyttäjän tiedot salataan ja tallennetaan turvallisesti.
-</details>
-
-<details>
-<summary> Käyttöliittymävaatimukset </summary>
-
-## Käyttöliittymävaatimukset
-
-- **Myyjän käyttöliittymä:** Yksinkertainen ja selkeä käyttöliittymä, jossa on helppo navigoida tapahtumien ja lippujen välillä.
-- **Raporttien tarkastelu:** Raportit esitetään visuaalisesti ymmärrettävällä tavalla, kuten taulukoina tai kaavioina.
-</details>
 
 <details>
 <summary> Yhteenveto ja rajaukset </summary>
 
 ## Yhteenveto ja rajaukset
 
-- **Sisältyvät toiminnot:** Lipun myynti, lippujen tulostaminen, myyntiraportit, käyttäjien hallinta.
+- **Sisältyvät toiminnot:** Tapahtuminen tarkastelu, lippujen myynti, lippujen tulostaminen, myyntiraportit, käyttäjien hallinta.
+- **Lippujen tulostaminen:** Liput tulostetaan standardikokoiselle paperille, ja lipussa on mukana QR-koodi tai viivakoodi tarkistamista varten.
 - **Ei sisälly:** Verkkokauppatoiminnot (tulevaisuudessa mahdollisesti).
 </details>
 
