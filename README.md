@@ -216,70 +216,93 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 </br>
 
 
-<details>
-<summary> Yhteenveto ja rajaukset </summary>
-
-## Yhteenveto ja rajaukset
-
-- **Sisältyvät toiminnot:** Tapahtuminen tarkastelu, lippujen myynti, lippujen tulostaminen, myyntiraportit, käyttäjien hallinta.
-- **Lippujen tulostaminen:** Liput tulostetaan standardikokoiselle paperille, ja lipussa on mukana QR-koodi tai viivakoodi tarkistamista varten.
-- **Ei sisälly:** Verkkokauppatoiminnot (tulevaisuudessa mahdollisesti).
-</details>
-
-</br>
-
 # Käyttöliittymä
 
+**Käyttöliittymän URL: https://ticketguru-sovellus-elite-innovators-ticketguru2.2.rahtiapp.fi**
+
+Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, joihin pääsee siirtymään pääsivulta. Lisäksi sivun yläreunan navigointipalkista pääsee samoihin toimintoihin kuin pääsivun painikkeista. Tässä osiossa kuvataan eri sivujen näkymät ja miten niissä liikutaan.</summary>
+
 <details>
-<summary>Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät voivat suorittaa tarvitsemansa toiminnot. Tässä kuvataan nämä päänäkymät ja miten niissä liikutaan.</summary>
+<summary> Login -sivu</summary>
+</br>
+
+- **Miksi:** Järjestelmää käyttämään pääsevät vain henkilöt, jotka on määritelty järjestelmän käyttäjiksi ja on siihen tarvittavat käyttäjänimi ja salasana.
+- **Mitä:** Login -sivulle ohjaudutaan käyttöliittymän URL-osoitteella.
+- **Siirtymiset:** Onnistuneen kirjautumisen jälkeen ohjaudutaan etusivulle.
+
+</details>
 
 <details>
 <summary> Etusivu </summary>
 </br>
 
-- **Miksi:** Etusivu toimii pääsivuna, josta käyttäjä pääsee kaikkiin tärkeimpiin osiin sovelluksessa.
-- **Mitä:** Sivulla on linkit tapahtumien hallintaan, lipunmyyntiin ja raporttien tarkasteluun.
-- **Siirtymiset:** Etusivulta käyttäjä pääsee helposti muihin näkymiin ja takaisin.
-
+- **Miksi:** Etusivu toimii pääsivuna, josta käyttäjä pääsee käyttämään järjestelmän eri toimintoja.
+- **Mitä:** Sivulla on linkit: **events**, **reports** ja **users**.
+- **Siirtymiset:** 
+    - **Events**: siirtytään tapahtumien listaukseen ja lipunmyyntiin. 
+    - **Reports**: siirtytään tarkastelmaan myyntiraportteja.
+    - **Users**: siirtytään käyttäjähallintaan. 
 </details>
 
 <details>
 
-<summary> Tapahtumien hallinta </summary>
+<summary> Events </summary>
 </br>
 
-- **Miksi:** Täällä käyttäjä voi hallita tapahtumia, kuten lisätä, muokata ja poistaa niitä.
+- **Miksi:** Täällä käyttäjä voi tarkastella ja hallita tapahtumia, kuten lisätä, muokata ja poistaa niitä.
 - **Mitä:** Näkymässä on lista tapahtumista, lomake uusille tapahtumille ja työkalut tapahtumien muokkaamiseen.
-- **Siirtymiset:** Käyttäjä voi siirtyä etusivulta tapahtumien hallintaan ja takaisin etusivulle.
+- **Siirtymiset:** 
+    - **Sell Ticket**: tapahtuman kohdalla olevasta linkistä siirtytään kyseisen tapahtuman lipunmyyntisivulle.
+    - **Add Event**: siirtytään lomakkeelle, jossa voidaan luoda uusi tapahtuma.
+    - **Edit**: siirrytään lomakkeelle, jossa pääsee muokkaamaan tapahtuman tietoja.
+    - **Delete**: voidaan poistaa tapahtuma, jos siihen ei ole myyty lippuja.  
 </details>
 
 <details>
-<summary> Lipunmyyntinäkymä </summary>
+<summary> Sell Ticket </summary>
 </br>
 
-- **Miksi:** Tämä on myyjien työskentelynäkymä, jossa he voivat myydä lippuja asiakkaille.
-- **Mitä:** Näkymässä valitaan tapahtuma, lipputyyppi, syötetään asiakastiedot ja maksetaan liput.
-- **Siirtymiset:** Etusivulta käyttäjä pääsee lipunmyyntiin ja takaisin. Lipunmyyntitapahtumasta voi siirtyä myös myyntiraporttiin.
+- **Miksi:** Täällä käyttäjä voi myydä lippuja tiettyyn tapahtumaan.
+- **Mitä:** Näkymässä käyttäjä voi valita lipputyypin ja lippumäärän. "Sell Ticket" painikkeesta muodostetaan myyntitapahtuma ja edetään näkymään, jossa nähdään liput ja niiden QR-koodit. 
+- **Siirtymiset:** 
+    - **Sell Ticket**: Käyttäjä siirtyy sivulle, jossa näkyy myydyt liput, niiden lippukoodit ja QR-koodit. Sivulta liput voi tulostaa asiakkaalle.
 </details>
 
-
 <details>
-<summary> Myyntiraportit </summary>
+<summary> Reports </summary>
 </br>
 
 - **Miksi:** Täällä käyttäjä voi tarkastella myyntiraportteja ja saada kokonaiskuvan myynnistä.
-- **Mitä:** Näkymässä on raporttilistat, suodatusvaihtoehdot ja yksityiskohtaiset myyntitiedot.
-- **Siirtymiset:** Raporttien tarkastelusta voi palata etusivulle.
+- **Mitä:** Raporttisivulla voidaan tarkastella myytyjä lippumääriä ja myyntisummia tapahtumittain. Lisäksi voidaan myös hakea tietyn myyntitapahtuman tiedot OrderId:n avulla.
+- **Siirtymiset:** 
+    - **Show Sales by Events**: Painiketta painamalla saadaan näkyviin lipunmyyntitiedot tapahtumittain listattuna.
+    - **Search by order ID**: Hakutoiminnon avulla sivulla näytetään haetun myyntitapahtuman tiedot.
+</details>
+
+
+<details>
+<summary> Users </summary>
+</br>
+
+- **Miksi:** Sivulla voidaan tarkastella ja hallita myyjien ja käyttäjien käyttäjätietoja järjestelmässä.
+- **Mitä:** Käyttäjä voi tarkastella omia kirjautumistietojaan. Pääkäyttäjä pystyy lisäämään uusia myyjiä ja luomaan heille käyttäjätilin järjestelmään. Käyttäjä pystyy muokkaamaan omia tietojaan ja pääkäyttäjä pystyy muokkaamaan ja poistamaan myyjiä ja järjestelmän käyttäjiä. 
+- **Siirtymiset:** 
+    - **Profile**: Välilehdellä näkyy kirjautuneen käyttäjän tiedot.
+    - **Add Salesperson**: Välilehdellä voidaan lisätä uusi myyjä (salesperson).
+    - **Add User**: Välilehdellä voidaan luoda myyjälle käyttäjätili järjestelmään.
+    - **Edit Users**: Välilehdellä voidaan muokata käyttäjien tietoja.
+    - **Edit Salesperson**: Välilehdellä voidaan muokata myyjien tietoja.
 </details>
 
 
 
 ### Käyttöliittymäkaavio
 - **Kaavio:** [Käyttöliittymäkaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=643351026#gid=643351026)
-- **Miksi:** Käyttöliittymäkaavio näyttää, miten eri näkymät liittyvät toisiinsa ja miten käyttäjä navigoi niiden välillä.
+- **Miksi:** Käyttöliittymäkaavio näyttää, miten eri näkymät liittyvät toisiinsa ja miten käyttäjä navigoi niiden välillä. Tätä käyttöliittymäkaavion suunnitelmaa on käytetty lähtökohtana lopullisten näkymien toteutuksessa.
 </details>
+</br>
 
-## Tietokanta
+# Tietokanta
 
 ### Tietokantakaavio
 [Tietokantakaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
