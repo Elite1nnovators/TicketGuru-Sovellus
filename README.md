@@ -12,6 +12,7 @@
 
 3. **[Käyttöliittymä](#käyttöliittymä)**
    - [Käyttöliittymäkaavio](#käyttöliittymäkaavio)
+   - [Käyttöliittymän näkymät](#käyttöliittymän-näkymät)
 
 4. **[Tietokanta](#tietokanta)**
    - [Tietokantakaavio](#tietokantakaavio)
@@ -69,8 +70,6 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - Voi tarkastella kaikkien tapahtumien myyntiraportteja.
 - Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään.
 </details>
-
-<details>
 
 
 ## Käyttötapaukset ja käyttäjätarinat
