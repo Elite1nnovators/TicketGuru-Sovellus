@@ -69,7 +69,7 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - Lipputoimiston henkilökuntaa
 - Pystyy käyttämään samoja toimintoja kuten myyjätkin.
 - Lisäksi pystyy lisäämään uusia tapahtumia, muokkaamaan tapahtumia ja poistamaan niitä.
-- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään User Dashboad -sivulla.
+- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään User Dashboad -sivulla. Pystyy lisäämään/muokkaamaan/poistamaan käyttäjätietoja.
 </details>
 
 
@@ -99,7 +99,7 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 - **Käyttötapaus 4: Käyttäjätietojen tarkastelu ja muokkaus**
     - **Tavoite:** Myyjä haluaa tarkastella tai muokata omia käyttäjätietojaan.
     - **Toimet:** Myyjä kirjautuu järjestelmään, valitsee etusivulta "Users" -painikkeen. Sivulla olevasta "Profile" -välilehdeltä hän näkee omat käyttäjätietonsa. "Edit Users" -välilehdeltä hän pystyy muokkaamaan omia käyttäjätietojaan, kuten vaihtamaan salasanan.
-    - **Tulos:** Myyjä saa näkyviin omat käyttäjätietonsa ja tarvittaessa vaihtamaan salasanansa.
+    - **Tulos:** Myyjä saa näkyviin omat käyttäjätietonsa ja pystyy tarvittaessa vaihtamaan salasanansa.
 
 
 </details>
@@ -111,20 +111,44 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 <summary> Järjestelmän pääkäyttäjä- käyttötapaukset </summary>
 </br>
 
-- **Käyttötapaus 1: Tapahtuman luominen**
+- **Käyttötapaus 1: Tapahtumien tarkastelu**
+  - ** Toimii samoin kuin myyjän kohdalla.
+
+- **Käyttötapaus 2: Lipun myynti**
+  - ** Toimii samoin kuin myyjän kohdalla.
+
+- **Käyttötapaus 3: Myyntiraporttien tarkastelu**
+  - ** Toimii samoin kuin myyjän kohdalla.
+
+- **Käyttötapaus 4: Tapahtuman lisääminen**
     - **Tavoite:** Pääkäyttäjä haluaa lisätä uuden tapahtuman järjestelmään.
-    - **Toimet:** Pääkäyttäjä syöttää tapahtuman tiedot (nimi, päivämäärä, lipputyypit, hinnat) ja tallentaa tiedot.
-    - **Tulos:** Uusi tapahtuma on näkyvissä järjestelmässä ja myytävissä liput on määritelty.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "Events" -painikkeen kautta tapahtumasivulle. Hän valitsee sieltä "Add Event", joka jälkeen syöttää uuden tapahtuman tiedot avautuvaan ikkunaan (nimi, päivämäärä ja kellonaika, osoitetiedot, kuvaus, lipputyypit, hinnat, lippumäärät) ja tallentaa tiedot painamalla "Save".
+    - **Tulos:** Uusi tapahtuma tulee näkyviin "Events" sivulle ja myytävissä olevat liput tapahtumaan on tallennettu järjestelmään. Lisättyyn tapahtumaan voi nyt myydä lippuja.
 
-- **Käyttötapaus 2: Käyttäjien hallinta**
-    - **Tavoite:** Pääkäyttäjä haluaa lisätä tai poistaa käyttäjän järjestelmässä.
-    - **Toimet:** Pääkäyttäjä luo uuden käyttäjätilin, määrittää roolin ja käyttöoikeudet tai poistaa käyttäjätilin käyttöoikeudet.
-    - **Tulos:** Uusi käyttäjä on lisätty/poistettu ja voi käyttää järjestelmää määritettyjen oikeuksien mukaisesti.
+- **Käyttötapaus 5: Tapahtuman muokkaaminen tai poistaminen**
+    - **Tavoite:** Pääkäyttäjä haluaa muokata järjestelmässä olevan tapahtuman tietoja tai poistaa koko tapahtuman (voi poistaa vain, jos lippuja ei ole myyty tapahtumaan).
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "Events" -painikkeen kautta tapahtumasivulle. Hän valitsee halutun tapahtuman kohdalta "Edit", jolloin voi tehdä halutut muutokset tapahtuman tietoihin ja lopuksi painamalla "Save" muutokset tallentuvat. Tapahtuman voi poistaa kokonaan painamalla tapahtuman kohdalta "Delete".
+    - **Tulos:** Tapahtuman tiedot päivittyvät järjestelmään tai tapahtuma poistuu kokonaan järjestelmästä. Jos tapahtumaan on jo myyty lippuja, poisto ei ole mahdollista.
 
-- **Käyttötapaus 3: Tapahtumien myyntiraporttien tarkastelu**
-    - **Tavoite:** Pääkäyttäjä haluaa tarkastella kaikkien tapahtumien myyntiraportteja.
-    - **Toimet:** Pääkäyttäjä kirjautuu järjestelmään, valitsee tarkasteltavat tapahtumat ja aikajaksot, ja tarkastelee myyntiraportteja.
-    - **Tulos:** Pääkäyttäjä saa näkyviin yhteenvedon myynnistä kaikkien tapahtumien osalta ja voi analysoida myyntitietoja.
+- **Käyttötapaus 6: Uuden myyjän lisääminen järjestelmään**
+    - **Tavoite:** Pääkäyttäjä haluaa lisätä uuden myyjän (salesperson) järjestelmään.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Add Salesperson" välilehdeltä hän voi lisätä uuden myyjän (salesperson) antamalla tarvittavat tiedot (etunimi, sukunimi ja puhelin) ja lopuksi painamalla "Add Salesperson" painiketta.
+    - **Tulos:** Uusi myyjä on lisätty järjestelmään.
+
+- **Käyttötapaus 7: Uuden käyttäjätilin luominen myyjälle**
+    - **Tavoite:** Pääkäyttäjä haluaa luoda järjestelmässä olevalle myyjälle käyttäjätilin järjestelmään.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Add User" välilehdeltä hän valitsee halutun myyjän, valitsee hänelle roolin (user/admin) ja salasanan käyttäjälle. Järjestelmä muodostaa automaattisesti generoidun käyttäjätunnuksen.
+    - **Tulos:** Uusi käyttäjätili on luotu myyjälle. Myyjä voi kirjautua järjestelmään ja käyttää sitä määritettyjen oikeuksiensa mukaisesti.
+
+- **Käyttötapaus 8: Myyjän tai käyttäjän tietojen muokkaaminen**
+    - **Tavoite:** Pääkäyttäjä haluaa muokata myyjän tai järjestelmän käyttäjän tietoja.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Edit Salespersons" -välilehdeltä hän pääsee valitsemaan myyjän, jonka tietoja haluaa muokata ja voi tehdä halutut muokkaukset. "Update Salesperson" -painikkeella muutokset tallentuvat. "Edit Users" -välilehdeltä pääsee muokkaamaan tietyn järjestelmän käyttäjän tietoja (esim. vaihtamaan salasanan tai roolin). "Update user" painikkeen kautta tehdyt muutokset tallentuvat.
+    - **Tulos:** Uusi myyjä on lisätty järjestelmään.
+
+- **Käyttötapaus 9: Myyjän tai käyttäjän poistaminen järjestelmästä**
+    - **Tavoite:** Pääkäyttäjä haluaa poistaa myyjän tai järjestelmän käyttäjän kokonaan järjestelmästä.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Edit Salespersons" -välilehdeltä hän pääsee valitsemaan myyjän ja pystyy poistamaan hänet painamalla "Delete Salesperson". "Edit Users" -välilehdeltä voi poistaa halutun käyttäjän valitsemalla "Delete user".
+    - **Tulos:** Myyjän tai käyttäjän tiedot poistuvat järjestelmästä.
 
 </details>
 
