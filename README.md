@@ -8,28 +8,24 @@
 
 2. **[Järjestelmän määrittely](#järjestelmän-määrittely)**
    - [Käyttäjäryhmät (roolit)](#käyttäjäryhmät-roolit)
+   - [Käyttötapaukset ja käyttäjätarinat](#käyttötapaukset-ja-käyttäjätarinat)
 
-3. **[Käyttötapaukset ja käyttäjätarinat](#käyttötapaukset-ja-käyttäjätarinat)**
-   - [Käyttäjätarinat](#käyttäjätarinat)
-
-4. **[Yksityiskohtaiset vaatimukset](#yksityiskohtaiset-vaatimukset)**
-
-5. **[Käyttöliittymä](#käyttöliittymä)**
+3. **[Käyttöliittymä](#käyttöliittymä)**
    - [Käyttöliittymäkaavio](#käyttöliittymäkaavio)
 
-6. **[Tietokanta](#tietokanta)**
+4. **[Tietokanta](#tietokanta)**
    - [Tietokantakaavio](#tietokantakaavio)
    - [Tietohakemisto](#tietohakemisto)
 
-7. **[REST API dokumentaatio](#rest-api-dokumentaatio)**
+5. **[REST API dokumentaatio](#rest-api-dokumentaatio)**
    - [Myyntitapahtumien API-dokumentaatio](#myyntitapahtumien-api-dokumentaatio)
    - [Lippujen (Ticket) API-pyynnöt](#lippujen-ticket-api-pyynnöt)
    - [Lipputyyppien (TicketType) API-pyynnöt](#lipputyyppien-tickettype-api-pyynnöt)
 
-8. **[Autentikaatio](#autentikaatio)**
+6. **[Autentikaatio](#autentikaatio)**
    - [Perustason autentikointi](#perustason-autentikointi-basic-authentication)
 
-9. **[Testaus](#testaus)**
+7. **[Testaus](#testaus)**
    - [Database Access Layer](#database-access-layer)
      - [Yhteyden toimivuus (DAL ↔ RDBMS)](#yhteyden-toimivuus-dal-rdbms)
      - [SQL-kyselyjen oikeellisuus](#sql-kyselyjen-oikeellisuus)
