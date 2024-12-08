@@ -82,19 +82,30 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 </br>
 
 - **Käyttötapaus 1: Tapahtumien tarkastelu**
-  - **Tavoite:** Myyjä haluaa tarkastella tapahtumien lippuja, niiden lipputyyppejä ja hintoja.
-  - **Toimet:** Myyjä kirjatutuu järjestelmään ja siirtyy pääsivulta Events -painikkeen kautta tapahtumasivulle. Myyjä näkee sivulla eri tapahtumat ja niiden tiedot. Hän voi myös hakea tiettyä tapahtumaa hakutoiminnon avulla.
-  - **Tulos:** Myyjä saa näkyviin tiedot tapahtumista ja voi tarkastella niiden tietoja.
+    - **Tavoite:** Myyjä haluaa tarkastella tapahtumien lippuja, niiden lipputyyppejä ja hintoja.
+    - **Toimet:** Myyjä kirjatutuu järjestelmään ja siirtyy pääsivulta Events -painikkeen kautta tapahtumasivulle. Myyjä näkee sivulla eri tapahtumat ja niiden tiedot. Hän voi myös hakea tiettyä tapahtumaa hakutoiminnon avulla.
+    - **Tulos:** Myyjä saa näkyviin tiedot tapahtumista ja voi tarkastella niiden tietoja.
+
+    - **Käyttäjätarinat:**
+        - **Myyjänä haluan nähdä kaikki tulevat tapahtumat**, jotta voin kertoa asiakkaalle tietoa tapahtumasta ajankohdan, sijainnin ja kuvauksen.
+        - **Myyjänä haluan tarkastella tapahtumiin liittyviä lippuja** ja niiden määriä.
 
 - **Käyttötapaus 2: Lipun myynti**
     - **Tavoite:** Myyjä haluaa myydä lipun asiakkaalle.
     - **Toimet:** Myyjä on Events -sivulla, josta hän halutun tapahtuman kohdalta painaa "Sell Ticket" -painiketta. Myyjä valitsee halutun lippumäärän sekä lipputyypin. Kun kaikki valinnat on tehty, painamalla "Sell Ticket" -painiketta saadaan liput ja niiden QR-koodit näkyviin. Myyjä tulostaa liput asiakkaalle paperisena.
     - **Tulos:** Asiakas saa lipun ja järjestelmä tallentaa myyntitapahtuman (OrderId) tiedot. Lippujen määrä vähenee järjestelmässä myytyjen lippujen määrän mukaisesti.
 
+    - **Käyttäjätarinat:**
+        - **Myyjänä haluan valita ja myydä lippuja** tapahtumaan niin, että voin helposti valita tapahtuman, lipputyypin (esim. aikuinen, lapsi, eläkeläinen) ja halutun määrän, jotta voin tarjota asiakkaalle sujuvan ostokokemuksen.
+        - **Myyjänä haluan tulostaa myymäni liput** niin, että asiakas voi käyttää niitä tapahtumassa ilman erillisiä toimenpiteitä.
+
 - **Käyttötapaus 3: Myyntiraporttien tarkastelu**
     - **Tavoite:** Myyjä haluaa tarkastella lippujen myyntimääriä tai myyntitapahtumia tapahtumakohtaisesti tai hakea tiettyä myyntitapahtumaa OrderId:n mukaan.
     - **Toimet:** Myyjä kirjautuu järjestelmään ja siirtyy pääsivulta "Reports" -painikkeen kautta raporttisivulle. Valitsemalla "Show Sales by Events" hän näkee tapahtumakohtaisesti lippujen myyntimäärät ja myyntisummat. Halutun tapahtuman kohdalta painamalla "Show Details" -painiketta hän pääsee näkemään tarkemmat myyntitapahtumien mukaiset tiedot myynneistä. Myyjä voi myös hakea OrderId:n mukaisesti vain tietyn myyntitapahtuman tiedot "Search by OrderId" -hakutoiminnon avulla.
     - **Tulos:** Myyjä saa näkyviin myyntitiedot tapahtumittain tai tietyn OrderId:n mukaan haetut myyntitapahtuman tiedot.
+
+    - **Käyttäjätarinat:**
+        - **Myyjänä haluan tarkastella myyntiraporttia** niin, että näen myydyt liput (tyypin ja määrän) ja kokonaissumman nopeasti yhdellä silmäyksellä.
 
 - **Käyttötapaus 4: Käyttäjätietojen tarkastelu ja muokkaus**
     - **Tavoite:** Myyjä haluaa tarkastella tai muokata omia käyttäjätietojaan.
@@ -112,23 +123,29 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 </br>
 
 - **Käyttötapaus 1: Tapahtumien tarkastelu**
-  - ** Toimii samoin kuin myyjän kohdalla.
+  - Toimii samoin kuin myyjän kohdalla.
 
 - **Käyttötapaus 2: Lipun myynti**
-  - ** Toimii samoin kuin myyjän kohdalla.
+  - Toimii samoin kuin myyjän kohdalla.
 
 - **Käyttötapaus 3: Myyntiraporttien tarkastelu**
-  - ** Toimii samoin kuin myyjän kohdalla.
+  - Toimii samoin kuin myyjän kohdalla.
 
 - **Käyttötapaus 4: Tapahtuman lisääminen**
     - **Tavoite:** Pääkäyttäjä haluaa lisätä uuden tapahtuman järjestelmään.
     - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "Events" -painikkeen kautta tapahtumasivulle. Hän valitsee sieltä "Add Event", joka jälkeen syöttää uuden tapahtuman tiedot avautuvaan ikkunaan (nimi, päivämäärä ja kellonaika, osoitetiedot, kuvaus, lipputyypit, hinnat, lippumäärät) ja tallentaa tiedot painamalla "Save".
     - **Tulos:** Uusi tapahtuma tulee näkyviin "Events" sivulle ja myytävissä olevat liput tapahtumaan on tallennettu järjestelmään. Lisättyyn tapahtumaan voi nyt myydä lippuja.
+    
+    - **Käyttäjätarinat:**
+        - **Yrityksenä haluan luoda ja hallita** tapahtumia yksinkertaisesti, jotta voin lisätä uusia tapahtumia, määrittää lipputyypit, hinnat ja määrät tehokkaasti.
 
 - **Käyttötapaus 5: Tapahtuman muokkaaminen tai poistaminen**
     - **Tavoite:** Pääkäyttäjä haluaa muokata järjestelmässä olevan tapahtuman tietoja tai poistaa koko tapahtuman (voi poistaa vain, jos lippuja ei ole myyty tapahtumaan).
     - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "Events" -painikkeen kautta tapahtumasivulle. Hän valitsee halutun tapahtuman kohdalta "Edit", jolloin voi tehdä halutut muutokset tapahtuman tietoihin ja lopuksi painamalla "Save" muutokset tallentuvat. Tapahtuman voi poistaa kokonaan painamalla tapahtuman kohdalta "Delete".
     - **Tulos:** Tapahtuman tiedot päivittyvät järjestelmään tai tapahtuma poistuu kokonaan järjestelmästä. Jos tapahtumaan on jo myyty lippuja, poisto ei ole mahdollista.
+
+    - **Käyttäjätarinat:**
+        - **Käyttäjänä haluan hallinnoida tapahtumia** niin, että voin lisätä, muokata ja poistaa tapahtumia, sekä hallita niihin liittyviä lippuja ja niiden määriä.
 
 - **Käyttötapaus 6: Uuden myyjän lisääminen järjestelmään**
     - **Tavoite:** Pääkäyttäjä haluaa lisätä uuden myyjän (salesperson) järjestelmään.
@@ -139,6 +156,9 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Tavoite:** Pääkäyttäjä haluaa luoda järjestelmässä olevalle myyjälle käyttäjätilin järjestelmään.
     - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Add User" välilehdeltä hän valitsee halutun myyjän, valitsee hänelle roolin (user/admin) ja salasanan käyttäjälle. Järjestelmä muodostaa automaattisesti generoidun käyttäjätunnuksen.
     - **Tulos:** Uusi käyttäjätili on luotu myyjälle. Myyjä voi kirjautua järjestelmään ja käyttää sitä määritettyjen oikeuksiensa mukaisesti.
+
+    - **Käyttäjätarinat:**
+        - **Kehittäjänä haluan, että sovellus käyttää vahvoja salausmenetelmiä**, jotta asiakkaiden ja myyjien henkilökohtaiset tiedot ovat turvattuja.
 
 - **Käyttötapaus 8: Myyjän tai käyttäjän tietojen muokkaaminen**
     - **Tavoite:** Pääkäyttäjä haluaa muokata myyjän tai järjestelmän käyttäjän tietoja.
@@ -155,37 +175,41 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 ## Käyttäjätarinat
 
+<details>
 <summary>  Lista käyttäjätarinoista   </summary>
 </br>
 
-- **Käyttäjänä haluan ostaa liput tapahtumaan** niin, että voin valita tapahtuman, lipputyypin (aikuinen, lapsi, eläkeläinen jne.) ja ostaa haluamani määrän lippuja helposti. Tavoitteenani on sujuva ostokokemus ilman ongelmia.
+- **Myyjänä haluan valita ja myydä lippuja** tapahtumaan niin, että voin helposti valita tapahtuman, lipputyypin (esim. aikuinen, lapsi, eläkeläinen) ja halutun määrän, jotta voin tarjota asiakkaalle sujuvan ostokokemuksen.
 
-- **Käyttäjänä haluan nähdä kaikki tulevat tapahtumat** niin, että voin valita tapahtuman ajan, paikan ja kuvauksen perusteella.
+- **Myyjänä haluan nähdä kaikki tulevat tapahtumat**, jotta voin kertoa asiakkaalle tietoa tapahtumasta ajankohdan, sijainnin ja kuvauksen. 
 
-- **Käyttäjänä haluan tarkastella myyntiraporttia** niin, että näen myydyt liput (tyypin ja määrän) ja kokonaissumman nopeasti yhdellä silmäyksellä.
+- **Myyjänä haluan tarkastella myyntiraporttia** niin, että näen myydyt liput (tyypin ja määrän) ja kokonaissumman nopeasti yhdellä silmäyksellä.
 
 - **Käyttäjänä haluan hallinnoida tapahtumia** niin, että voin lisätä, muokata ja poistaa tapahtumia, sekä hallita niihin liittyviä lippuja ja niiden määriä.
 
-- **Käyttäjänä haluan tulostaa ostamani liput** niin, että voin käyttää niitä tapahtumassa ilman erillisiä toimenpiteitä.
+- **Myyjänä haluan tarkastella tapahtumiin liittyviä lippuja** ja niiden määriä.
+
+- **Myyjänä haluan tulostaa myymäni liput** niin, että asiakas voi käyttää niitä tapahtumassa ilman erillisiä toimenpiteitä.
 
 - **Yrityksenä haluan pystyä näkemään lipunmyynnin trendejä** ajan mittaan, jotta voin suunnitella tulevia tapahtumia ja optimoida lippujen hinnoittelua.
 
-- **Yrityksenä haluan luoda ja hallita tapahtumia** yksinkertaisesti, jotta voin lisätä uusia tapahtumia, määrittää lipputyypit, hinnat ja määrät tehokkaasti.
-
-- **Yrityksenä haluan varmistaa, että sovellus toimii hyvin eri laitteilla**, jotta voin hallita tapahtumia ja tarkastella raportteja sekä työpöydältä että mobiililaitteilta.
+- **Yrityksenä haluan luoda ja hallita** tapahtumia yksinkertaisesti, jotta voin lisätä uusia tapahtumia, määrittää lipputyypit, hinnat ja määrät tehokkaasti.
 
 - **Käyttäjänä haluan sovelluksen latautuvan nopeasti**, jotta voin käyttää sitä sujuvasti ilman pitkiä odotusaikoja.
 
-- **Käyttäjänä haluan, että tietoni ovat suojattuja** ja että sovellus käyttää vahvoja salausmenetelmiä, jotta henkilökohtaiset tietoni ovat turvassa.
+- **Myyjänä haluan olla varma**, että asiakkaiden henkilökohtaiset tiedot ovat turvattuja.
 
-- **Yrityksenä haluan integroivan sovelluksen useisiin maksujärjestelmiin**, jotta asiakkaat voivat maksaa liput haluamallaan tavalla.
+- **Kehittäjänä haluan, että sovellus käyttää vahvoja salausmenetelmiä**, jotta asiakkaiden ja myyjien henkilökohtaiset tiedot ovat turvattuja.
 
-- **Käyttäjänä haluan sovelluksen olevan helppokäyttöinen ja intuitiivinen**, jotta voin löytää tarvittavat tiedot ja toiminnot vaivattomasti.
+- **Käyttäjänä haluan, että sovelluksen käyttöliittymä on selkeä ja intuitiivinen**, josta löytyy tarvittavat tiedot ja toiminnot vaivattomasti.
 
-- **Kehittäjänä haluan laatia testitapaukset eri sovelluksen toiminnoille**, jotta voimme varmistaa, että kaikki osat toimivat oikein ennen julkaisua.
+- **Käyttäjänä haluan, että sovelluksen toimintoja on helppo käyttää** ja ne toimivat odottamallani tavalla.
+
+- **Kehittäjänä haluan laatia ja suorittaa testitapaukset** sovelluksen kriittisille toiminnoille, jotta voin varmistaa perustoiminnallisuuden toimivuuden ennen julkaisua.
+
+- **Kehittäjänä haluan laatia ja suorittaa testitapaukset sovelluksen ei kriittisille toiminnoille**, jotta voin varmistaa myös toissijaisten toiminnallisuuksien toimivuuden ennen julkaisua.
 
 - **Kehittäjänä haluan seurata ja raportoida sovelluksen virheitä ja bugeja**, jotta ne voidaan korjata nopeasti ja parantaa sovelluksen laatua.
-</details>
 
 </details>
 
