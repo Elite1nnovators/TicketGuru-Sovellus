@@ -51,24 +51,24 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 ## Käyttäjäryhmät (roolit)
 <details>
-<summary> Lipputoimiston myyjä</summary>
+<summary> Lipputoimiston myyjä (salesperson)</summary>
 
 
-### Lipputoimiston myyjä
-- Pystyy tarkastelemaan eri tapahtumien lippuja, niiden tyyppejä ja hintoja.
+### Lipputoimiston myyjä (salesperson)
+- Pystyy tarkastelemaan eri tapahtumien lippuja, niiden niiden lipputyyppejä ja hintoja.
 - Voi myydä asiakkaalle lipun ja tulostaa sen.
-- Voi tarkastella myymiensä lippujen myyntiraportteja.
-- Ei pysty muokkaamaan tapahtumiin kirjattuja lipputietoja tai hintoja.
+- Voi tarkastella lippujen myyntiraportteja.
+- Pääsee näkemään omat kirjaumistietonsa User Dashboard -sivulta sekä muokkaamaan siellä omia tietojaan.
+- RAJOITUKSET: Ei pysty muokkaamaan tapahtumien tietoja eikä poistamaan tapahtumia. Ei pysty muokkaamaan tai poistamaan muita käyttäjiä tai myyjiä järjestelmässä.
 </details>
 
 <details>
-<summary> Järjestelmän pääkäyttäjä</summary>
+<summary> Järjestelmän pääkäyttäjä (admin)</summary>
 
-### Järjestelmän pääkäyttäjä
-- Lipputoimiston henkilökuntaa.
+### Järjestelmän pääkäyttäjä (admin)
+- Lipputoimiston henkilökuntaa
 - Pystyy käyttämään kaikkia järjestelmän ominaisuuksia (lisäys, muokkaus, poisto).
-- Voi tarkastella kaikkien tapahtumien myyntiraportteja.
-- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään.
+- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään (User Dashboad -sivulla)
 </details>
 
 
@@ -94,6 +94,13 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
     - **Tavoite:** Myyjä haluaa tarkastella myymiään lippuja.
     - **Toimet:** Myyjä kirjautuu järjestelmään, valitsee ajanjakson ja tarkastelee raporttia omista myynneistään.
     - **Tulos:** Myyjä saa näkyviin raportin myymistään lipuista.
+
+- **Käyttötapaus 3: Myyntiraporttien tarkastelu**
+    - **Tavoite:** Myyjä haluaa tarkastella myymiään lippuja.
+    - **Toimet:** Myyjä kirjautuu järjestelmään, valitsee ajanjakson ja tarkastelee raporttia omista myynneistään.
+    - **Tulos:** Myyjä saa näkyviin raportin myymistään lipuista.
+
+
 </details>
 
 
@@ -122,10 +129,7 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 
 ## Käyttäjätarinat
-<details> 
-    <summary> Käyttäjätarinat </summary>
 
-<details>
 <summary>  Lista käyttäjätarinoista   </summary>
 </br>
 
@@ -162,27 +166,14 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 
 </br>
 
-## Yksityiskohtaiset vaatimukset
-
-- **Lippujen tulostaminen:** Liput tulostetaan standardikokoiselle paperille, ja lipussa on mukana QR-koodi tai viivakoodi tarkistamista varten.
-- **Tietoturva:** Käyttäjän tiedot salataan ja tallennetaan turvallisesti.
-</details>
-
-<details>
-<summary> Käyttöliittymävaatimukset </summary>
-
-## Käyttöliittymävaatimukset
-
-- **Myyjän käyttöliittymä:** Yksinkertainen ja selkeä käyttöliittymä, jossa on helppo navigoida tapahtumien ja lippujen välillä.
-- **Raporttien tarkastelu:** Raportit esitetään visuaalisesti ymmärrettävällä tavalla, kuten taulukoina tai kaavioina.
-</details>
 
 <details>
 <summary> Yhteenveto ja rajaukset </summary>
 
 ## Yhteenveto ja rajaukset
 
-- **Sisältyvät toiminnot:** Lipun myynti, lippujen tulostaminen, myyntiraportit, käyttäjien hallinta.
+- **Sisältyvät toiminnot:** Tapahtuminen tarkastelu, lippujen myynti, lippujen tulostaminen, myyntiraportit, käyttäjien hallinta.
+- **Lippujen tulostaminen:** Liput tulostetaan standardikokoiselle paperille, ja lipussa on mukana QR-koodi tai viivakoodi tarkistamista varten.
 - **Ei sisälly:** Verkkokauppatoiminnot (tulevaisuudessa mahdollisesti).
 </details>
 
