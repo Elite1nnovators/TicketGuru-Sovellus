@@ -1,128 +1,137 @@
 import { useEffect, useState } from "react";
 import EventForm from "./EventForm";
-import { Button } from 'react-bootstrap';
-import { PencilIcon } from '@heroicons/react/24/outline';
-import api from './api';
+import { Button } from "react-bootstrap";
+import { PencilIcon } from "@heroicons/react/24/outline";
+import api from "./api";
 
+export default function EditEvent({ event, refreshEvents }) {
+  const [show, setShow] = useState(false);
+  const [editedEvent, setEditedEvent] = useState({ ...event });
+  const [ticketTypesToDelete, setTicketTypesToDelete] = useState([]);
 
+  // Initialize editedEvent when the component receives a new event prop
+  useEffect(() => {
+    setEditedEvent({ ...event });
+    setTicketTypesToDelete([]);
+  }, [event]);
 
-export default function EditEvent({ event, editEvent }) {
-    const [show, setShow] = useState(false);
-    const [editedEvent, setEditedEvent] = useState(event);
+  // Update event fields
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedEvent((prev) => ({ ...prev, [name]: value }));
+  };
 
-    // Muokkaa lipputyyppiä
-    const handleTicketTypeChange = (index, e) => {
-        const { name, value } = e.target;
+  // Handle ticket type changes
+  const handleTicketTypeChange = (index, e) => {
+    const { name, value } = e.target;
     const updatedTicketTypes = [...editedEvent.eventTicketTypes];
+    updatedTicketTypes[index][name] = value;
+    console.log("upadted ticketTypes", updatedTicketTypes);
+    setEditedEvent((prev) => ({
+      ...prev,
+      eventTicketTypes: updatedTicketTypes,
+    }));
+  };
 
-    if (name === "ticketTypeName") {
-        updatedTicketTypes[index].ticketTypeName = value;
-    } else {
-        updatedTicketTypes[index][name] = value;
+  const handleAddTicketType = () => {
+    setEditedEvent((prev) => ({
+      ...prev,
+      eventTicketTypes: [
+        ...prev.eventTicketTypes,
+        { id: null, ticketTypeName: "", price: 0, ticketsInStock: 0 },
+      ],
+    }));
+  };
+
+  const handleDeleteTicketType = (index) => {
+    const updatedTicketTypes = [...editedEvent.eventTicketTypes];
+    const [removedTicketType] = updatedTicketTypes.splice(index, 1);
+
+    if (removedTicketType.id) {
+      setTicketTypesToDelete((prev) => [...prev, removedTicketType.id]);
     }
 
-    setEditedEvent((prevEvent) => ({
-        ...prevEvent,
-        eventTicketTypes: updatedTicketTypes,
+    setEditedEvent((prev) => ({
+      ...prev,
+      eventTicketTypes: updatedTicketTypes,
     }));
-    };
+  };
 
+  const handleSave = async () => {
+    try {
 
-
-    const handleAddTicketType = () => {
-        setEditedEvent((prevEvent) => ({
-            ...prevEvent,
-            eventTicketTypes: [
-                ...prevEvent.eventTicketTypes,
-                {
-                    ticketType: {
-                        id: "",
-                        name: ""
-                    },
-                    price: 0,
-                    ticketsInStock: 0,
-                },
-            ],
-        }));
-    };
-
-
-
-
-    // Päivitä tapahtuma
-    const handleSave = async () => {
-        try {
-            // Tallenna uudet lipputyypit, jos niitä on
-            const savedTicketTypes = await Promise.all(
-                editedEvent.eventTicketTypes.map(async (ticket) => {
-                    if (!ticket.ticketType || !ticket.ticketType.id) {
-                        // Tallenna uusi lipputyyppi
-                        const response = await api.post('/tickettypes', { name: ticket.ticketTypeName });
-                        return response.data; // Palautetaan tallennettu lipputyyppi
-                    }
-                    return ticket.ticketType; // Käytä olemassa olevaa
-                })
-            );
-    
-            // Muodosta tapahtuma tallennettavaksi
-            const formattedEvent = {
-                ...editedEvent,
-                eventTicketTypes: editedEvent.eventTicketTypes.map((ticket, index) => ({
-                    ticketType: {
-                        id: savedTicketTypes[index].id,
-                        name: savedTicketTypes[index].name,
-                    },
-                    price: ticket.price,
-                    ticketsInStock: ticket.ticketsInStock,
-                })),
-            };
-    
-            // Käytä editEvent-funktiota tallennukseen
-            await editEvent(formattedEvent);
-            handleClose();
-        } catch (error) {
-            console.error("Error adding event:", error);
+      const patchData = {};
+      for (const key in editedEvent) {
+        if (key !== "eventTicketTypes" && editedEvent[key] !== event[key]) {
+          patchData[key] = editedEvent[key];
         }
-    };
+      }
+
+      if (Object.keys(patchData).length > 0) {
+        await api.patch(`/events/${event.eventId}`, patchData);
+      }
 
 
+      for (const ticket of editedEvent.eventTicketTypes) {
+        if (!ticket.id) {
 
-    // Päivitä lomakkeen kentät
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setEditedEvent((prevEvent) => ({
-            ...prevEvent,
-            [name]: value,
-        }));
-    };
+          const price = Number(ticket.price);
+          const ticketsInStock = Number(ticket.ticketsInStock);
+          const payload = {
+            eventId: event.eventId,
+            ticketTypeName: ticket.ticketTypeName,
+            price: price,
+            ticketsInStock: ticketsInStock,
+          };
+          console.log("Payload for new ticket type:", payload);
 
-    const handleShow = () => {
-        setShow(true);
-    };
-    const handleClose = () => {
-        setShow(false);
-    };
+          await api.post("/api/eventtickettypes", payload);
+        } else {
+          console.log("Updating price and ticketsInStock:", {
+            price: ticket.price,
+            ticketsInStock: ticket.ticketsInStock,
+          });
 
-    useEffect(() => {
-        if (event && event.eventTicketTypes) {
-            setEditedEvent(event);
+          await api.patch(`/api/eventtickettypes/${ticket.id}`, {
+            price: Number(ticket.price),
+            ticketsInStock: Number(ticket.ticketsInStock),
+          });
         }
-    }, [event]);
+      }
 
-    return (
-        <>
-            <Button variant='primary' size='sm' className='d-flex align-items-center' onClick={handleShow}>Edit
-                  <PencilIcon width={15} height={15} className='ms-2' />
-                </Button>
-            <EventForm
-                show={show}
-                event={editedEvent}
-                handleChange={handleChange}
-                handleTicketTypeChange={handleTicketTypeChange}
-                handleAddTicketType={handleAddTicketType}
-                handleSave={handleSave}
-                handleClose={handleClose}
-            />
-        </>
-    );
+      for (const ticketId of ticketTypesToDelete) {
+        console.log("Deleting ticket type with ID:", ticketId);
+        await api.delete(`/api/eventtickettypes/${ticketId}`);
+      }
+
+      alert("Event updated successfully!");
+      refreshEvents();
+      handleClose();
+    } catch (error) {
+      console.error("Error updating event:", error);
+      alert("Error updating event.");
+    }
+  };
+
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
+
+  return (
+    <>
+      <Button variant="primary" size="sm" onClick={handleShow}>
+        Edit
+        <PencilIcon width={15} height={15} />
+      </Button>
+      <EventForm
+        show={show}
+        event={editedEvent}
+        handleChange={handleChange}
+        handleTicketTypeChange={handleTicketTypeChange}
+        handleAddTicketType={handleAddTicketType}
+        handleDeleteTicketType={handleDeleteTicketType}
+        onSave={handleSave}
+        onClose={handleClose}
+      />
+    </>
+  );
 }

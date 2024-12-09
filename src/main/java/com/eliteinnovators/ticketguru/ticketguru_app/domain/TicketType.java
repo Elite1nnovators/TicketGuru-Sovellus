@@ -54,4 +54,8 @@ public class TicketType {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public List<EventTicketType> getEventTicketTypes() {
+        return eventTicketTypes;
+    }
 }

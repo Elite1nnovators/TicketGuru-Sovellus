@@ -1,152 +1,130 @@
 import { useState } from "react";
-import { Button } from 'react-bootstrap';
-import api from './api';
+import { Button } from "react-bootstrap";
+import api from "./api";
 import EventForm from "./EventForm";
 
-export default function AddEvent( {addEvent} ) {
-    const [event, setEvent] = useState( {
-        eventName: "",
-        eventDate: "",
-        eventAddress: "",
-        eventCity: "",
-        eventDescription: "",
-        eventTicketTypes: [
-            {
-                ticketType: {
-                    id: "",
-                    name: ""
-                },
-                price: 0,
-                ticketsInStock: 0,
-            },
-        ],
-    });
+export default function AddEvent({ refreshEvents }) {
+  const [show, setShow] = useState(false);
+  const [newEvent, setNewEvent] = useState({
+    eventName: "",
+    eventDate: "",
+    eventAddress: "",
+    eventCity: "",
+    eventDescription: "",
+    eventTicketTypes: [
+      {
+        ticketTypeName: "",
+        price: 0,
+        ticketsInStock: 0,
+      },
+    ],
+  });
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setEvent((prevEvent) => ({
-            ...prevEvent,
-            [name]: value,
-        }));
-    };
+  const handleEventChange = (e) => {
+    const { name, value } = e.target;
+    setNewEvent((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    const handleTicketTypeChange = (index, e) => {
-        const { name, value } = e.target;
-        const updatedTicketTypes = [...event.eventTicketTypes];
-        if (name === "ticketTypeName") {
-            updatedTicketTypes[index].ticketType.name = value;
-        } else if (name === "ticketTypeId") {
-            updatedTicketTypes[index].ticketType.id = value;
-        } else {
-            updatedTicketTypes[index][name] = value;
-        }
-        setEvent((prevEvent) => ({
-            ...prevEvent,
-            eventTicketTypes: updatedTicketTypes,
-        }));
-    };
+  const handleTicketTypeChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedTicketTypes = [...newEvent.eventTicketTypes];
+    updatedTicketTypes[index][name] = value;
+    setNewEvent((prev) => ({ ...prev, eventTicketTypes: updatedTicketTypes }));
+  };
 
-    const handleAddTicketType = () => {
-        setEvent((prevEvent) => ({
-            ...prevEvent,
-            eventTicketTypes: [
-                ...prevEvent.eventTicketTypes,
-                {
-                    ticketType: {
-                        id: "",
-                        name: ""
-                    },
-                    price: 0,
-                    ticketsInStock: 0,
-                },
-            ],
-        }));
-    };
+  const handleAddTicketType = () => {
+    setNewEvent((prev) => ({
+      ...prev,
+      eventTicketTypes: [
+        ...prev.eventTicketTypes,
+        { ticketTypeName: "", price: 0, ticketsInStock: 0 },
+      ],
+    }));
+  };
 
-    const handleSave = async () => {
-        try {
-            // Jos lipputyyppi on uusi, tallenna se ensin
-            const savedTicketTypes = await Promise.all(
-                event.eventTicketTypes.map(async (ticket) => {
-                    if (!ticket.ticketType.id) {
-                        // Tallenna uusi lipputyyppi
-                        const response = await api.post('/tickettypes', { name: ticket.ticketType.name });
-                        return response.data;  // Palautetaan tallennettu lipputyyppi
-                    }
-                    return { id: ticket.ticketType.id, name: ticket.ticketType.name };  // Jos ID on jo, käytetään sitä
-                })
-            );
-    
-    // Muodostetaan tapahtuma, joka viittaa tallennettuihin lipputyyppeihin
-    const formattedEvent = {
-                eventName: event.eventName,
-                eventDate: event.eventDate,
-                eventAddress: event.eventAddress,
-                eventCity: event.eventCity,
-                eventDescription: event.eventDescription,
-                eventTicketTypes: event.eventTicketTypes.map((ticket, index) => ({
-                    ticketType: {
-                        id: savedTicketTypes[index].id,
-                        name: savedTicketTypes[index].name,
-                    },
-                    price: ticket.price,
-                    ticketsInStock: ticket.ticketsInStock,
-                })),
-            };
-    
-            // Lähetetään tapahtuma
-            await addEvent(formattedEvent);
-            handleClose();
-            resetEvent();
-        } catch (error) {
-            console.error("Error adding event:", error);
-        }
-    };
-
-    const resetEvent = () => {
-        setEvent({ // Lomakkeen nollaus
-            eventName: "",
-            eventDate: "",
-            eventAddress: "",
-            eventCity: "",
-            eventDescription: "",
-            eventTicketTypes: [
-                {
-                    ticketType: {
-                        id: "",
-                        name: ""
-                    },
-                    price: 0,
-                    ticketsInStock: 0,
-                },
-            ],
-        });
-    };
-
-    const [show, setShow] = useState(false);
-
-
-    const handleShow = () => {
-        setShow(true);
-    };
-    const handleClose = () => {
-        setShow(false);
-    };
-
-    return (
-        <>
-        <div className="d-grid gap-2 mb-4">
-        <Button onClick={handleShow} variant='outline-secondary' size='lg'>Add Event</Button>
-        </div>
-        <EventForm
-            show={show}
-            event={event}
-            handleChange={handleChange}
-            handleTicketTypeChange={handleTicketTypeChange}
-            handleAddTicketType={handleAddTicketType}
-            handleSave={handleSave}
-            handleClose={handleClose}
-            />
-        </>
+  const handleDeleteTicketType = (index) => {
+    const updatedTicketTypes = newEvent.eventTicketTypes.filter(
+      (_, i) => i !== index
     );
+    setNewEvent((prev) => ({ ...prev, eventTicketTypes: updatedTicketTypes }));
+  };
+
+  const handleSave = async () => {
+    try {
+      // Step 1: Create the event
+      const eventPayload = {
+        eventName: newEvent.eventName,
+        eventDate: newEvent.eventDate,
+        eventAddress: newEvent.eventAddress,
+        eventCity: newEvent.eventCity,
+        eventDescription: newEvent.eventDescription,
+      };
+  
+      const eventResponse = await api.post("/events", eventPayload);
+      const createdEvent = eventResponse.data;
+      console.log("Created Event:", createdEvent);
+  
+      // Step 2: Add ticket types
+      for (const ticket of newEvent.eventTicketTypes) {
+        const ticketPayload = {
+          eventId: createdEvent.eventId,
+          ticketTypeName: ticket.ticketTypeName,
+          price: Number(ticket.price),
+          ticketsInStock: Number(ticket.ticketsInStock),
+        };
+  
+        const ticketResponse = await api.post("/api/eventtickettypes", ticketPayload);
+        console.log("Created Ticket Type:", ticketResponse.data);
+      }
+  
+      alert("Event and ticket types added successfully!");
+      refreshEvents();
+      handleClose();
+    } catch (error) {
+      console.error("Error adding event or ticket types:", error);
+      alert("Failed to add event or ticket types.");
+    }
+  };
+  
+
+  const handleClose = () => {
+    setShow(false);
+    setNewEvent({
+      eventName: "",
+      eventDate: "",
+      eventAddress: "",
+      eventCity: "",
+      eventDescription: "",
+      eventTicketTypes: [
+        {
+          ticketTypeName: "",
+          price: 0,
+          ticketsInStock: 0,
+        },
+      ],
+    });
+  };
+
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      <Button onClick={handleShow} variant="outline-secondary" size="lg">
+        Add Event
+      </Button>
+      <EventForm
+        show={show}
+        event={newEvent}
+        handleChange={handleEventChange}
+        handleTicketTypeChange={handleTicketTypeChange}
+        handleAddTicketType={handleAddTicketType}
+        handleDeleteTicketType={handleDeleteTicketType}
+        onSave={handleSave}
+        onClose={handleClose}
+      />
+    </>
+  );
 }

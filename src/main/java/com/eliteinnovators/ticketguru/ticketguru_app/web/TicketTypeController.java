@@ -1,6 +1,7 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketTypeRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -73,5 +75,13 @@ public class TicketTypeController {
         // Palautetaan päivitetty lipputyyppi ja status 200 (OK)
         return ResponseEntity.status(HttpStatus.OK).body(updatedTicketType);
     }
+
+    
+
+    
+    
+    
+
+
 
 }
