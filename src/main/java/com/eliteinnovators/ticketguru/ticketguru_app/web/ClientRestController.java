@@ -1,6 +1,7 @@
 package com.eliteinnovators.ticketguru.ticketguru_app.web;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -76,8 +77,6 @@ public class ClientRestController {
             Authentication authentication) {
 
         Long selectedEventId = request.getSelectedEventId();
-        int quantity = request.getQuantity();
-        String ticketTypeString = request.getTicketType();
         boolean soldAtDoor = request.isSoldAtDoor();
 
         String username = authentication.getName();
@@ -88,7 +87,7 @@ public class ClientRestController {
                     .body("Event with ID " + selectedEventId + " not found.");
         }
 
-        if (quantity <= 0) {
+        if (request.getTicketSelections().isEmpty()) {
             return ResponseEntity.badRequest().body("Quantity must be greater than zero.");
         }
 
@@ -102,33 +101,44 @@ public class ClientRestController {
             return ResponseEntity.badRequest().body("Advance sales are over. Tickets must be sold at the door.");
         }
 
-        EventTicketType selectedEventTicketType = null;
-        List<EventTicketType> eventTicketTypes = selectedEvent.getEventTicketTypes();
-        for (EventTicketType e : eventTicketTypes) {
-            if (e.getTicketTypeName().equals(ticketTypeString)) {
-                selectedEventTicketType = e;
-                break;
-            }
-        }
-        if (selectedEventTicketType == null) {
-            return ResponseEntity.badRequest().body("Invalid ticket type selection.");
-        }
+        List<OrderDetailsDTO> orderDetailsList = new ArrayList<>();
+        for(SellTicketsDto.TicketSelection selection : request.getTicketSelections()) {
+            String ticketTypeString = selection.getTicketType();
+            int quantity = selection.getQuantity();
 
-        OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
-        orderDetailsDTO.setEventTicketTypeId(selectedEventTicketType.getId());
-        orderDetailsDTO.setQuantity(quantity);
+            if(quantity <= 0) {
+                return ResponseEntity.badRequest().body("Quantity must be greater than zero.");
+            }
+
+            // Find the EventTicketType for this ticketType
+            EventTicketType selectedEventTicketType = null;
+            for (EventTicketType e : selectedEvent.getEventTicketTypes()) {
+                if (e.getTicketTypeName().equals(ticketTypeString)) {
+                    selectedEventTicketType = e;
+                    break;
+                }
+            }
+
+            if (selectedEventTicketType == null) {
+                return ResponseEntity.badRequest().body("Invalid ticket type selection: " + ticketTypeString);
+            }
+
+            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
+            orderDetailsDTO.setEventTicketTypeId(selectedEventTicketType.getId());
+            orderDetailsDTO.setQuantity(quantity);
+            // The unit price is set in the OrderService, no need to set here if not required.
+
+            orderDetailsList.add(orderDetailsDTO);
+        }
 
         OrderDTO orderDTO = new OrderDTO();
         SalespersonDTO salespersonDTO = salespersonService.getSalespersonByUsername(username);
-
         orderDTO.setSalespersonId(salespersonDTO.getSalespersonId());
-        orderDTO.setOrderDetails(List.of(orderDetailsDTO));
+        orderDTO.setOrderDetails(orderDetailsList);
 
         try {
             OrderDTO savedOrder = orderService.newOrder(orderDTO);
-
             URI location = URI.create(String.format("/api/orders/%s", savedOrder.getOrderId()));
-
             return ResponseEntity.created(location).body(savedOrder);
 
         } catch (InsufficientTicketsException e) {

@@ -5,9 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const SellTicket = () => {
   const { eventId } = useParams();
-  const [quantity, setQuantity] = useState('');
-  const [ticketType, setTicketType] = useState('');
   const [ticketTypes, setTicketTypes] = useState([]);
+  const [ticketSelections, setTicketSelections] = useState([
+    { ticketType: '', quantity: 1 },
+  ]);
   const [eventName, setEventName] = useState(''); // State for event name
   const [responseMessage, setResponseMessage] = useState('');
   const [orderId, setOrderId] = useState(null);
@@ -28,7 +29,9 @@ const SellTicket = () => {
           (ett) => ett.ticketTypeName
         );
         setTicketTypes(fetchedTicketTypes);
-        setTicketType(fetchedTicketTypes[0] || '');
+        setTicketSelections([
+          { ticketType: fetchedTicketTypes[0] || '', quantity: 1 },
+        ]);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching event data:', err);
@@ -40,14 +43,22 @@ const SellTicket = () => {
     fetchEventDetails();
   }, [eventId]);
 
+  const handleTicketSelectionChange = (index, field, value) => {
+    const updated = [...ticketSelections];
+    updated[index][field] = value;
+    setTicketSelections(updated);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const payload = {
       selectedEventId: parseInt(eventId, 10),
-      quantity: parseInt(quantity, 10),
-      ticketType,
-      soldAtDoor,
+      soldAtDoor: soldAtDoor,
+      ticketSelections: ticketSelections.map((ts) => ({
+        ticketType: ts.ticketType,
+        quantity: parseInt(ts.quantity, 10),
+      })),
     };
 
     try {
@@ -96,38 +107,51 @@ const SellTicket = () => {
         Sell Ticket for Event: {eventName} (ID: {eventId})
       </h1>
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formQuantity" className="mt-3">
-          <Form.Label>Quantity</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Enter Quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            required
-            min="1"
-          />
-        </Form.Group>
+        {ticketSelections.map((sel, index) => (
+          <div key={index}>
+            <Form.Group>
+              <Form.Label>Ticket Type</Form.Label>
+              <Form.Control
+                as="select"
+                value={sel.ticketType}
+                onChange={(e) =>
+                  handleTicketSelectionChange(
+                    index,
+                    'ticketType',
+                    e.target.value
+                  )
+                }>
+                {ticketTypes.map((type, i) => (
+                  <option key={i} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
 
-        <Form.Group controlId="formTicketType" className="mt-3">
-          <Form.Label>Ticket Type</Form.Label>
-          <Form.Control
-            as="select"
-            value={ticketType}
-            onChange={(e) => setTicketType(e.target.value)}
-            required>
-            {ticketTypes.length > 0 ? (
-              ticketTypes.map((type, index) => (
-                <option key={index} value={type}>
-                  {type}
-                </option>
-              ))
-            ) : (
-              <option value="" disabled>
-                No ticket types available
-              </option>
-            )}
-          </Form.Control>
-        </Form.Group>
+            <Form.Group>
+              <Form.Label>Quantity</Form.Label>
+              <Form.Control
+                type="number"
+                min="1"
+                value={sel.quantity}
+                onChange={(e) =>
+                  handleTicketSelectionChange(index, 'quantity', e.target.value)
+                }
+              />
+            </Form.Group>
+          </div>
+        ))}
+        <Button
+          type="button"
+          onClick={() =>
+            setTicketSelections([
+              ...ticketSelections,
+              { ticketType: ticketTypes[0] || '', quantity: 1 },
+            ])
+          }>
+          Add Another Ticket Type
+        </Button>
         <Form.Group controlId="formSoldAtDoor" className="mt-3">
           <Form.Label>Sold at Door?</Form.Label>
           <Form.Control
