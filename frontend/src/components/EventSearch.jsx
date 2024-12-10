@@ -2,15 +2,15 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Button, Card, Form, InputGroup, Container, Row, Col } from 'react-bootstrap';
 import api from './api';
 import { useNavigate } from 'react-router-dom';
-import { CartContext } from '../context/cart';
 import AddEvent from './AddEvent';
+import EditEvent from './EditEvent';
+import { CreditCardIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 
 const EventSearch = () => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const { addToCart } = useContext(CartContext);
 
   
 const navigate = useNavigate(); 
@@ -57,6 +57,17 @@ const navigate = useNavigate();
       alert("Error adding event: " + (error.response ? error.response.data.message : error.message));
     }
   };
+
+  // Käsittele muokkaus
+  const editEvent = async (eventId, updatedEvent) => {
+    try {
+      const response = await api.put(`/events/${eventId}`, updatedEvent);
+      console.log("Event updated:", response);
+      await fetchEvents();
+    } catch {
+      console.error("Error updating event:", error.response ? error.response.data : error);
+    }
+  }
 
   //Käsittele poisto
   const handleDeleteEvent = async () => {
@@ -118,13 +129,13 @@ const navigate = useNavigate();
                 <Card.Text>{event.eventDescription}</Card.Text>
                 <Card.Text>
                   <strong>Address:</strong> {event.eventAddress}
-                 <button
-  style={styles.sellTicketButton}
-  onClick={() => handleSellTicket(event)}
->
-  Sell Ticket
-</button>
-
+                 <button style={styles.sellTicketButton} onClick={() => handleSellTicket(event)}>
+              Sell Ticket
+                  </button>
+                  <button style={styles.deleteEventButton} onClick={handleDeleteEvent} className="d-flex align-items-center">
+          <TrashIcon width={20} height={20} className='me-2' />
+            Delete
+          </button>
                 </Card.Text>
                 {event.eventTicketTypes.length > 0 && (
                   <div>
@@ -133,23 +144,7 @@ const navigate = useNavigate();
                       <div key={ticket.id} className="d-flex justify-content-between align-items-center mb-2">
                         <span>
                           {ticket.ticketTypeName} - {ticket.price}€ | <strong>{ticket.ticketsInStock} available</strong>
-                        </span>
-                        <Button
-                          size="sm"
-                          variant="primary"
-                          onClick={() =>
-                            addToCart({
-                              eventId: event.eventId,
-                              ticketTypeId: ticket.id,
-                              title: `${event.eventName} - ${ticket.ticketTypeName}`,
-                              price: ticket.price,
-                            })
-                          }
-                          disabled={ticket.ticketsInStock <= 0}
-                        >
-                          Add to Cart
-                        </Button>
-                        
+                        </span>                        
                       </div>
                     ))}
                   </div>
@@ -167,6 +162,17 @@ const navigate = useNavigate();
 };
 
 const styles = {
+  deleteEventButton: {
+    display: 'block',
+    marginTop: '20px',
+    padding: '10px 20px',
+    backgroundColor: '#007BFF',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    textAlign: 'center',
+  },
   sellTicketButton: {
     display: 'block',
     marginTop: '20px',
