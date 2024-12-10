@@ -451,7 +451,7 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 
 ---
 
-## Tekninen kuvaus
+# Tekninen kuvaus
 
 **Yleiskuvaus järjestelmästä**  
 TicketGuru on lipunmyyntijärjestelmä, jossa voidaan hallita tapahtumia, lipputyyppejä, myydä lippuja, tulostaa lippukoodeja sekä hallinnoida käyttäjiä ja myyjiä (salesperson). Järjestelmä koostuu kahdesta pääosasta:
@@ -540,7 +540,7 @@ Response: { "ticketCodes": ["code1", "code2", ...] }
 - Duplikaation välttämiseksi on käytetty mm. Mapstructia entiteettien ja DTO:iden väliseen muunnokseen, jotta looginen koodi pysyy yhdenmukaisena eikä toisteta samoja muunnoksia useassa paikassa.
 
 
-## Asennusohjeet
+# Asennusohjeet
 
 **Kehitysympäristö**  
 1. Asenna Java (esim. AdoptOpenJDK 11), Node.js ja npm.  
@@ -573,7 +573,7 @@ Response: { "ticketCodes": ["code1", "code2", ...] }
 - Rahti-lokaatio (OpenShift/Kubernetes) hoitaa podien hallinnan.
 
 
-## Käynnistys- ja käyttöohje
+# Käynnistys- ja käyttöohje
 
 **Käynnistys kehitysympäristössä:**  
 - Backend käynnistyy osoitteessa `http://localhost:8080` (dev-profiili).  
