@@ -11,7 +11,6 @@ import PrintTickets from './components/PrintTickets';
 import Navbar from './components/Navbar';
 import SalesReports from './components/SalesReports';
 import EventSearch from './components/EventSearch';
-import ShoppingCart from './components/ShoppingCart';
 import UserDashboard from './components/UserDashboard';
 
 function App() {
@@ -25,7 +24,6 @@ function App() {
         <Route path="/print-tickets/:orderId" element={<PrintTickets />} />
         <Route path="/sales-reports" element={<SalesReports />} />
         <Route path="/events" element={<EventSearch />} />
-        <Route path="/shopping-cart" element={<ShoppingCart />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>
     </Router>

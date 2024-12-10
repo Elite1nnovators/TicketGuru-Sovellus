@@ -11,9 +11,11 @@ import jakarta.transaction.Transactional;
 
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.EventTicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.domain.Ticket;
+import com.eliteinnovators.ticketguru.ticketguru_app.domain.TicketType;
 import com.eliteinnovators.ticketguru.ticketguru_app.exception.TicketNotFoundException;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.EventTicketTypeRepository;
 import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketRepository;
+import com.eliteinnovators.ticketguru.ticketguru_app.repository.TicketTypeRepository;
 
 // TODO TicketDto
 @Service
@@ -24,6 +26,9 @@ public class TicketService {
 
     @Autowired
     private EventTicketTypeRepository eventTicketTypeRepository;
+
+    @Autowired
+    private TicketTypeRepository ticketTypeRepository;
 
     // Haetaan kaikki liput
     public List<Ticket> getAllTickets() {
@@ -106,6 +111,10 @@ public class TicketService {
         List<Ticket> tickets = getTicketsByOrder(orderId);
         return tickets.stream() .map(Ticket::getTicketCode).collect(Collectors.toList()); 
     }
+
+    
+
+    
         
 
     

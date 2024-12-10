@@ -8,26 +8,25 @@
 
 2. **[Järjestelmän määrittely](#järjestelmän-määrittely)**
    - [Käyttäjäryhmät (roolit)](#käyttäjäryhmät-roolit)
+   - [Käyttötapaukset ja käyttäjätarinat](#käyttötapaukset-ja-käyttäjätarinat)
 
-3. **[Käyttötapaukset ja käyttäjätarinat](#käyttötapaukset-ja-käyttäjätarinat)**
-   - [Käyttäjätarinat](#käyttäjätarinat)
-
-4. **[Yksityiskohtaiset vaatimukset](#yksityiskohtaiset-vaatimukset)**
-
-5. **[Käyttöliittymä](#käyttöliittymä)**
+3. **[Käyttöliittymä](#käyttöliittymä)**
    - [Käyttöliittymäkaavio](#käyttöliittymäkaavio)
+   - [Käyttöliittymän näkymät](#käyttöliittymän-näkymät)
 
-6. **[Tietokanta](#tietokanta)**
+4. **[Tietokanta](#tietokanta)**
    - [Tietokantakaavio](#tietokantakaavio)
    - [Tietohakemisto](#tietohakemisto)
 
-7. **[REST API dokumentaatio](#rest-api-dokumentaatio)**
+5. **[REST API dokumentaatio](#rest-api-dokumentaatio)**
    - [Myyntitapahtumien API-dokumentaatio](#myyntitapahtumien-api-dokumentaatio)
    - [Lippujen (Ticket) API-pyynnöt](#lippujen-ticket-api-pyynnöt)
+   - [Lipputyyppien (TicketType) API-pyynnöt](#lipputyyppien-tickettype-api-pyynnöt)
 
-8. **[Autentikaatio](#autentikaatio)**
+6. **[Autentikaatio](#autentikaatio)**
+   - [Perustason autentikointi](#perustason-autentikointi-basic-authentication)
 
-9. **[Testaus](#testaus)**
+7. **[Testaus](#testaus)**
    - [Database Access Layer](#database-access-layer)
      - [Yhteyden toimivuus (DAL ↔ RDBMS)](#yhteyden-toimivuus-dal-rdbms)
      - [SQL-kyselyjen oikeellisuus](#sql-kyselyjen-oikeellisuus)
@@ -42,56 +41,41 @@ Projektin tavoitteena on luoda lipunmyyntijärjestelmä (TicketGuru) lipputoimis
 
 Järjestelmä näyttää eri tapahtumiin tarjolla olevat lipputyypit ja niiden hinnat. Jokaisen myyntitapahtuman yhteydessä lippuihin tulostuu tarkastuskoodi. Sen avulla lippu voidaan merkitä käytetyksi ovella, kun asiakas tulee tapahtumaan. Lipputoimiston myyntipisteessä myydyt liput tulee voida tulostaa paperisena asiakkaille. Lipputoimiston asiakkaana on tapahtumajärjestäjiä, joille pystytään tapahtumakohtaisesti luomaan järjestelmästä myyntiraportteja. Raporteista nähdään kokonaismyynti myydyistä lipuista lipputyypeittäin sekä tarkempi erottelu jokaisesta erillisestä myyntitapahtumasta. 
 
-Järjestelmä toteutetaan Spring Boot -menetelmän avulla Java-ohjelmointikieltä käyttäen. Järjestelmän palvelinratkaisuina pyritään käyttämään teknologiaa, joka mahdollistaa järjestelmän luotettavuuden, tietoturvallisen tiedonkäsittelyn ja sujuvan käytettävyyden sen kaikille käyttäjille. 
+Järjestelmä toteutetaan Spring Boot -menetelmän avulla Java-ohjelmointikieltä käyttäen. Järjestelmän palvelinratkaisuina pyritään käyttämään teknologiaa, joka mahdollistaa järjestelmän luotettavuuden, tietoturvallisen tiedonkäsittelyn ja sujuvan käytettävyyden sen kaikille käyttäjille. Järjestelmän frontend on toteutettu Reactilla Vite -projektina.
 
 Käyttöliittymä on suunniteltu ensisijaisesti käytettäväksi pöytätietokoneilla ja läppäreillä, joita lipputoimistossa on käytössä. Kuitenkin lippujen tarkastuksen yhteydessä järjestelmää tulisi voida käyttää myös puhelimen avulla, jotta lippujen tarkastaminen on sujuvampaa.
 
+</br>
+
 # Järjestelmän määrittely
 
-Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän näkökulmasta. Tämä osio keskittyy kuvaamaan, millaisia käyttäjäryhmiä (rooleja) sovelluksessa on ja millaisia toimintoja kullakin roolilla on käytettävissään. Lisäksi määrittelyssä käsitellään käyttäjätarinoita, jotka kuvaavat, miten käyttäjät vuorovaikuttavat sovelluksen kanssa ja mitkä ovat heidän tarpeensa ja odotuksensa. Tavoitteena on varmistaa, että sovellus täyttää käyttäjien ja organisaation vaatimukset, ja tarjoaa sujuvan, tehokkaan ja turvallisen käyttökokemuksen kaikille osapuolille.
+Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän näkökulmasta. Tämä osio keskittyy kuvaamaan, millaisia käyttäjäryhmiä (rooleja) sovelluksessa on ja millaisia toimintoja kullakin roolilla on käytettävissään. Lisäksi tässä osiossa kuvataan käyttäjätarinat, joiden avulla selvitetään käyttäjien tarpeet ja odotukset. Tavoitteena on varmistaa, että sovellus täyttää käyttäjien ja organisaation vaatimukset, ja tarjoaa sujuvan, tehokkaan ja turvallisen käyttökokemuksen kaikille osapuolille.
 
 ## Käyttäjäryhmät (roolit)
 <details>
-<summary> Lipputoimiston myyjä</summary>
+<summary> Lipputoimiston myyjä (salesperson)</summary>
 
 
-### Lipputoimiston myyjä
-- Pystyy tarkastelemaan eri tapahtumien lippuja, niiden tyyppejä ja hintoja.
+### Lipputoimiston myyjä (salesperson)
+- Pystyy tarkastelemaan eri tapahtumien lippuja, niiden niiden lipputyyppejä ja hintoja.
 - Voi myydä asiakkaalle lipun ja tulostaa sen.
-- Voi tarkastella myymiensä lippujen myyntiraportteja.
-- Ei pysty muokkaamaan tapahtumiin kirjattuja lipputietoja tai hintoja.
+- Voi tarkastella lippujen myyntiraportteja.
+- Pääsee näkemään omat kirjaumistietonsa User Dashboard -sivulta sekä muokkaamaan siellä omia tietojaan.
+- RAJOITUKSET: Ei pysty muokkaamaan tapahtumien tietoja eikä poistamaan tapahtumia. Ei pysty muokkaamaan tai poistamaan muita käyttäjiä tai myyjiä järjestelmässä.
 </details>
 
 <details>
-<summary> Järjestelmän pääkäyttäjä</summary>
+<summary> Järjestelmän pääkäyttäjä (admin)</summary>
 
-### Järjestelmän pääkäyttäjä
-- Lipputoimiston henkilökuntaa.
-- Pystyy käyttämään kaikkia järjestelmän ominaisuuksia (lisäys, muokkaus, poisto).
-- Voi tarkastella kaikkien tapahtumien myyntiraportteja.
-- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään.
-</details>
-
-<details>
-<summary> Tapahtumajärjestäjä</summary>
-
-### Tapahtumajärjestäjä
-- Pystyy tarkastelemaan omien tapahtumiensa lipputietoja.
-- Voi luoda ja tulostaa myyntiraportteja omista tapahtumista.
-</details>
-
-<details>
-<summary> Asiakas</summary>
-
-### Asiakas
-- Voi ostaa lippuja Lipputoimiston myyntipisteestä.
-- Näkee ostamansa lipun tiedot (tapahtuma, lipputyyppi, hinta, tarkistuskoodi). Lipussa näkyy myös ostopäivämäärä ja aika.
+### Järjestelmän pääkäyttäjä (admin)
+- Lipputoimiston henkilökuntaa
+- Pystyy käyttämään samoja toimintoja kuten myyjätkin.
+- Lisäksi pystyy lisäämään uusia tapahtumia, muokkaamaan tapahtumia ja poistamaan niitä.
+- Hallinnoi järjestelmän käyttäjien käyttöoikeuksia järjestelmään User Dashboad -sivulla. Pystyy lisäämään/muokkaamaan/poistamaan käyttäjätietoja.
 </details>
 
 
 ## Käyttötapaukset ja käyttäjätarinat
-<details>
-<summary> Lipputoimiston myyjä </summary>
 
 ### Lipputoimiston myyjä
 
@@ -100,22 +84,39 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 </br>
 
 - **Käyttötapaus 1: Tapahtumien tarkastelu**
-  - **Tavoite:** Myyjä haluaa tarkastella tapahtumien lippuja, niiden tyyppejä ja hintoja.
-  - **Toimet:** Myyjä navigoi järjestelmään, valitsee tarkasteltavan tapahtuman ja katsoo sen tiedot, kuten lipputyypit ja lippujen hinnat.
-  - **Tulos:** Myyjä saa näkyviin valitun tapahtuman tiedot ja voi tarkastella sen ominaisuuksia.
+    - **Tavoite:** Myyjä haluaa tarkastella tapahtumien lippuja, niiden lipputyyppejä ja hintoja.
+    - **Toimet:** Myyjä kirjatutuu järjestelmään ja siirtyy pääsivulta Events -painikkeen kautta tapahtumasivulle. Myyjä näkee sivulla eri tapahtumat ja niiden tiedot. Hän voi myös hakea tiettyä tapahtumaa hakutoiminnon avulla.
+    - **Tulos:** Myyjä saa näkyviin tiedot tapahtumista ja voi tarkastella niiden tietoja.
+
+    - **Käyttäjätarinat:**
+        - **Myyjänä haluan nähdä kaikki tulevat tapahtumat**, jotta voin kertoa asiakkaalle tietoa tapahtumasta ajankohdan, sijainnin ja kuvauksen.
+        - **Myyjänä haluan tarkastella tapahtumiin liittyviä lippuja** ja niiden määriä.
 
 - **Käyttötapaus 2: Lipun myynti**
     - **Tavoite:** Myyjä haluaa myydä lipun asiakkaalle.
-    - **Toimet:** Myyjä valitsee tapahtuman, valitsee lipputyypin, syöttää asiakkaan tiedot, hyväksyy maksun ja tulostaa lipun.
-    - **Tulos:** Asiakas saa lipun ja järjestelmä tallentaa myyntitapahtuman tiedot.
+    - **Toimet:** Myyjä on Events -sivulla, josta hän halutun tapahtuman kohdalta painaa "Sell Ticket" -painiketta. Myyjä valitsee halutun lippumäärän sekä lipputyypin. Kun kaikki valinnat on tehty, painamalla "Sell Ticket" -painiketta saadaan liput ja niiden QR-koodit näkyviin. Myyjä tulostaa liput asiakkaalle paperisena.
+    - **Tulos:** Asiakas saa lipun ja järjestelmä tallentaa myyntitapahtuman (OrderId) tiedot. Lippujen määrä vähenee järjestelmässä myytyjen lippujen määrän mukaisesti.
+
+    - **Käyttäjätarinat:**
+        - **Myyjänä haluan valita ja myydä lippuja** tapahtumaan niin, että voin helposti valita tapahtuman, lipputyypin (esim. aikuinen, lapsi, eläkeläinen) ja halutun määrän, jotta voin tarjota asiakkaalle sujuvan ostokokemuksen.
+        - **Myyjänä haluan tulostaa myymäni liput** niin, että asiakas voi käyttää niitä tapahtumassa ilman erillisiä toimenpiteitä.
 
 - **Käyttötapaus 3: Myyntiraporttien tarkastelu**
-    - **Tavoite:** Myyjä haluaa tarkastella myymiään lippuja.
-    - **Toimet:** Myyjä kirjautuu järjestelmään, valitsee ajanjakson ja tarkastelee raporttia omista myynneistään.
-    - **Tulos:** Myyjä saa näkyviin raportin myymistään lipuista.
-</details>
+    - **Tavoite:** Myyjä haluaa tarkastella lippujen myyntimääriä tai myyntitapahtumia tapahtumakohtaisesti tai hakea tiettyä myyntitapahtumaa OrderId:n mukaan.
+    - **Toimet:** Myyjä kirjautuu järjestelmään ja siirtyy pääsivulta "Reports" -painikkeen kautta raporttisivulle. Valitsemalla "Show Sales by Events" hän näkee tapahtumakohtaisesti lippujen myyntimäärät ja myyntisummat. Halutun tapahtuman kohdalta painamalla "Show Details" -painiketta hän pääsee näkemään tarkemmat myyntitapahtumien mukaiset tiedot myynneistä. Myyjä voi myös hakea OrderId:n mukaisesti vain tietyn myyntitapahtuman tiedot "Search by OrderId" -hakutoiminnon avulla.
+    - **Tulos:** Myyjä saa näkyviin myyntitiedot tapahtumittain tai tietyn OrderId:n mukaan haetut myyntitapahtuman tiedot.
+
+    - **Käyttäjätarinat:**
+        - **Myyjänä haluan tarkastella myyntiraporttia** niin, että näen myydyt liput (tyypin ja määrän) ja kokonaissumman nopeasti yhdellä silmäyksellä.
+
+- **Käyttötapaus 4: Käyttäjätietojen tarkastelu ja muokkaus**
+    - **Tavoite:** Myyjä haluaa tarkastella tai muokata omia käyttäjätietojaan.
+    - **Toimet:** Myyjä kirjautuu järjestelmään, valitsee etusivulta "Users" -painikkeen. Sivulla olevasta "Profile" -välilehdeltä hän näkee omat käyttäjätietonsa. "Edit Users" -välilehdeltä hän pystyy muokkaamaan omia käyttäjätietojaan, kuten vaihtamaan salasanan.
+    - **Tulos:** Myyjä saa näkyviin omat käyttäjätietonsa ja pystyy tarvittaessa vaihtamaan salasanansa.
+
 
 </details>
+
 
 ### Järjestelmän pääkäyttäjä
 
@@ -123,186 +124,205 @@ Järjestelmän määrittelyssä tarkastellaan TicketGuru-sovellusta käyttäjän
 <summary> Järjestelmän pääkäyttäjä- käyttötapaukset </summary>
 </br>
 
-- **Käyttötapaus 1: Tapahtuman luominen**
+- **Käyttötapaus 1: Tapahtumien tarkastelu**
+  - Toimii samoin kuin myyjän kohdalla.
+
+- **Käyttötapaus 2: Lipun myynti**
+  - Toimii samoin kuin myyjän kohdalla.
+
+- **Käyttötapaus 3: Myyntiraporttien tarkastelu**
+  - Toimii samoin kuin myyjän kohdalla.
+
+- **Käyttötapaus 4: Tapahtuman lisääminen**
     - **Tavoite:** Pääkäyttäjä haluaa lisätä uuden tapahtuman järjestelmään.
-    - **Toimet:** Pääkäyttäjä syöttää tapahtuman tiedot (nimi, päivämäärä, lipputyypit, hinnat) ja tallentaa tiedot.
-    - **Tulos:** Uusi tapahtuma on näkyvissä järjestelmässä ja myytävissä liput on määritelty.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "Events" -painikkeen kautta tapahtumasivulle. Hän valitsee sieltä "Add Event", joka jälkeen syöttää uuden tapahtuman tiedot avautuvaan ikkunaan (nimi, päivämäärä ja kellonaika, osoitetiedot, kuvaus, lipputyypit, hinnat, lippumäärät) ja tallentaa tiedot painamalla "Save".
+    - **Tulos:** Uusi tapahtuma tulee näkyviin "Events" sivulle ja myytävissä olevat liput tapahtumaan on tallennettu järjestelmään. Lisättyyn tapahtumaan voi nyt myydä lippuja.
+    
+    - **Käyttäjätarinat:**
+        - **Yrityksenä haluan luoda ja hallita** tapahtumia yksinkertaisesti, jotta voin lisätä uusia tapahtumia, määrittää lipputyypit, hinnat ja määrät tehokkaasti.
 
-- **Käyttötapaus 2: Käyttäjien hallinta**
-    - **Tavoite:** Pääkäyttäjä haluaa lisätä tai poistaa käyttäjän järjestelmässä.
-    - **Toimet:** Pääkäyttäjä luo uuden käyttäjätilin, määrittää roolin ja käyttöoikeudet tai poistaa käyttäjätilin käyttöoikeudet.
-    - **Tulos:** Uusi käyttäjä on lisätty/poistettu ja voi käyttää järjestelmää määritettyjen oikeuksien mukaisesti.
+- **Käyttötapaus 5: Tapahtuman muokkaaminen tai poistaminen**
+    - **Tavoite:** Pääkäyttäjä haluaa muokata järjestelmässä olevan tapahtuman tietoja tai poistaa koko tapahtuman (voi poistaa vain, jos lippuja ei ole myyty tapahtumaan).
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "Events" -painikkeen kautta tapahtumasivulle. Hän valitsee halutun tapahtuman kohdalta "Edit", jolloin voi tehdä halutut muutokset tapahtuman tietoihin ja lopuksi painamalla "Save" muutokset tallentuvat. Tapahtuman voi poistaa kokonaan painamalla tapahtuman kohdalta "Delete".
+    - **Tulos:** Tapahtuman tiedot päivittyvät järjestelmään tai tapahtuma poistuu kokonaan järjestelmästä. Jos tapahtumaan on jo myyty lippuja, poisto ei ole mahdollista.
 
-- **Käyttötapaus 3: Tapahtumien myyntiraporttien tarkastelu**
-    - **Tavoite:** Pääkäyttäjä haluaa tarkastella kaikkien tapahtumien myyntiraportteja.
-    - **Toimet:** Pääkäyttäjä kirjautuu järjestelmään, valitsee tarkasteltavat tapahtumat ja aikajaksot, ja tarkastelee myyntiraportteja.
-    - **Tulos:** Pääkäyttäjä saa näkyviin yhteenvedon myynnistä kaikkien tapahtumien osalta ja voi analysoida myyntitietoja.
+    - **Käyttäjätarinat:**
+        - **Käyttäjänä haluan hallinnoida tapahtumia** niin, että voin lisätä, muokata ja poistaa tapahtumia, sekä hallita niihin liittyviä lippuja ja niiden määriä.
+
+- **Käyttötapaus 6: Uuden myyjän lisääminen järjestelmään**
+    - **Tavoite:** Pääkäyttäjä haluaa lisätä uuden myyjän (salesperson) järjestelmään.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Add Salesperson" välilehdeltä hän voi lisätä uuden myyjän (salesperson) antamalla tarvittavat tiedot (etunimi, sukunimi ja puhelin) ja lopuksi painamalla "Add Salesperson" painiketta.
+    - **Tulos:** Uusi myyjä on lisätty järjestelmään.
+
+- **Käyttötapaus 7: Uuden käyttäjätilin luominen myyjälle**
+    - **Tavoite:** Pääkäyttäjä haluaa luoda järjestelmässä olevalle myyjälle käyttäjätilin järjestelmään.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Add User" välilehdeltä hän valitsee halutun myyjän, valitsee hänelle roolin (user/admin) ja salasanan käyttäjälle. Järjestelmä muodostaa automaattisesti generoidun käyttäjätunnuksen.
+    - **Tulos:** Uusi käyttäjätili on luotu myyjälle. Myyjä voi kirjautua järjestelmään ja käyttää sitä määritettyjen oikeuksiensa mukaisesti.
+
+    - **Käyttäjätarinat:**
+        - **Kehittäjänä haluan, että sovellus käyttää vahvoja salausmenetelmiä**, jotta asiakkaiden ja myyjien henkilökohtaiset tiedot ovat turvattuja.
+
+- **Käyttötapaus 8: Myyjän tai käyttäjän tietojen muokkaaminen**
+    - **Tavoite:** Pääkäyttäjä haluaa muokata myyjän tai järjestelmän käyttäjän tietoja.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Edit Salespersons" -välilehdeltä hän pääsee valitsemaan myyjän, jonka tietoja haluaa muokata ja voi tehdä halutut muokkaukset. "Update Salesperson" -painikkeella muutokset tallentuvat. "Edit Users" -välilehdeltä pääsee muokkaamaan tietyn järjestelmän käyttäjän tietoja (esim. vaihtamaan salasanan tai roolin). "Update user" painikkeen kautta tehdyt muutokset tallentuvat.
+    - **Tulos:** Uusi myyjä on lisätty järjestelmään.
+
+- **Käyttötapaus 9: Myyjän tai käyttäjän poistaminen järjestelmästä**
+    - **Tavoite:** Pääkäyttäjä haluaa poistaa myyjän tai järjestelmän käyttäjän kokonaan järjestelmästä.
+    - **Toimet:** Pääkäyttäjä siirtyy pääsivulta "User Dashboard" -sivulle. "Edit Salespersons" -välilehdeltä hän pääsee valitsemaan myyjän ja pystyy poistamaan hänet painamalla "Delete Salesperson". "Edit Users" -välilehdeltä voi poistaa halutun käyttäjän valitsemalla "Delete user".
+    - **Tulos:** Myyjän tai käyttäjän tiedot poistuvat järjestelmästä.
 
 </details>
 
-### Tapahtumajärjestäjä
-
-<details>
-<summary> Tapahtumajärjestäjä- käyttötapaukset </summary>
-</br>
-
-- **Käyttötapaus 1: Myyntiraportin luominen**
-    - **Tavoite:** Tapahtumajärjestäjä haluaa tarkastella myyntiraporttia omasta tapahtumastaan.
-    - **Toimet:** Tapahtumajärjestäjä valitsee tapahtuman ja aikajakson, luo raportin ja tulostaa sen.
-    - **Tulos:** Tapahtumajärjestäjä saa raportin tapahtuman myynnistä.
-
-- **Käyttötapaus 2: Myyntiraporttien tarkastelu**
-    - **Tavoite:** Tapahtumajärjestäjä haluaa tarkastella myymiään lippuja.
-    - **Toimet:** Tapahtumajärjestäjä kirjautuu järjestelmään, valitsee ajanjakson ja tarkastelee raporttia omista myynneistään.
-    - **Tulos:** Tapahtumajärjestäjä saa näkyviin raportin myymistään lipuista.
-</details>
-
-</details>
-
-### Asiakas
-
-<details>
-<summary> Asiakas- käyttötapaukset</summary>
-</br>
-
-- **Käyttötapaus 1: Lipun ostaminen**
-    - **Tavoite:** Asiakas haluaa ostaa lipun tapahtumaan.
-    - **Toimet:** Asiakas valitsee tapahtuman, valitsee lipputyypin, maksaa lipun ja saa tulostetun lipun.
-    - **Tulos:** Asiakas saa lipun ja voi tarkistaa sen tiedot.
-
-- **Käyttötapaus 2: Lippujen tarkastelu**
-    - **Tavoite:** Asiakas haluaa tarkastella ostamansa lipun tietoja.
-    - **Toimet:** Asiakas kirjautuu järjestelmään, valitsee lipun ja tarkastelee sen tietoja, kuten tapahtuman, lipputyypin, hinnan ja tarkistuskoodin.
-    - **Tulos:** Asiakas näkee lipun tiedot ja voi varmistaa lipun oikeellisuuden.
-</details>
 
 ## Käyttäjätarinat
-<details> 
-    <summary> Käyttäjätarinat </summary>
 
 <details>
 <summary>  Lista käyttäjätarinoista   </summary>
 </br>
 
-- **Käyttäjänä haluan ostaa liput tapahtumaan** niin, että voin valita tapahtuman, lipputyypin (aikuinen, lapsi, eläkeläinen jne.) ja ostaa haluamani määrän lippuja helposti. Tavoitteenani on sujuva ostokokemus ilman ongelmia.
+- **Myyjänä haluan valita ja myydä lippuja** tapahtumaan niin, että voin helposti valita tapahtuman, lipputyypin (esim. aikuinen, lapsi, eläkeläinen) ja halutun määrän, jotta voin tarjota asiakkaalle sujuvan ostokokemuksen.
 
-- **Käyttäjänä haluan nähdä kaikki tulevat tapahtumat** niin, että voin valita tapahtuman ajan, paikan ja kuvauksen perusteella.
+- **Myyjänä haluan nähdä kaikki tulevat tapahtumat**, jotta voin kertoa asiakkaalle tietoa tapahtumasta ajankohdan, sijainnin ja kuvauksen. 
 
-- **Käyttäjänä haluan tarkastella myyntiraporttia** niin, että näen myydyt liput (tyypin ja määrän) ja kokonaissumman nopeasti yhdellä silmäyksellä.
+- **Myyjänä haluan tarkastella myyntiraporttia** niin, että näen myydyt liput (tyypin ja määrän) ja kokonaissumman nopeasti yhdellä silmäyksellä.
 
 - **Käyttäjänä haluan hallinnoida tapahtumia** niin, että voin lisätä, muokata ja poistaa tapahtumia, sekä hallita niihin liittyviä lippuja ja niiden määriä.
 
-- **Käyttäjänä haluan tulostaa ostamani liput** niin, että voin käyttää niitä tapahtumassa ilman erillisiä toimenpiteitä.
+- **Myyjänä haluan tarkastella tapahtumiin liittyviä lippuja** ja niiden määriä.
+
+- **Myyjänä haluan tulostaa myymäni liput** niin, että asiakas voi käyttää niitä tapahtumassa ilman erillisiä toimenpiteitä.
 
 - **Yrityksenä haluan pystyä näkemään lipunmyynnin trendejä** ajan mittaan, jotta voin suunnitella tulevia tapahtumia ja optimoida lippujen hinnoittelua.
 
-- **Yrityksenä haluan luoda ja hallita tapahtumia** yksinkertaisesti, jotta voin lisätä uusia tapahtumia, määrittää lipputyypit, hinnat ja määrät tehokkaasti.
-
-- **Yrityksenä haluan varmistaa, että sovellus toimii hyvin eri laitteilla**, jotta voin hallita tapahtumia ja tarkastella raportteja sekä työpöydältä että mobiililaitteilta.
+- **Yrityksenä haluan luoda ja hallita** tapahtumia yksinkertaisesti, jotta voin lisätä uusia tapahtumia, määrittää lipputyypit, hinnat ja määrät tehokkaasti.
 
 - **Käyttäjänä haluan sovelluksen latautuvan nopeasti**, jotta voin käyttää sitä sujuvasti ilman pitkiä odotusaikoja.
 
-- **Käyttäjänä haluan, että tietoni ovat suojattuja** ja että sovellus käyttää vahvoja salausmenetelmiä, jotta henkilökohtaiset tietoni ovat turvassa.
+- **Myyjänä haluan olla varma**, että asiakkaiden henkilökohtaiset tiedot ovat turvattuja.
 
-- **Yrityksenä haluan integroivan sovelluksen useisiin maksujärjestelmiin**, jotta asiakkaat voivat maksaa liput haluamallaan tavalla.
+- **Kehittäjänä haluan, että sovellus käyttää vahvoja salausmenetelmiä**, jotta asiakkaiden ja myyjien henkilökohtaiset tiedot ovat turvattuja.
 
-- **Käyttäjänä haluan sovelluksen olevan helppokäyttöinen ja intuitiivinen**, jotta voin löytää tarvittavat tiedot ja toiminnot vaivattomasti.
+- **Käyttäjänä haluan, että sovelluksen käyttöliittymä on selkeä ja intuitiivinen**, josta löytyy tarvittavat tiedot ja toiminnot vaivattomasti.
 
-- **Kehittäjänä haluan laatia testitapaukset eri sovelluksen toiminnoille**, jotta voimme varmistaa, että kaikki osat toimivat oikein ennen julkaisua.
+- **Käyttäjänä haluan, että sovelluksen toimintoja on helppo käyttää** ja ne toimivat odottamallani tavalla.
+
+- **Kehittäjänä haluan laatia ja suorittaa testitapaukset** sovelluksen kriittisille toiminnoille, jotta voin varmistaa perustoiminnallisuuden toimivuuden ennen julkaisua.
+
+- **Kehittäjänä haluan laatia ja suorittaa testitapaukset sovelluksen ei kriittisille toiminnoille**, jotta voin varmistaa myös toissijaisten toiminnallisuuksien toimivuuden ennen julkaisua.
 
 - **Kehittäjänä haluan seurata ja raportoida sovelluksen virheitä ja bugeja**, jotta ne voidaan korjata nopeasti ja parantaa sovelluksen laatua.
-</details>
 
 </details>
 
 </br>
 
-## Yksityiskohtaiset vaatimukset
-
-- **Lippujen tulostaminen:** Liput tulostetaan standardikokoiselle paperille, ja lipussa on mukana QR-koodi tai viivakoodi tarkistamista varten.
-- **Tietoturva:** Käyttäjän tiedot salataan ja tallennetaan turvallisesti.
-</details>
-
-<details>
-<summary> Käyttöliittymävaatimukset </summary>
-
-## Käyttöliittymävaatimukset
-
-- **Myyjän käyttöliittymä:** Yksinkertainen ja selkeä käyttöliittymä, jossa on helppo navigoida tapahtumien ja lippujen välillä.
-- **Raporttien tarkastelu:** Raportit esitetään visuaalisesti ymmärrettävällä tavalla, kuten taulukoina tai kaavioina.
-</details>
-
-<details>
-<summary> Yhteenveto ja rajaukset </summary>
-
-## Yhteenveto ja rajaukset
-
-- **Sisältyvät toiminnot:** Lipun myynti, lippujen tulostaminen, myyntiraportit, käyttäjien hallinta.
-- **Ei sisälly:** Verkkokauppatoiminnot (tulevaisuudessa mahdollisesti).
-</details>
-
-</br>
 
 # Käyttöliittymä
 
+**Käyttöliittymän URL: https://ticketguru-sovellus-elite-innovators-ticketguru2.2.rahtiapp.fi**
+
+Käyttöliittymässä tarvittavat toiminnot on koottu selkeästi eri sivuille, joihin pääsee siirtymään pääsivulta. Lisäksi sivun yläreunan navigointipalkista pääsee samoihin toimintoihin kuin pääsivun painikkeista. Tässä osiossa kuvataan eri sivujen näkymät ja miten niissä liikutaan.</summary>
+
+### Käyttöliittymän näkymät
+
 <details>
-<summary>Käyttöliittymässä on useita tärkeitä näkymiä, joiden avulla käyttäjät voivat suorittaa tarvitsemansa toiminnot. Tässä kuvataan nämä päänäkymät ja miten niissä liikutaan.</summary>
+<summary> Login -sivu</summary>
+</br>
+
+- **Miksi:** Järjestelmää käyttämään pääsevät vain henkilöt, jotka on määritelty järjestelmän käyttäjiksi ja on siihen tarvittavat käyttäjänimi ja salasana.
+- **Mitä:** Login -sivulle ohjaudutaan käyttöliittymän URL-osoitteella.
+- **Siirtymiset:** Onnistuneen kirjautumisen jälkeen ohjaudutaan etusivulle.
+
+![Login-sivu](images/login_nakyma.png)
+
+</details>
 
 <details>
 <summary> Etusivu </summary>
 </br>
 
-- **Miksi:** Etusivu toimii pääsivuna, josta käyttäjä pääsee kaikkiin tärkeimpiin osiin sovelluksessa.
-- **Mitä:** Sivulla on linkit tapahtumien hallintaan, lipunmyyntiin ja raporttien tarkasteluun.
-- **Siirtymiset:** Etusivulta käyttäjä pääsee helposti muihin näkymiin ja takaisin.
+- **Miksi:** Etusivu toimii pääsivuna, josta käyttäjä pääsee käyttämään järjestelmän eri toimintoja.
+- **Mitä:** Sivulla on linkit: **events**, **reports** ja **users**.
+- **Siirtymiset:** 
+    - **Events**: siirtytään tapahtumien listaukseen ja lipunmyyntiin. 
+    - **Reports**: siirtytään tarkastelmaan myyntiraportteja.
+    - **Users**: siirtytään käyttäjähallintaan. 
+
+![Etusivu](images/etusivu_nakyma.png)
 
 </details>
 
 <details>
 
-<summary> Tapahtumien hallinta </summary>
+<summary> Events </summary>
 </br>
 
-- **Miksi:** Täällä käyttäjä voi hallita tapahtumia, kuten lisätä, muokata ja poistaa niitä.
+- **Miksi:** Täällä käyttäjä voi tarkastella ja hallita tapahtumia, kuten lisätä, muokata ja poistaa niitä.
 - **Mitä:** Näkymässä on lista tapahtumista, lomake uusille tapahtumille ja työkalut tapahtumien muokkaamiseen.
-- **Siirtymiset:** Käyttäjä voi siirtyä etusivulta tapahtumien hallintaan ja takaisin etusivulle.
+- **Siirtymiset:** 
+    - **Sell Ticket**: tapahtuman kohdalla olevasta linkistä siirtytään kyseisen tapahtuman lipunmyyntisivulle.
+    - **Add Event**: siirtytään lomakkeelle, jossa voidaan luoda uusi tapahtuma.
+    - **Edit**: siirrytään lomakkeelle, jossa pääsee muokkaamaan tapahtuman tietoja.
+    - **Delete**: voidaan poistaa tapahtuma, jos siihen ei ole myyty lippuja.  
+
+
+      <details>
+      <summary> Sell Ticket </summary>
+      </br>
+
+      - **Miksi:** Täällä käyttäjä voi myydä lippuja tiettyyn tapahtumaan.
+      - **Mitä:** Näkymässä käyttäjä voi valita lipputyypin ja lippumäärän. "Sell Ticket" painikkeesta muodostetaan myyntitapahtuma ja edetään näkymään, jossa nähdään liput ja niiden QR-koodit. 
+      - **Siirtymiset:** 
+          - **Sell Ticket**: Käyttäjä siirtyy sivulle, jossa näkyy myydyt liput, niiden lippukoodit ja QR-koodit. Sivulta liput voi tulostaa asiakkaalle.
+      </details>
+
+![Events](images/events_nakyma.png)
+
 </details>
 
-<details>
-<summary> Lipunmyyntinäkymä </summary>
-</br>
-
-- **Miksi:** Tämä on myyjien työskentelynäkymä, jossa he voivat myydä lippuja asiakkaille.
-- **Mitä:** Näkymässä valitaan tapahtuma, lipputyyppi, syötetään asiakastiedot ja maksetaan liput.
-- **Siirtymiset:** Etusivulta käyttäjä pääsee lipunmyyntiin ja takaisin. Lipunmyyntitapahtumasta voi siirtyä myös myyntiraporttiin.
-</details>
-
 
 <details>
-<summary> Myyntiraportit </summary>
+<summary> Reports </summary>
 </br>
 
 - **Miksi:** Täällä käyttäjä voi tarkastella myyntiraportteja ja saada kokonaiskuvan myynnistä.
-- **Mitä:** Näkymässä on raporttilistat, suodatusvaihtoehdot ja yksityiskohtaiset myyntitiedot.
-- **Siirtymiset:** Raporttien tarkastelusta voi palata etusivulle.
+- **Mitä:** Raporttisivulla voidaan tarkastella myytyjä lippumääriä ja myyntisummia tapahtumittain. Lisäksi voidaan myös hakea tietyn myyntitapahtuman tiedot OrderId:n avulla.
+- **Siirtymiset:** 
+    - **Show Sales by Events**: Painiketta painamalla saadaan näkyviin lipunmyyntitiedot tapahtumittain listattuna.
+    - **Search by order ID**: Hakutoiminnon avulla sivulla näytetään haetun myyntitapahtuman tiedot.
+
+![Reports](images/reports_nakyma.png)
+
 </details>
+
 
 <details>
-<summary> Asiakasnäkymä </summary>
+<summary> Users </summary>
 </br>
 
-- **Miksi:** Asiakkaat voivat tarkastella ostamiaan lippuja ja tapahtumatietoja.
-- **Mitä:** Näkymässä näkyvät ostetut liput, tapahtumatiedot ja tarkistuskoodi.
-- **Siirtymiset:** Asiakas voi siirtyä asiakasnäkymään etusivulta ja palata takaisin etusivulle.
+- **Miksi:** Sivulla voidaan tarkastella ja hallita myyjien ja käyttäjien käyttäjätietoja järjestelmässä.
+- **Mitä:** Käyttäjä voi tarkastella omia kirjautumistietojaan. Pääkäyttäjä pystyy lisäämään uusia myyjiä ja luomaan heille käyttäjätilin järjestelmään. Käyttäjä pystyy muokkaamaan omia tietojaan ja pääkäyttäjä pystyy muokkaamaan ja poistamaan myyjiä ja järjestelmän käyttäjiä. 
+- **Siirtymiset:** 
+    - **Profile**: Välilehdellä näkyy kirjautuneen käyttäjän tiedot.
+    - **Add Salesperson**: Välilehdellä voidaan lisätä uusi myyjä (salesperson).
+    - **Add User**: Välilehdellä voidaan luoda myyjälle käyttäjätili järjestelmään.
+    - **Edit Users**: Välilehdellä voidaan muokata käyttäjien tietoja.
+    - **Edit Salesperson**: Välilehdellä voidaan muokata myyjien tietoja.
+
+![Users](images/users_nakyma.png)
+
 </details>
+
 
 
 ### Käyttöliittymäkaavio
 - **Kaavio:** [Käyttöliittymäkaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=643351026#gid=643351026)
-- **Miksi:** Käyttöliittymäkaavio näyttää, miten eri näkymät liittyvät toisiinsa ja miten käyttäjä navigoi niiden välillä.
+- **Miksi:** Käyttöliittymäkaavio näyttää, miten eri näkymät liittyvät toisiinsa ja miten käyttäjä navigoi niiden välillä. Tätä käyttöliittymäkaavion suunnitelmaa on käytetty lähtökohtana lopullisten näkymien toteutuksessa.
 </details>
+</br>
 
-## Tietokanta
+# Tietokanta
 
 ### Tietokantakaavio
 [Tietokantakaavio -linkki](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
@@ -419,8 +439,6 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 | Kenttä            | Tyyppi           | Kuvaus                                                  |
 | ------------------|------------------| --------------------------------------------------------|
 | salesPersonId     | int (AN) PK      | Myyjän yksilöllinen tunniste.                           |
-| username          | varchar(30)      | Myyjän käyttäjätunnus.                                  |
-| passwordHash      | varchar(30)      | Myyjän salasana.                                        |
 | lastName          | varchar(30)      | Myyjän sukunimi.                                        |
 | firstName         | varchar(30)      | Myyjän etunimi.                                         |
 | phone             | varchar(30)      | Myyjän puhelinnumero.                                   |
@@ -430,6 +448,156 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 
 [Linkki tietokantakaavioon](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
 </details>
+
+---
+
+# Tekninen kuvaus
+
+**Yleiskuvaus järjestelmästä**  
+TicketGuru on lipunmyyntijärjestelmä, jossa voidaan hallita tapahtumia, lipputyyppejä, myydä lippuja, tulostaa lippukoodeja sekä hallinnoida käyttäjiä ja myyjiä (salesperson). Järjestelmä koostuu kahdesta pääosasta:
+
+1. **Backend-palvelu** (Spring Boot -sovellus, Java):  
+   - Palvelee REST-rajapintojen kautta pyyntöjä frontendiltä.  
+   - Vastaa tapahtumien, lippujen, tilausten, käyttäjä- ja myyjätilien hallinnasta sekä tietokantayhteyksistä.  
+   - Sisältää tietomallin (Entity-luokat), palvelukerrokset (Service), repositoriot (Repository) ja kontrollerit (Controller).  
+   - Tietokanta: PostgreSQL (tuotanto- ja testiympäristöissä) tai H2 (kehitysympäristössä).
+
+2. **Frontend-sovellus** (React):  
+   - Tarjoaa käyttöliittymän mm. tapahtumien selailuun ja lipunmyyntiin.  
+   - Kommunikoi backendin kanssa REST API -päätepisteiden kautta.
+
+**Käyttöympäristö**  
+- Backend:  
+  - Ajetaan yleensä erillisenä palveluna (esim. Java-toteutus Spring Boot -sovelluspalvelimella).  
+  - Tuotantoympäristössä voi pyöriä esimerkiksi Kubernetes-klusterissa (Rahti).  
+  - Käyttää suoraa TCP-yhteyttä tietokantaan (PostgreSQL) ja tarjoaa HTTP(S)-rajapinnan frontendille.  
+- Frontend:  
+  - Ajetaan typillisesti esim. Node.js:llä käännettynä staattisena sivustona, joka voidaan palvella Nginx:llä tai vastaavalla web-palvelimella.  
+  - Selainklientti käyttää HTTPS-pyyntöjä backend-rajapintaan.
+
+**Tietoliikenne ja yhteydet**  
+- Selain (käyttäjän asiakaslaite) lähettää HTTP/HTTPS-pyyntöjä frontendissä pyörivään React-sovellukseen.  
+- React-sovellus lähettää REST-pyynnöt backendin julkistamiin HTTP(S)-endpointteihin.  
+- Backend-yhteys tietokantaan (PostgreSQL/H2) tapahtuu JDBC/SQL-tasolla.
+
+Tietovirtojen hahmottelua voi tehdä esimerkiksi dynaamisilla sekvenssikaavioilla (esim. tietokannan päivitys tilauksia luotaessa) tai data flow -diagrammilla:
+
+```
+[User Browser]
+       |
+       v (HTTPS)
+ [Frontend (React)] 
+       |
+       v (HTTPS/HTTP)
+   [Backend (Spring Boot)]
+       |
+       v (JDBC/SSL)
+    [PostgreSQL DB]
+```
+
+**Palvelintoteutuksen yleiskuvaus**  
+- Sovellus on toteutettu Spring Boot -ympäristössä (Java 11+).  
+- Tietokantana PostgreSQL (prod/rahti) tai H2 (dev).  
+- Hibernate + JPA käytössä tietokantakerroksessa.  
+- Sovellus voidaan paketoida jar:ksi ja ajaa komennolla `java -jar TicketGuru-Sovellus.jar`.  
+- Rahti-ympäristössä käytetään sovellusprofiilia `rahti`, joka lukee `application-rahti.properties` -tiedostoa ja käyttää ympäristömuuttujia tietokantayhteyden määrittelyyn.  
+- Kehitysympäristössä käytetään `application-dev.properties`, joka hyödyntää H2-muistitietokantaa.
+
+**Teknologiat**  
+- Backend: Spring Boot, Java, JPA/Hibernate, Spring Security  
+- Frontend: React, Bootstrap  
+- Tietokanta: PostgreSQL (prod), H2 (dev)
+
+**Rajapintojen kuvaukset**  
+Keskeiset rajapinnat ovat REST-tyyppisiä. Backend altistaa mm. seuraavanlaisia REST-päätepisteitä:
+
+- `GET /events` - Hakee kaikki tapahtumat  
+- `POST /events` - Luo uuden tapahtuman  
+- `GET /orders` - Hakee kaikki tilaukset  
+- `POST /orders` - Luo uuden tilauksen  
+- `POST /api/sell` - Myy lippuja tiettyyn tapahtumaan  
+- `GET /api/print-tickets/{orderId}` - Hakee lipputunnisteet tulostettavaksi  
+- `POST /api/auth/login` - Kirjautuminen  
+- `GET /api/users/me` - Hakee kirjautuneen käyttäjän tiedot
+
+Esimerkki REST-kutsusta lippujen tulostamiseen:  
+```
+GET /api/print-tickets/123
+Response: { "ticketCodes": ["code1", "code2", ...] }
+```
+
+**Turvallisuus**  
+- Backend käyttää Spring Securityä perustuen käyttäjänimien ja salasanojen hallintaan (Basic Auth).  
+- Rajapintoja on suojattu roolipohjaisilla oikeuksilla (USER/ADMIN/SALESPERSON).
+- Tietokantayhteydet voidaan suojata TLS:llä tuotantoympäristössä.  
+- Frontend-ohjelma ei tallenna salasanoja selkokielisenä.  
+- Salausalgoritmeina bcrypt password-hashauksen yhteydessä.
+
+**Ohjelmointikäytännöt**  
+- Ohjelmakoodi on pyritty jäsentämään selkeisiin paketteihin: `domain` entiteeteille, `service` palvelulogiikalle, `repository` tiedonhakurajapinnoille, `web` kontrollerit.  
+- Luokat, metodit ja muuttujat on nimetty kuvaavasti (esimerkiksi `EventService`, `TicketRepository`, `SellTicketsDto`).  
+- Koodissa on Javadoc- ja kommenttikäytäntöjä selkeyttämään tarkoituksia.  
+- Duplikaation välttämiseksi on käytetty mm. Mapstructia entiteettien ja DTO:iden väliseen muunnokseen, jotta looginen koodi pysyy yhdenmukaisena eikä toisteta samoja muunnoksia useassa paikassa.
+
+
+# Asennusohjeet
+
+**Kehitysympäristö**  
+1. Asenna Java (esim. AdoptOpenJDK 11), Node.js ja npm.  
+2. Kloonaa projektin lähdekoodi Git-reposta.  
+3. Backend:  
+   - Mene backend-hakemistoon (`./TicketGuru-Sovellus`)  
+   - Aja `mvn clean install` luodaksesi jar-paketin.  
+   - Kehitystilassa käytetään `application-dev.properties` -asetuksia.  
+   - Käynnistä `mvn spring-boot:run -Dspring-boot.run.profiles=dev` tai `java -jar target/TicketGuru-Sovellus-*.jar --spring.profiles.active=dev`.
+4. Frontend:  
+   - Mene frontend-hakemistoon (`./TicketGuru-Sovellus/frontend`)  
+   - Aja `npm install` asentaaksesi riippuvuudet.  
+   - Aja `npm run dev` käynnistääksesi kehityspalvelimen (localhost:5173).  
+
+**Tuotantoympäristö**  
+1. Määritä tietokantayhteydet ympäristömuuttujina (esim. `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`) tai käytä `application-prod.properties` -tiedostoa.  
+2. Rakenna backend-sovellus `mvn clean install` ja aja `java -jar target/TicketGuru-Sovellus-*.jar --spring.profiles.active=prod`.  
+3. Varmista että PostgreSQL-tietokanta on asennettu ja käytössä. Luo tarvittaessa tietokantakäyttäjä ja tietokanta:  
+   ```
+   CREATE DATABASE ticketguru;
+   CREATE USER ticketuser WITH PASSWORD 'ticketpassword';
+   GRANT ALL PRIVILEGES ON DATABASE ticketguru TO ticketuser;
+   ```
+4. Yhdistä backend annettuihin ympäristömuuttujiin. Palvelin käynnistyy ja hibernaten `update` strategia luo/päivittää taulut automaattisesti.  
+5. Frontend voidaan rakentaa komennolla `npm run build` ja sitten palvella tuotannossa esim. Nginx:llä. Määritä Nginx konfiguraatio ohjaamaan `/api`-pyynnöt backend-palvelimelle.
+
+**Rahti-ympäristö**  
+- Aseta Rahti-palvelussa tarvittavat environment-muuttujat (`POSTGRESQL_SERVICE_HOST`, `POSTGRESQL_SERVICE_PORT`, `POSTGRESQL_DATABASE`, `POSTGRESQL_USER`, `POSTGRESQL_PASSWORD`).
+- Käynnistä sovellus `--spring.profiles.active=rahti` profiililla.  
+- Rahti-lokaatio (OpenShift/Kubernetes) hoitaa podien hallinnan.
+
+
+# Käynnistys- ja käyttöohje
+
+**Käynnistys kehitysympäristössä:**  
+- Backend käynnistyy osoitteessa `http://localhost:8080` (dev-profiili).  
+- Frontend käynnistyy osoitteessa `http://localhost:5173`.
+
+**Kirjautuminen**  
+- Sovellukseen voi kirjautua oletusarvoisella admin-käyttäjällä:  
+  - Käyttäjätunnus: `admin`  
+  - Salasana: `admin`  
+- Kehitysympäristössä löytyy myös käyttäjä `user`:  
+  - Käyttäjätunnus: `user`  
+  - Salasana: `user`  
+- Nämä tunnukset on määritelty `UserConfiguration`-luokassa ja tallennettu tietokantaan sovelluksen käynnistyessä.
+
+**Käyttö**  
+1. Mene sovelluksen frontend-osoitteeseen (esim. `http://localhost:5173`).  
+2. Kirjaudu sisään admin-/user-tunnuksilla.  
+3. Päävalikosta pääsee mm. tapahtumien hallintaan, lippujen myyntiin, raporttien katseluun ja käyttäjien hallintaan.  
+4. Myytäessä lippuja (esim. `Sell Ticket`) valitse tapahtuma, lipputyyppi ja kappalemäärä.  
+5. Kun tilaus on luotu, liput voi tulostaa /katsoa `Print Tickets` -sivulta.
+
+Mikäli käytät tuotanto- tai rahtiympäristöä, korvaa `localhost:8080` ja `localhost:5173` tuotantoympäristön palvelinosoitteilla. Kirjautumiseen ja testitunnuksiin voi päivitysten jälkeen tarvita erilaisia tunnuksia, jotka on hyvä dokumentoida sisäisesti.
+
+---
 
 ## REST API dokumentaatio
 
@@ -1076,7 +1244,7 @@ Tähän sovellukseen on määritetty CORS-säännöt seuraavasti:
 
 Vastaus:
 
-```
+```json
 [
     {
         "id": 4,
@@ -1111,7 +1279,7 @@ Vastaus:
 
 #### **Vastaus**
 
-```
+```json
 {
         "id": 6,
         "ticketCode": "6c51d8f2-59c3-4780-9b22-2d6cd974d9d9",
@@ -1134,7 +1302,7 @@ Vastaus:
 
 #### Vastaus:
 
-```
+```json
 [
     {
         "id": 4,
@@ -1176,7 +1344,7 @@ Vastaus:
 
 #### Pyynnön runko:
 
-```
+```json
 {}
 ```
 
@@ -1187,7 +1355,7 @@ Vastaus:
 
 #### Vastaus:
 
-```
+```json
 {
         "id": 4,
         "ticketCode": "a9e94359-b259-4a90-ada7-b03b7dfd2a00",
@@ -1210,7 +1378,7 @@ Vastaus:
 
 #### Vastaus:
 
-```
+```json
 [
     {
         "id": 4,
@@ -1231,9 +1399,120 @@ Vastaus:
 ```
 </details>
 
+## Lipputyyppien (TicketType) API-pyynnöt
+
+<details><summary>Hae kaikki lipputyypit (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickettypes`
+* **Käyttöoikeudet**: ADMIN
+* **Paluukoodit**:
+  - 200 OK - Kutsu onnistui, lipputyypit löytyivät.
+  - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+  - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia
+
+#### Vastaus
+```json
+  [
+    {
+        "id": 1,
+        "name": "VIP"
+    },
+    {
+        "id": 2,
+        "name": "Standard"
+    }
+]
+```
+</details>
+
+<details><summary>Hae lipputyyppi ID:n perusteella (GET)</summary>
+
+* **Metodi**: GET
+* **Polku**: `/tickettypes/{id}`
+* **Käyttöoikeudet**: ADMIN
+* **Paluukoodit**:
+  - 200 OK - Kutsu onnistui, lipputyypit löytyivät.
+  - 400 Bad Request - ID ei ole kevlollinen.
+  - 404 Not Found - Lipputyyppiä ei löydy annetulla ID:llä.
+  - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+  - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia
+
+#### Vastaus:
+```json
+    {
+        "id": 1,
+        "name": "VIP"
+    }
+```
+</details>
+
+<details><summary>Luo uusi lipputyyppi (POST)</summary>
+
+* **Metodi**: POST
+* **Polku**: `/tickettypes`
+* **Käyttöoikeudet**: ADMIN
+* **Pyyntöparametrit**:
+  - **name** (pakollinen): Lipputyypin nimi
+
+* **Pyynnön runko**:
+```json
+{
+  "name": "Aikuinen"
+}
+```
+
+* **Paluukoodit**:
+  - 201 Created - Kutsu onnistui, uusi lipputyyppi luotiin.
+  - 404 Bad Request - Pyyntö on puutteellinen tai lipputyyppi on jo olemassa samalla nimellä.
+  - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+  - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+
+**Vastaus**:
+```json
+    {
+        "id": 3,
+        "name": "Aikuinen"
+    }
+```
+</details>
+
+<details><summary>Päivitä lipputyyppi (PUT)</summary>
+
+* **Metodi**: PUT
+* **Polku**: `/tickettypes/{id}`
+* **Käyttöoikeudet**: ADMIN
+* **Pyyntöparametrit**:
+  - **id** (pakollinen): Lipputyypin ID, jota halutaan päivittää.
+  - **name** (pakollinen): Lipputyypin uusi nimi.
+
+* **Pyynnön runko**:
+```json
+{
+  "name": "Aikuinen K-18"
+}
+```
+
+* **Paluukoodit**:
+  - 200 OK - Kutsu onnistui, lipputyyppi päivitettiin.
+  - 404 Bad Request - Pyyntö on puutteellinen tai lipputyyppi on jo olemassa samalla nimellä.
+  - 404 Not Found - Lipputyyppiä ei löydy annetulla ID:llä.
+  - 401 Unauthorized - Käyttäjä ei ole kirjautunut sisään tai käyttäjätunnus/salasana on virheellinen.
+  - 403 Forbidden - Käyttäjällä ei ole riittäviä käyttöoikeuksia.
+
+**Vastaus**:
+```json
+    {
+        "id": 3,
+        "name": "Aikuinen K-18"
+    }
+```
+</details>
+
 
 # Autentikaatio
 
+## Autentikointiprosessi
 <details>
 <summary> Autentikointiprosessi </summary>
 <br/>
@@ -1243,24 +1522,34 @@ TicketGuru-sovelluksessa käytetään perinteistä käyttäjätunnus-salasana -a
 ## Perustason autentikointi (Basic Authentication)
 
 Perustason autentikointi on määritetty Spring Boot -sovelluksessa käyttäen SecurityFilterChain-luokkaa. Autentikointi tapahtuu HTTP-pyyntöjen yhteydessä, joissa käyttäjätunnus ja salasana lähetetään base64-koodattuna Authorization-otsikossa. Tämä mahdollistaa käyttäjän todennuksen, ennen kuin he saavat pääsyn sovelluksen API-pyyntöihin.
+</details>
 
-## Turvallisuuskonfiguraation selitys
+<details><summary>Turvallisuuskonfiguraation selitys</summary>
 
 Sovelluksen turvallisuuskonfiguraatio on määritelty `SecurityConfig`-luokassa, joka hallitsee autentikoinnin ja valtuutuksen sääntöjä. Tämä luokka käyttää Spring Security -kirjastoa, joka tarjoaa joustavan ja tehokkaan tavan hallita käyttäjien pääsyä sovellukseen.
+</details>
 
-### Turvallisuuskonfiguraation Ominaisuudet
+<details><summary>Turvallisuuskonfiguraation Ominaisuudet</summary>
 
-1. **Autentikointi**: `SecurityConfig` määrittelee, että kaikki API-pyynnöt vaativat käyttäjän tunnistamista. Tämä tapahtuu perustason autentikoinnin (Basic Authentication) avulla, jossa käyttäjätunnus ja salasana lähetetään base64-koodattuna HTTP-otsikossa.
+1. **Autentikointi**: `SecurityConfig` määrittelee, että kaikki API-pyynnöt vaativat käyttäjän tunnistamista. Tämä tapahtuu perustason autentikoinnin (Basic Authentication) avulla, jossa käyttäjätunnus ja salasana lähetetään base64-koodattuna HTTP-otsikossa. Autentikointi käsitellään `AuthenticationManager` -beanin avulla, joka vastaa käyttäjien autentikaatiosta. Tämä bean on määritelty seuraavasti:
+```java
+  @Bean
+public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+}
+```
+`AuthenticationManager` -bean käyttää `AuthenticationConfiguration` -luokkaa, joka määrittelee autentikaatiomekanismin. Se varmistaa, että vain oikeutetut käyttäjät pääsevät käyttämään sovelluksen toimintoja.
 
 2. **Käyttöoikeudet**: Luokassa määritellään myös, mitkä käyttäjäroolit voivat käyttää mitäkin sovelluksen toimintoja. Esimerkiksi:
    - Admin-käyttäjät voivat käyttää kaikkia päätepisteitä.
-   - Salesperson-käyttäjät saavat vain rajoitetun pääsyn myyntitoimintoihin.
+   - User-käyttäjät saavat vain rajoitetun pääsyn myyntitoimintoihin.
 
 3. **CSRF-suojaus**: CSRF-suojauksen tarkastukset on toistaiseksi poistettu käytöstä testauksen helpottamiseksi.
 
 4. **Virheiden käsittely**: Turvallisuuskonfiguraatio sisältää myös säännöt siitä, miten autentikointi- ja valtuutusvirheitä käsitellään. Jos käyttäjä ei pysty tunnistautumaan oikein tai ei omaa tarvittavia käyttöoikeuksia, sovellus palauttaa asianmukaiset virhekoodit.
+</details>
 
-### Esimerkki SecurityConfig-luokasta
+<details><summary>Esimerkki SecurityConfig-luokasta</summary>
 
 ```java
 @Bean
@@ -1278,8 +1567,9 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 ```
 
 Tämä rakenne varmistaa, että vain oikeutetut käyttäjät voivat käyttää sovelluksen eri toimintoja, ja se parantaa tietoturvaa koko sovelluksessa.
+</details>
 
-## Endpoint-yhteenveto
+<details><summary>Endpoint-yhteenveto</summary>
 
 Sovelluksessa on useita API-päätepisteitä, jotka tarjoavat erilaisia toimintoja. Jokaiselle päätepisteelle on määritelty käyttöoikeudet, jotka perustuvat käyttäjärooleihin. Alla on luettelo keskeisistä päätepisteistä ja niiden vaatimista käyttöoikeuksista:
 
@@ -1316,34 +1606,53 @@ Sovelluksessa on useita API-päätepisteitä, jotka tarjoavat erilaisia toiminto
 | `DELETE /events/{eventId}`       | Poistaa tapahtuman.                            | **ADMIN**              |
 | `GET /events/search`             | Hakee tapahtumat kaupungin perusteella.       | **SALESPERSON**, **ADMIN**  |
 
-## Määritellyt käyttäjätunnukset ja salasanat
+### TicketTypeController
 
-Käyttäjätiedot on tallennettu muistiin käyttämällä `InMemoryUserDetailsManager`-komponenttia. Sovelluksessa on määritelty seuraavat käyttäjätunnukset ja salasanat:
+| Päätepiste                            | Kuvaus                                         | Vaadittu rooli         |
+|---------------------------------------|------------------------------------------------|------------------------|
+| `GET /tickettypes`                    | Hakee kaikki lipputyypit.                      | **ADMIN**              |
+| `GET /tickettypes/id}`                | Hakee lipputyypin ID:n perusteella.            | **ADMIN**              |
+| `POST /tickettypes`                   | Luo uuden lipputyypin.                         | **ADMIN**              |
+| `PUT /tickettypes/{id}`               | Muokkaa olemassa olevaa lipputyyppiä.          | **ADMIN**              |
 
-## Käyttäjätiedot
+</details>
 
-Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `Salesperson` -entiteetteinä. Käyttäjätunnukset ja salasanat tallennetaan tietokantaan seuraavasti:
+<details></summary>Käyttäjätiedot</summary>
 
+Jokainen sovelluksen käyttäjä tallennetaan tietokantaan `User` ja `Salesperson` -entiteetteinä. Käyttäjätunnukset ja salasanat tallennetaan tietokantaan seuraavasti:
+
+### User (Käyttäjä)
+- **userId**: Käyttäjän yksilöllinen ID.
+- **username**: Käyttäjän yksilöllinen käyttäjätunnus.
+- **passwordHash**: Salasanan hajautusarvo.
+- **role**: Käyttäjän rooli (ADMIN tai USER)
 
 ### Salesperson (Myyjä)
 - **salespersonId**: Myyjän yksilöllinen ID.
-- **username**: Myyjän käyttäjätunnus.
-- **passwordHash**: Salasanan hajautusarvo.
-- **isAdmin**: Boolean-arvo, joka määrittää onko myyjä järjestelmän pääkäyttäjä (admin). Tämä ominaisuus mahdollistaa erilaisten pääsyoikeuksien hallinnan eri käyttäjien välillä.
+- **firstName**: Myyjän etunimi.
+- **lastName**: Myyjän sukunimi
+- **phone**: Myyjän puhelinnumero.
+- **orders**: Lista myyjän tekemistä tilauksista.
 
 ### Käyttäjät
-
-- **Admin** (isAdmin = true)
+* Kehitysvaiheessa luodut valmiit käyttäjät:
+- **Admin** (role = ADMIN)
   - **Käyttäjätunnus**: `admin`
   - **Salasana**: `admin` (hajautettuna)
   - **Rooli**: `ADMIN`
 
-- **Salesperson** (isAdmin = false)
-  - **Käyttäjätunnus**: `salesperson`
-  - **Salasana**: `salesperson` (hajautettuna)
-  - **Rooli**: `SALESPERSON`
+- **User** (role = USER)
+  - **Käyttäjätunnus**: `user`
+  - **Salasana**: `user` (hajautettuna)
+  - **Rooli**: `USER`
 
-### Salasanan tallennus
+  #### Käyttäjien luominen ja roolien määrittäminen
+
+  Admin-tason käyttäjät voivat luoda uusia käyttäjiä ja myyjiä sovellukseen sekä määrittää heille roolit. Tämä tarkoittaa, että jokaisella käyttäjällä on omat käyttäjätunnuksensa ja salasanansa, jotka tallennetaan turvallisesti tietokantaan.
+
+</details>
+
+<details><summary>Salasanan tallennus</summary>
 
 Salasana tallennetaan tietokantaan hajautettuna, eli se ei ole selkokielinen. Tämä toteutetaan hyödyntäen Java Spring Security -komponentteja, jotka varmistavat salasanan turvallisen tallennuksen ja tarkastamisen.
 
@@ -1353,17 +1662,19 @@ String hashedAdminPassword = encoder.encode("admin");
 String hashedSalespersonPassword = encoder.encode("salesperson");
 ```
 
-## Käyttäjäroolit ja pääsy (Authorization Policies)
+</details>
+
+<details><summary>Käyttäjäroolit ja pääsy (Authorization Policies)</summary>
 
 Sovelluksessa on kaksi pääasiallista käyttäjäroolia, jotka määrittävät käyttäjien pääsyoikeudet:
 
-- **Admin**: Käyttäjät, joilla on `isAdmin`-arvo `true`. Salesperson tasoisilla käyttäjillä on täysi pääsy kaikkiin sovelluksen toimintoihin ja API-pyyntöihin, mukaan lukien:
+- **Admin**: Käyttäjät, joilla on `role`-arvo `ADMIN`. Admin tasoisilla käyttäjillä on täysi pääsy kaikkiin sovelluksen toimintoihin ja API-pyyntöihin, mukaan lukien:
   - Käyttäjien hallinta (luonti, muokkaus, poisto).
   - Tapahtumien luominen ja hallinta.
   - Kaikkien varausten tarkastelu ja hallinta.
   - Sovelluksen asetusten muokkaaminen.
 
-- **Salesperson**: Käyttäjät, joilla on `isAdmin`-arvo `false`. Salesperson tasoisilla käyttäjillä on rajoitetut oikeudet, joilla voivat:
+- **Salesperson**: Käyttäjät, joilla on `role`-arvo `USER`. User tasoisilla käyttäjillä on rajoitetut oikeudet, joilla voivat:
   - Myydä lippuja olemassa oleviin tapahtumiin.
   - Tarkastella omia myyntitietojaan.
 
@@ -1376,6 +1687,10 @@ Käyttöoikeudet on määritelty seuraavasti:
 - CSRF-suojauksen (Cross-Site Request Forgery) tarkastukset on poistettu käytöstä testauksen helpottamiseksi, mutta tuotantoympäristössä suositellaan sen käyttämistä.
 
 Tämä rakenne varmistaa, että vain oikeutetut käyttäjät voivat käyttää sovelluksen eri toimintoja, mikä parantaa tietoturvaa ja käyttäjäkokemusta.
+
+</details>
+
+<details><summary>Virheenkäsittely ja autentikointivirheet</summary>
 
 ## Virheenkäsittely
 
@@ -1427,7 +1742,7 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
 
 # Testaus
 
-## Database Access Layer
+<details><summary>Database Access Layer</summary>
 
 ### Yhteyden toimivuus (DAL ↔ RDBMS)
 - **Testattava:** Onko tietokantayhteys määritetty oikein? Toimiiko yhteys kaikissa käyttöolosuhteissa?
@@ -1470,8 +1785,9 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
   - Testataan repositoriotesteissä.
 
 ---
+</details>
 
-## REST API -testaus
+<details><summary> REST API -testaus </summary>
 
 ### Reitityksen testaus (RestApiTests)
 - **Testattava:** Testataan eri reittien osalta, ohjautuuko reititys oikein ja onko palautunut vastaus odotetunlainen. Lisäksi testataan tilannetta, että reittiä ei ole olemassa.
@@ -1506,7 +1822,9 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
 
   ---
 
-## CLIENT-sivujen testaus
+  </details>
+
+<details><summary>CLIENT-sivujen testaus</summary>
 
 ### Index-sivu (ClientIndexTest)
 - **Testattava:** Clientin index-sivu.
@@ -1555,8 +1873,10 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
     - **Tulos:** Testi varmistaa, että sovellus palauttaa virheviestin, jos lippuja ei ole riittävästi.
 
   ---
+  </details>
 
-  ### Entiteettien testaus (OrderValidationTest ja OrderEntityTest)
+ <details><summary> Entiteettien testaus (OrderValidationTest ja OrderEntityTest)</summary>
+
   - **Testattava**: Order entiteetti.
   - **Suoritetut testit**:
     - **whenSalespersonIsNull_thenValidationFailure**
@@ -1618,8 +1938,10 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
         - **Tulos**: Testi varmistaa, että `Order`-entiteetti käyttäytyy odotetusti persistenssikontekstissa.
 
     ---
+    </details>
 
-### ORM testaus (ORMIntegrationTest ja ORMPerformanceTest)
+<details><summary>ORM testaus (ORMIntegrationTest ja ORMPerformanceTest)</summary>
+
   - **Testattava**: Entiteettien ja tietokannan välinen ORM-yhdistäminen, sovelluksen tietokantakyselyiden suorituskyky ja Hibernate-statistiikka.
   - **Suoritetut testit**:
     - **testTicketTypeEntityMapping**
@@ -1650,6 +1972,8 @@ Virheiden käsittelyssä pyritään antamaan käyttäjille mahdollisimman paljon
       - Suoritetaan `TicketRepository.findAll()` ja tarkistetaan suoritettujen kyselyiden määrä.
       - Varmistetaan, että kyselyiden määrä on alle 2.
       - **Tulos**: Testi varmistaa, että `Ticket`-entiteetin nouto suoritetaan tehokkaasti ilman ylimääräisiä kyselyitä.
+
+      </details>
 
 
 
