@@ -449,6 +449,156 @@ Tämä tietohakemisto kuvaa taulujen ja niiden attribuuttien tarkoituksen sekä 
 [Linkki tietokantakaavioon](https://docs.google.com/spreadsheets/d/1MQNqwOzjuIXldOeYIx_NevCTvQeL70HyKikxyzmMKN8/edit?gid=1081752884#gid=1081752884)
 </details>
 
+---
+
+## Tekninen kuvaus
+
+**Yleiskuvaus järjestelmästä**  
+TicketGuru on lipunmyyntijärjestelmä, jossa voidaan hallita tapahtumia, lipputyyppejä, myydä lippuja, tulostaa lippukoodeja sekä hallinnoida käyttäjiä ja myyjiä (salesperson). Järjestelmä koostuu kahdesta pääosasta:
+
+1. **Backend-palvelu** (Spring Boot -sovellus, Java):  
+   - Palvelee REST-rajapintojen kautta pyyntöjä frontendiltä.  
+   - Vastaa tapahtumien, lippujen, tilausten, käyttäjä- ja myyjätilien hallinnasta sekä tietokantayhteyksistä.  
+   - Sisältää tietomallin (Entity-luokat), palvelukerrokset (Service), repositoriot (Repository) ja kontrollerit (Controller).  
+   - Tietokanta: PostgreSQL (tuotanto- ja testiympäristöissä) tai H2 (kehitysympäristössä).
+
+2. **Frontend-sovellus** (React):  
+   - Tarjoaa käyttöliittymän mm. tapahtumien selailuun ja lipunmyyntiin.  
+   - Kommunikoi backendin kanssa REST API -päätepisteiden kautta.
+
+**Käyttöympäristö**  
+- Backend:  
+  - Ajetaan yleensä erillisenä palveluna (esim. Java-toteutus Spring Boot -sovelluspalvelimella).  
+  - Tuotantoympäristössä voi pyöriä esimerkiksi Kubernetes-klusterissa (Rahti).  
+  - Käyttää suoraa TCP-yhteyttä tietokantaan (PostgreSQL) ja tarjoaa HTTP(S)-rajapinnan frontendille.  
+- Frontend:  
+  - Ajetaan typillisesti esim. Node.js:llä käännettynä staattisena sivustona, joka voidaan palvella Nginx:llä tai vastaavalla web-palvelimella.  
+  - Selainklientti käyttää HTTPS-pyyntöjä backend-rajapintaan.
+
+**Tietoliikenne ja yhteydet**  
+- Selain (käyttäjän asiakaslaite) lähettää HTTP/HTTPS-pyyntöjä frontendissä pyörivään React-sovellukseen.  
+- React-sovellus lähettää REST-pyynnöt backendin julkistamiin HTTP(S)-endpointteihin.  
+- Backend-yhteys tietokantaan (PostgreSQL/H2) tapahtuu JDBC/SQL-tasolla.
+
+Tietovirtojen hahmottelua voi tehdä esimerkiksi dynaamisilla sekvenssikaavioilla (esim. tietokannan päivitys tilauksia luotaessa) tai data flow -diagrammilla:
+
+```
+[User Browser]
+       |
+       v (HTTPS)
+ [Frontend (React)] 
+       |
+       v (HTTPS/HTTP)
+   [Backend (Spring Boot)]
+       |
+       v (JDBC/SSL)
+    [PostgreSQL DB]
+```
+
+**Palvelintoteutuksen yleiskuvaus**  
+- Sovellus on toteutettu Spring Boot -ympäristössä (Java 11+).  
+- Tietokantana PostgreSQL (prod/rahti) tai H2 (dev).  
+- Hibernate + JPA käytössä tietokantakerroksessa.  
+- Sovellus voidaan paketoida jar:ksi ja ajaa komennolla `java -jar TicketGuru-Sovellus.jar`.  
+- Rahti-ympäristössä käytetään sovellusprofiilia `rahti`, joka lukee `application-rahti.properties` -tiedostoa ja käyttää ympäristömuuttujia tietokantayhteyden määrittelyyn.  
+- Kehitysympäristössä käytetään `application-dev.properties`, joka hyödyntää H2-muistitietokantaa.
+
+**Teknologiat**  
+- Backend: Spring Boot, Java, JPA/Hibernate, Spring Security  
+- Frontend: React, Bootstrap  
+- Tietokanta: PostgreSQL (prod), H2 (dev)
+
+**Rajapintojen kuvaukset**  
+Keskeiset rajapinnat ovat REST-tyyppisiä. Backend altistaa mm. seuraavanlaisia REST-päätepisteitä:
+
+- `GET /events` - Hakee kaikki tapahtumat  
+- `POST /events` - Luo uuden tapahtuman  
+- `GET /orders` - Hakee kaikki tilaukset  
+- `POST /orders` - Luo uuden tilauksen  
+- `POST /api/sell` - Myy lippuja tiettyyn tapahtumaan  
+- `GET /api/print-tickets/{orderId}` - Hakee lipputunnisteet tulostettavaksi  
+- `POST /api/auth/login` - Kirjautuminen  
+- `GET /api/users/me` - Hakee kirjautuneen käyttäjän tiedot
+
+Esimerkki REST-kutsusta lippujen tulostamiseen:  
+```
+GET /api/print-tickets/123
+Response: { "ticketCodes": ["code1", "code2", ...] }
+```
+
+**Turvallisuus**  
+- Backend käyttää Spring Securityä perustuen käyttäjänimien ja salasanojen hallintaan (Basic Auth).  
+- Rajapintoja on suojattu roolipohjaisilla oikeuksilla (USER/ADMIN/SALESPERSON).
+- Tietokantayhteydet voidaan suojata TLS:llä tuotantoympäristössä.  
+- Frontend-ohjelma ei tallenna salasanoja selkokielisenä.  
+- Salausalgoritmeina bcrypt password-hashauksen yhteydessä.
+
+**Ohjelmointikäytännöt**  
+- Ohjelmakoodi on pyritty jäsentämään selkeisiin paketteihin: `domain` entiteeteille, `service` palvelulogiikalle, `repository` tiedonhakurajapinnoille, `web` kontrollerit.  
+- Luokat, metodit ja muuttujat on nimetty kuvaavasti (esimerkiksi `EventService`, `TicketRepository`, `SellTicketsDto`).  
+- Koodissa on Javadoc- ja kommenttikäytäntöjä selkeyttämään tarkoituksia.  
+- Duplikaation välttämiseksi on käytetty mm. Mapstructia entiteettien ja DTO:iden väliseen muunnokseen, jotta looginen koodi pysyy yhdenmukaisena eikä toisteta samoja muunnoksia useassa paikassa.
+
+
+## Asennusohjeet
+
+**Kehitysympäristö**  
+1. Asenna Java (esim. AdoptOpenJDK 11), Node.js ja npm.  
+2. Kloonaa projektin lähdekoodi Git-reposta.  
+3. Backend:  
+   - Mene backend-hakemistoon (`./TicketGuru-Sovellus`)  
+   - Aja `mvn clean install` luodaksesi jar-paketin.  
+   - Kehitystilassa käytetään `application-dev.properties` -asetuksia.  
+   - Käynnistä `mvn spring-boot:run -Dspring-boot.run.profiles=dev` tai `java -jar target/TicketGuru-Sovellus-*.jar --spring.profiles.active=dev`.
+4. Frontend:  
+   - Mene frontend-hakemistoon (`./TicketGuru-Sovellus/frontend`)  
+   - Aja `npm install` asentaaksesi riippuvuudet.  
+   - Aja `npm run dev` käynnistääksesi kehityspalvelimen (localhost:5173).  
+
+**Tuotantoympäristö**  
+1. Määritä tietokantayhteydet ympäristömuuttujina (esim. `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`) tai käytä `application-prod.properties` -tiedostoa.  
+2. Rakenna backend-sovellus `mvn clean install` ja aja `java -jar target/TicketGuru-Sovellus-*.jar --spring.profiles.active=prod`.  
+3. Varmista että PostgreSQL-tietokanta on asennettu ja käytössä. Luo tarvittaessa tietokantakäyttäjä ja tietokanta:  
+   ```
+   CREATE DATABASE ticketguru;
+   CREATE USER ticketuser WITH PASSWORD 'ticketpassword';
+   GRANT ALL PRIVILEGES ON DATABASE ticketguru TO ticketuser;
+   ```
+4. Yhdistä backend annettuihin ympäristömuuttujiin. Palvelin käynnistyy ja hibernaten `update` strategia luo/päivittää taulut automaattisesti.  
+5. Frontend voidaan rakentaa komennolla `npm run build` ja sitten palvella tuotannossa esim. Nginx:llä. Määritä Nginx konfiguraatio ohjaamaan `/api`-pyynnöt backend-palvelimelle.
+
+**Rahti-ympäristö**  
+- Aseta Rahti-palvelussa tarvittavat environment-muuttujat (`POSTGRESQL_SERVICE_HOST`, `POSTGRESQL_SERVICE_PORT`, `POSTGRESQL_DATABASE`, `POSTGRESQL_USER`, `POSTGRESQL_PASSWORD`).
+- Käynnistä sovellus `--spring.profiles.active=rahti` profiililla.  
+- Rahti-lokaatio (OpenShift/Kubernetes) hoitaa podien hallinnan.
+
+
+## Käynnistys- ja käyttöohje
+
+**Käynnistys kehitysympäristössä:**  
+- Backend käynnistyy osoitteessa `http://localhost:8080` (dev-profiili).  
+- Frontend käynnistyy osoitteessa `http://localhost:5173`.
+
+**Kirjautuminen**  
+- Sovellukseen voi kirjautua oletusarvoisella admin-käyttäjällä:  
+  - Käyttäjätunnus: `admin`  
+  - Salasana: `admin`  
+- Kehitysympäristössä löytyy myös käyttäjä `user`:  
+  - Käyttäjätunnus: `user`  
+  - Salasana: `user`  
+- Nämä tunnukset on määritelty `UserConfiguration`-luokassa ja tallennettu tietokantaan sovelluksen käynnistyessä.
+
+**Käyttö**  
+1. Mene sovelluksen frontend-osoitteeseen (esim. `http://localhost:5173`).  
+2. Kirjaudu sisään admin-/user-tunnuksilla.  
+3. Päävalikosta pääsee mm. tapahtumien hallintaan, lippujen myyntiin, raporttien katseluun ja käyttäjien hallintaan.  
+4. Myytäessä lippuja (esim. `Sell Ticket`) valitse tapahtuma, lipputyyppi ja kappalemäärä.  
+5. Kun tilaus on luotu, liput voi tulostaa /katsoa `Print Tickets` -sivulta.
+
+Mikäli käytät tuotanto- tai rahtiympäristöä, korvaa `localhost:8080` ja `localhost:5173` tuotantoympäristön palvelinosoitteilla. Kirjautumiseen ja testitunnuksiin voi päivitysten jälkeen tarvita erilaisia tunnuksia, jotka on hyvä dokumentoida sisäisesti.
+
+---
+
 ## REST API dokumentaatio
 
 **Base URL: sovellus on julkaistu Rahti2 palvelussa ja API pyynnöt käytettävissä https://ticket-guru-sovellus-git-elite-innovators-ticketguru2.2.rahtiapp.fi**
