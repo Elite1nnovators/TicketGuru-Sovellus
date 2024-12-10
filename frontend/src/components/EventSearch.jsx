@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Button, Card, Form, InputGroup, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { CartContext } from "../context/cart";
 import api from "./api";
 import EditEvent from "./EditEvent";
 import AddEvent from "./AddEvent";
@@ -9,8 +8,7 @@ import AddEvent from "./AddEvent";
 const EventSearch = () => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const { addToCart } = useContext(CartContext); // Access cart context
+  const [searchTerm, setSearchTerm] = useState("");// Access cart context
   const navigate = useNavigate(); // For navigation
 
   useEffect(() => {
@@ -131,21 +129,6 @@ const EventSearch = () => {
                           {ticket.ticketTypeName} - {ticket.price}€ |{" "}
                           <strong>{ticket.ticketsInStock} available</strong>
                         </span>
-                        <Button
-                          size="sm"
-                          variant="primary"
-                          onClick={() =>
-                            addToCart({
-                              eventId: event.eventId,
-                              ticketTypeId: ticket.id,
-                              title: `${event.eventName} - ${ticket.ticketTypeName}`,
-                              price: ticket.price,
-                            })
-                          }
-                          disabled={ticket.ticketsInStock <= 0}
-                        >
-                          Add to Cart
-                        </Button>
                       </div>
                     ))}
                   </div>
