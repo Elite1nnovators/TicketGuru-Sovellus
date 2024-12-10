@@ -2,25 +2,14 @@ import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import Logo from '../assets/Logo.png'; 
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
-import { ShoppingCartIcon } from '@heroicons/react/24/outline';
-import { useState, useContext } from 'react'; 
-import Cart from './ShoppingCart';
-import { CartContext } from '../context/cart.jsx';
+
+
 
 function TicketGuruNavbar() {
     const navigate = useNavigate();
-    const [showModal, setShowModal] = useState(false);
-
-    const { cartItems } = useContext(CartContext); // Hakee carItemsit CartContextista 
-
     const handleLogout = () => {
         navigate('/');
     };
-
-    const toggle = () => {
-        setShowModal(!showModal);
-    };
-
     return (
         <>
             <Navbar className="bg-body-tertiary ms-0" data-bs-theme="dark">
@@ -45,14 +34,6 @@ function TicketGuruNavbar() {
    <Nav.Link as={Link} to="/user-dashboard">UserDasboard</Nav.Link>
 
                         </Nav>
-                        {!showModal && (
-                            <button
-                                className="px-4 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700 me-3"
-                                onClick={toggle}
-                            >
-                                Cart ({cartItems.length})
-                            </button>
-                        )}
                         <Button onClick={handleLogout} variant="outline-danger" className="d-flex align-items-center">
                             Logout
                             <ArrowLeftStartOnRectangleIcon width={20} height={20} className="ms-2" />
@@ -60,8 +41,6 @@ function TicketGuruNavbar() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            {/* Render Cart modal */}
-            {showModal && <Cart showModal={showModal} toggle={toggle} />}
         </>
     );
 }
